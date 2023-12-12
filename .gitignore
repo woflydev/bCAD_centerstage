@@ -26,3 +26,5 @@ replay_pid*
 *.gradle
 *.DS_Store
 *.idea
+
+FtcRobotController/build/*

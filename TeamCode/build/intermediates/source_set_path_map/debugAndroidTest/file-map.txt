@@ -1,0 +1,4 @@
+org.firstinspires.ftc.teamcode.test.TeamCode-androidTest-0 /Users/woffles/Desktop/bCAD_centerstage/TeamCode/build/generated/res/resValues/androidTest/debug
+org.firstinspires.ftc.teamcode.test.TeamCode-mergeDebugAndroidTestResources-1 /Users/woffles/Desktop/bCAD_centerstage/TeamCode/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
+org.firstinspires.ftc.teamcode.test.TeamCode-mergeDebugAndroidTestResources-2 /Users/woffles/Desktop/bCAD_centerstage/TeamCode/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
+org.firstinspires.ftc.teamcode.test.TeamCode-merged_res-3 /Users/woffles/Desktop/bCAD_centerstage/TeamCode/build/intermediates/merged_res/debugAndroidTest
