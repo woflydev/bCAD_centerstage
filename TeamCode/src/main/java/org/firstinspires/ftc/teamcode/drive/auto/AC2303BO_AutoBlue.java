@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.drive.auto;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.drive.Robotv8.FSM_Auto_Fullstack;
+import org.firstinspires.ftc.teamcode.drive.Robotv8.Auto_Fullstack_Base;
 import org.firstinspires.ftc.teamcode.drive.Robotv8.RobotInfo.FSM_Auto_State.RobotAlliance;
 import org.firstinspires.ftc.teamcode.drive.Robotv8.RobotInfo.FSM_Auto_State.RobotParkingLocation;
 import org.firstinspires.ftc.teamcode.drive.Robotv8.RobotInfo.FSM_Auto_State.RobotStartingPosition;
@@ -12,7 +12,7 @@ import org.opencv.core.Point;
 
 @Config
 @Autonomous(name="NAT_BlueBackdropAuto_OUTER", group="Final")
-public class AC2303BO_AutoBlue extends FSM_Auto_Fullstack {
+public class AC2303BO_AutoBlue extends Auto_Fullstack_Base {
     public static double r1x = 25;
     public static double r1y = 90;
     public static double r2x = 150;
