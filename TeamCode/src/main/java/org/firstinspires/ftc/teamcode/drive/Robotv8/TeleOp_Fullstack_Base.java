@@ -70,8 +70,6 @@ public class TeleOp_Fullstack_Base extends OpMode {
     public boolean adjustmentAllowed = true;
     public boolean fieldCentricRed = true;
 
-    public boolean DANGER_MANUAL_OUTTAKE = false;
-
     public void InitializeBlock() {
         // NOTE: giant initialization block stored here instead of directly in init.
         driveSpeedModifier = RobotConstants.BASE_DRIVE_SPEED_MODIFIER;
@@ -205,7 +203,6 @@ public class TeleOp_Fullstack_Base extends OpMode {
     }
     public void StatusTelemetry() {
         // NOTE: Basic robot telemetry is handled here, instead of child classes.
-        telemetry.addData("DANGER_OUTTAKE_MODE", DANGER_MANUAL_OUTTAKE);
         telemetry.addData("Arm Left: ", armL.getCurrentPosition());
         telemetry.addData("Arm Right: ", armR.getCurrentPosition());
         telemetry.addData("IMU Raw: ", GetHeadingRaw());
@@ -698,22 +695,19 @@ public class TeleOp_Fullstack_Base extends OpMode {
     }
 
     public void PassiveArmResetCheck() {
-        if (!DANGER_MANUAL_OUTTAKE) {
-            if (targetOuttakePosition <= 30) {
-                if ((armL.getCurrentPosition() <= 10 && armR.getCurrentPosition() <= 10) && (armL.getCurrentPosition() >= 0 && armR.getCurrentPosition() <= 0)) {
-                    armR.setVelocity(0);
-                    armL.setVelocity(0);
-                } else if ((armL.getCurrentPosition() <= 210 && armR.getCurrentPosition() <= 210) && (armL.getCurrentPosition() >= -100 && armR.getCurrentPosition() >= -100)) {
-                    armR.setTargetPosition(10);
-                    armL.setTargetPosition(10);
-                    targetOuttakePosition = 10;
+        if (targetOuttakePosition <= 30) {
+            if ((armL.getCurrentPosition() <= 10 && armR.getCurrentPosition() <= 10) && (armL.getCurrentPosition() >= 0 && armR.getCurrentPosition() <= 0)) {
+                armR.setVelocity(0);
+                armL.setVelocity(0);
+            } else if ((armL.getCurrentPosition() <= 210 && armR.getCurrentPosition() <= 210) && (armL.getCurrentPosition() >= -100 && armR.getCurrentPosition() >= -100)) {
+                armR.setTargetPosition(10);
+                armL.setTargetPosition(10);
+                targetOuttakePosition = 10;
 
-                    armR.setVelocity(800);
-                    armL.setVelocity(800);
-                }
+                armR.setVelocity(800);
+                armL.setVelocity(800);
             }
         }
-
     }
 
     public void Delay(double time) {
