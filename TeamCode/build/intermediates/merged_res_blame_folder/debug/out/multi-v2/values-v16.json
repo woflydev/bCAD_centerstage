@@ -4,7 +4,7 @@
             "outputFile": "org.firstinspires.ftc.teamcode.TeamCode-mergeDebugResources-31:/values-v16/values-v16.xml",
             "map": [
                 {
-                    "source": "/Users/woffles/.gradle/caches/transforms-3/3ed1d9dd6eccc1cd536df93400b21c1b/transformed/core-1.9.0/res/values-v16/values-v16.xml",
+                    "source": "C:\\Users\\User\\.gradle\\caches\\transforms-3\\3ed1d9dd6eccc1cd536df93400b21c1b\\transformed\\core-1.9.0\\res\\values-v16\\values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -14,7 +14,7 @@
                     }
                 },
                 {
-                    "source": "/Users/woffles/.gradle/caches/transforms-3/f1b7a143da4aed9e9e352d0107654b88/transformed/appcompat-1.6.1/res/values-v16/values-v16.xml",
+                    "source": "C:\\Users\\User\\.gradle\\caches\\transforms-3\\f1b7a143da4aed9e9e352d0107654b88\\transformed\\appcompat-1.6.1\\res\\values-v16\\values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
