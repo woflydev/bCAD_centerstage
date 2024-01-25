@@ -84,3 +84,5 @@ lint/tmp/
 .idea
 .DS_Store
 .DS_Store
+
+TeamCode/build/*
