@@ -3,5 +3,3 @@ org.firstinspires.ftc.teamcode.test.TeamCode-androidTest-1 C:\Users\User\Desktop
 org.firstinspires.ftc.teamcode.test.TeamCode-mergeDebugAndroidTestResources-2 C:\Users\User\Desktop\bCAD_centerstage\TeamCode\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
 org.firstinspires.ftc.teamcode.test.TeamCode-mergeDebugAndroidTestResources-3 C:\Users\User\Desktop\bCAD_centerstage\TeamCode\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
 org.firstinspires.ftc.teamcode.test.TeamCode-merged_res-4 C:\Users\User\Desktop\bCAD_centerstage\TeamCode\build\intermediates\merged_res\debugAndroidTest
-org.firstinspires.ftc.teamcode.test.TeamCode-androidTest-5 C:\Users\User\Desktop\bCAD_centerstage\TeamCode\src\androidTest\res
-org.firstinspires.ftc.teamcode.test.TeamCode-androidTestDebug-6 C:\Users\User\Desktop\bCAD_centerstage\TeamCode\src\androidTestDebug\res
