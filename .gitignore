@@ -26,5 +26,8 @@ replay_pid*
 *.DS_Store
 *.idea
 .gradle/
+local.properties
 
 FtcRobotController/build/*
+local.properties
+*.properties
