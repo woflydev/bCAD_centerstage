@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.commands;
 
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants.*;
+
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -24,21 +26,21 @@ public class TransferCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        deposit.currentlyTransfering = true;
+        deposit.outtakeBusy = true;
         timer = new ElapsedTime();
         timer.reset();
 
         deposit.wrist.turnToAngle(260);
         deposit.spin.turnToAngle(deposit.transferSpin);
-        deposit.claw.turnToAngle(deposit.transferGrip);
+        deposit.claw.turnToAngle(CLAW_OPEN);
     }
 
     @Override
     public void execute() {
         delay = 500;
 
-        lift.liftLM.motor.setTargetPosition(0+lift.liftOffset);
-        lift.liftRM.motor.setTargetPosition(0+lift.liftOffset);
+        lift.liftLM.motor.setTargetPosition(lift.liftOffset);
+        lift.liftRM.motor.setTargetPosition(lift.liftOffset);
 
         lift.liftLM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift.liftRM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -46,18 +48,19 @@ public class TransferCommand extends CommandBase {
         lift.liftLM.motor.setPower(1);
         lift.liftRM.motor.setPower(1);
 
-        if(timer.milliseconds() > delay && timer.milliseconds() < delay*2) {
+        if (timer.milliseconds() > delay && timer.milliseconds() < delay*2) {
             deposit.elbow.turnToAngle(268);
-        } else if (timer.milliseconds() > delay*2 && timer.milliseconds() < delay*3) {
+        } else if (timer.milliseconds() > delay * 2 && timer.milliseconds() < delay*3) {
             deposit.grab();
-        } else if(timer.milliseconds() > delay*3) {
+        } else if(timer.milliseconds() > delay * 3) {
             intake.openCover();
         }
     }
 
     @Override
     public void end(boolean interrupted) {
-        deposit.currentlyTransfering = false;
+        deposit.outtakeBusy = false;
+
         deposit.elbow.turnToAngle(225);
         lift.liftLM.motor.setTargetPosition(0);
         lift.liftRM.motor.setTargetPosition(0);
@@ -68,6 +71,6 @@ public class TransferCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timer.milliseconds() > delay*4;
+        return timer.milliseconds() > delay * 4;
     }
 }

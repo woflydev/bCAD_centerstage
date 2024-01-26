@@ -12,13 +12,9 @@ import org.firstinspires.ftc.teamcode.drive.commands.ScoreCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.TransferCommand;
 
 public class TeleOp_Fullstack_Base extends OpModeTemplate {
-    ScoreCommand scoreCommand;
-
     @Override
     public void initialize() {
         InitBlock();
-        scoreCommand = new ScoreCommand(deposit, lift);
-
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.START).toggleWhenPressed(
                 () -> intake.openCover(),
                 () -> intake.closeCover()
@@ -35,7 +31,7 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
         );
 
         // note: will not be scheduled unless button becomes INACTIVE -> ACTIVE again
-        new GamepadButton(gamepad2Ex, GamepadKeys.Button.X).whenPressed(scoreCommand);
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.X).whenPressed(new ScoreCommand(deposit, lift));
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.Y).whenPressed(new HomeCommand(deposit, lift));
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.B).whenPressed(new TransferCommand(deposit, lift, intake));
 
@@ -51,15 +47,19 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.DPAD_UP)
                 .whenPressed(() -> lift.liftOffset += 10);
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(() -> lift.liftOffset += -10);
+                .whenPressed(() -> lift.liftOffset -= 10);
 
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(() -> deposit.manualWristControl(1, telemetry));
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(() -> deposit.manualWristControl(-1, telemetry));
 
-        new RightTriggerReader(gamepad2Ex, gamepad1Ex).whenActive(intake::spin).whenInactive(intake::stop);
-        new LeftTriggerReader(gamepad2Ex, gamepad1Ex).whenActive(intake::reverseSpin).whenInactive(intake::stop);
+        new RightTriggerReader(gamepad2Ex, gamepad1Ex)
+                .whenActive(intake::spin)
+                .whenInactive(intake::stop);
+        new LeftTriggerReader(gamepad2Ex, gamepad1Ex)
+                .whenActive(intake::reverseSpin)
+                .whenInactive(intake::stop);
 
         new GamepadButton(gamepad1Ex, GamepadKeys.Button.BACK)
                 .whenPressed(() -> imu.resetYaw());
@@ -74,12 +74,18 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
     }
 
     public void RuntimeConfiguration() {
-        if (!deposit.currentlyPlacing && !deposit.currentlyHoming && !deposit.currentlyTransfering) {
+        if (!deposit.outtakeBusy) {
+            // note: allows for manual lift operation by driver2
             lift.run(gamepad2Ex.getLeftY());
         }
 
+        // note: drivetrain
         drivebase.userControlledDrive(gamepad1, imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
+
+        // note: elbow
         deposit.manualElbowControl(gamepad2Ex.getRightY(), telemetry);
+
+        // note: manual hanging control
         hang.run(gamepad2);
     }
 

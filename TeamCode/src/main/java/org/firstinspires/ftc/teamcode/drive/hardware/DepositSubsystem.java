@@ -17,15 +17,9 @@ public class DepositSubsystem extends SubsystemBase {
     public SimpleServo elbow;
     public ServoEx spin;
 
-    public int closedPosition = 140;
-    public int openPosition = 30;
-    public int transferGrip = 80;
     public int transferSpin = 27;
-    public int flatSpin = transferSpin+90;
-    public boolean outtaking;
-    public boolean currentlyPlacing;
-    public boolean currentlyHoming;
-    public boolean currentlyTransfering;
+    public int flatSpin = transferSpin + 90;
+    public boolean outtakeBusy;
 
     public DepositSubsystem(HardwareMap hardwareMap) {
         int MIN_ANGLE = 0;
@@ -42,13 +36,13 @@ public class DepositSubsystem extends SubsystemBase {
         elbow.turnToAngle(240);
         wrist.turnToAngle(170);
         spin.turnToAngle(transferSpin);
-        claw.turnToAngle(transferGrip);
-        outtaking = false;
+        claw.turnToAngle(CLAW_OPEN);
+        outtakeBusy = false;
     }
 
     @Override
     public void periodic() {
-        if (outtaking) {
+        if (outtakeBusy) {
             double difference = elbow.getAngle() - 60;
             wrist.turnToAngle(190 - difference);
         }
@@ -73,7 +67,7 @@ public class DepositSubsystem extends SubsystemBase {
     }
 
     public void mosaicSpin(double direction, Telemetry telemetry) {
-        if(direction == 1) {
+        if (direction == 1) {
             spin.turnToAngle(flatSpin - 60);
         } else if (direction == -1){
             spin.turnToAngle(flatSpin + 60);
@@ -87,8 +81,8 @@ public class DepositSubsystem extends SubsystemBase {
         wrist.turnToAngle(165);
     }
 
-    public void grab() { claw.turnToAngle(closedPosition); }
-    public void release() { claw.turnToAngle(openPosition); }
+    public void grab() { claw.turnToAngle(CLAW_CLOSE); }
+    public void release() { claw.turnToAngle(CLAW_DEPOSIT); }
 
     public boolean withinUncertainty(double currentPos, double wantedPos, double range) {
         return (currentPos < wantedPos + range) && currentPos > wantedPos - range;

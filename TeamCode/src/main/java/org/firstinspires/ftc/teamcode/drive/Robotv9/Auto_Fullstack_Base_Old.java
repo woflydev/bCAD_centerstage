@@ -1,35 +1,35 @@
 package org.firstinspires.ftc.teamcode.drive.Robotv9;
 
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.AUDIENCE_PURPLE_PIXEL_ALIGN_VARIANCE;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.AUDIENCE_PURPLE_PIXEL_VARIANCE;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.AUDIENCE_PURPLE_APPROACH_SPEED;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.AUDIENCE_YELLOW_BACKDROP_APPROACH_AMOUNT;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.AUDIENCE_YELLOW_PIXEL_VARIANCE;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BACKDROP_BLUE_PURPLE_PIXEL_VARIANCE;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BACKDROP_CENTER_POSES;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BACKDROP_DEPOSIT_PUSHBACK_AMOUNT;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BACKDROP_RED_PURPLE_PIXEL_VARIANCE;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BACKDROP_YELLOW_PIXEL_VARIANCE;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BLUE_PARKING_POSES;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BLUE_STARTING_POSES;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BLUE_YELLOW_PIXEL_BACKUP_POSES;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.CAUTION_SPEED;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BACKDROP_CENTER_SPIKEMARK_ALIGN_TURN_DEG;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.CYCLE_BACKDROP_APPROACH_AMOUNT;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.CYCLE_RETURN_POSES;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.CYCLE_STACK_APPROACH_AMOUNT;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.CYCLE_STACK_REVERSE_AMOUNT;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.CYCLING_STACK_INNER_POSES;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.DEPOSIT_YELLOW_TO_BACKDROP_TRANSIT_BLUE;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.INCHES_PER_TILE;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.RED_PARKING_POSES;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.RED_STARTING_POSES;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.RED_YELLOW_PIXEL_BACKDROP_POSES;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.SPIKEMARK_CENTER_POSES;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.SPIKEMARK_TRANSIT_CENTER_POSES;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.DEPOSIT_YELLOW_TO_BACKDROP_TRANSIT_RED;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.STAGE_DOOR_POSES;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.YELLOW_PIXEL_DEPOSIT_HEIGHT;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.AUDIENCE_PURPLE_PIXEL_ALIGN_VARIANCE;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.AUDIENCE_PURPLE_PIXEL_VARIANCE;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.AUDIENCE_PURPLE_APPROACH_SPEED;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.AUDIENCE_YELLOW_BACKDROP_APPROACH_AMOUNT;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.AUDIENCE_YELLOW_PIXEL_VARIANCE;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.BACKDROP_BLUE_PURPLE_PIXEL_VARIANCE;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.BACKDROP_CENTER_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.BACKDROP_DEPOSIT_PUSHBACK_AMOUNT;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.BACKDROP_RED_PURPLE_PIXEL_VARIANCE;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.BACKDROP_YELLOW_PIXEL_VARIANCE;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.BLUE_PARKING_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.BLUE_STARTING_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.BLUE_YELLOW_PIXEL_BACKUP_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.CAUTION_SPEED;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.BACKDROP_CENTER_SPIKEMARK_ALIGN_TURN_DEG;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.CYCLE_BACKDROP_APPROACH_AMOUNT;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.CYCLE_RETURN_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.CYCLE_STACK_APPROACH_AMOUNT;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.CYCLE_STACK_REVERSE_AMOUNT;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.CYCLING_STACK_INNER_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.DEPOSIT_YELLOW_TO_BACKDROP_TRANSIT_BLUE;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.INCHES_PER_TILE;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.RED_PARKING_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.RED_STARTING_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.RED_YELLOW_PIXEL_BACKDROP_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.SPIKEMARK_CENTER_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.SPIKEMARK_TRANSIT_CENTER_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.DEPOSIT_YELLOW_TO_BACKDROP_TRANSIT_RED;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.STAGE_DOOR_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstantsOld.YELLOW_PIXEL_DEPOSIT_HEIGHT;
 
 import static java.lang.Thread.sleep;
 
@@ -51,6 +51,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AutoState;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.FSM_Auto_State.*;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.FSM_Outtake;
@@ -80,7 +81,7 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
     public static Pose2d START_POSE = new Pose2d();
     public static Pose2d PARKING_POSE = new Pose2d();
 
-    public RobotAlliance alliance;
+    public AutoState.RobotAlliance alliance;
     public RobotStartingPosition startingPosition;
     public RobotParkingLocation parkingLocation;
     public RobotTaskFinishBehaviour taskFinishBehaviour;
@@ -119,22 +120,22 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
     public int targetOuttakePosition = 0;
 
     // note: constructor ----------------------------------------------------------------
-    public Auto_Fullstack_Base_Old(RobotAlliance alliance, RobotStartingPosition startPos, RobotParkingLocation parkLoc, RobotTaskFinishBehaviour finishBehaviour, Point r1, Point r2, Point r3) {
+    public Auto_Fullstack_Base_Old(AutoState.RobotAlliance alliance, RobotStartingPosition startPos, RobotParkingLocation parkLoc, RobotTaskFinishBehaviour finishBehaviour, Point r1, Point r2, Point r3) {
         this.alliance = alliance;
         this.startingPosition = startPos;
         this.parkingLocation = parkLoc;
         this.taskFinishBehaviour = finishBehaviour;
-        this.dir = alliance == RobotAlliance.RED ? 1 : -1;
+        this.dir = alliance == AutoState.RobotAlliance.RED ? 1 : -1;
         this.r1 = r1;
         this.r2 = r2;
         this.r3 = r3;
 
         taskFinishBehaviourSelected = false;
-        allianceIndex = this.alliance == RobotAlliance.RED ? 0 : 1;
+        allianceIndex = this.alliance == AutoState.RobotAlliance.RED ? 0 : 1;
         startingPositionIndex = this.startingPosition == RobotStartingPosition.BACKDROP ? 0 : 1;
         parkingLocationIndex = this.parkingLocation == RobotParkingLocation.INNER ? 0 : 1;
-        START_POSE = this.alliance == RobotAlliance.RED ? RED_STARTING_POSES[startingPositionIndex] : BLUE_STARTING_POSES[startingPositionIndex];
-        PARKING_POSE = this.alliance == RobotAlliance.RED ? RED_PARKING_POSES[parkingLocationIndex] : BLUE_PARKING_POSES[parkingLocationIndex];
+        START_POSE = this.alliance == AutoState.RobotAlliance.RED ? RED_STARTING_POSES[startingPositionIndex] : BLUE_STARTING_POSES[startingPositionIndex];
+        PARKING_POSE = this.alliance == AutoState.RobotAlliance.RED ? RED_PARKING_POSES[parkingLocationIndex] : BLUE_PARKING_POSES[parkingLocationIndex];
 
         locMode = RobotLocMode.MEC;
     }
@@ -241,7 +242,7 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
                         break;
                     case BA_MOVING_TO_BACKDROP:
                         if (!drive.isBusy()) {
-                            drive.followTrajectoryAsync(CalcKinematics(alliance == RobotAlliance.RED ? -DEPOSIT_YELLOW_TO_BACKDROP_TRANSIT_RED : -DEPOSIT_YELLOW_TO_BACKDROP_TRANSIT_BLUE, DriveConstants.MAX_VEL));
+                            drive.followTrajectoryAsync(CalcKinematics(alliance == AutoState.RobotAlliance.RED ? -DEPOSIT_YELLOW_TO_BACKDROP_TRANSIT_RED : -DEPOSIT_YELLOW_TO_BACKDROP_TRANSIT_BLUE, DriveConstants.MAX_VEL));
                             autoState = FSM_RootAutoState.BA_DEPOSIT_YELLOW;
                         }
                         break;
@@ -363,7 +364,7 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
                         PrimePurple(); // note: takes over from outtake subsystem and forces prime purple position
                         switch (randomization) {
                             case LOCATION_1:
-                                if (alliance == RobotAlliance.BLUE) Delay(500);
+                                if (alliance == AutoState.RobotAlliance.BLUE) Delay(500);
                                 // has to drive backwards
                                 drive.followTrajectory(CalcKinematics(-workingBackdropPurpleVariance[0], DriveConstants.MAX_VEL));
                                 ExpelPurple();
@@ -376,7 +377,7 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
                                 //drive.turn(Math.toRadians(BACKDROP_CENTER_SPIKEMARK_ALIGN_TURN_DEG * dir));
                                 break;
                             case LOCATION_3:
-                                if (alliance == RobotAlliance.RED) Delay(500); // note: purple has to prime first to push prop
+                                if (alliance == AutoState.RobotAlliance.RED) Delay(500); // note: purple has to prime first to push prop
                                 drive.followTrajectory(CalcKinematics(-workingBackdropPurpleVariance[2], DriveConstants.MAX_VEL));
                                 ExpelPurple();
                                 break;
@@ -549,7 +550,7 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
                 .splineToLinearHeading(PARKING_POSE, PARKING_POSE.getHeading()).build();
 
         drive.followTrajectory(parking);
-        ExecuteRotation(alliance == RobotAlliance.RED ? 90 : 270, true); // note: ensure field centric heading on finish
+        ExecuteRotation(alliance == AutoState.RobotAlliance.RED ? 90 : 270, true); // note: ensure field centric heading on finish
     }
 
     private void CenterRobotForSpikemark() {
@@ -612,7 +613,7 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
             case PRIMED_FOR_DEPOSIT:
                 break;
             case CLAW_OPENING:
-                servoClaw.setPosition(RobotConstants.CLAW_OPEN);
+                servoClaw.setPosition(RobotConstants.CLAW_DEPOSIT);
                 outtakeTimer.reset();
                 outtakeState = FSM_Outtake.OUTTAKE_RESET;
                 break;
@@ -797,7 +798,7 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
     }
 
     private void ExpelPurple() {
-        servoClaw.setPosition(RobotConstants.CLAW_OPEN);
+        servoClaw.setPosition(RobotConstants.CLAW_DEPOSIT);
         Delay(400);
     }
 
@@ -817,12 +818,12 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
     }
 
     public void DropAndReset() {
-        servoClaw.setPosition(RobotConstants.CLAW_OPEN);
+        servoClaw.setPosition(RobotConstants.CLAW_DEPOSIT);
         servoWrist.setPosition(RobotConstants.WRIST_ACTIVE + 0.1);
         MoveElbow(RobotConstants.ELBOW_ACTIVE + 0.00);
         Delay(450);
         drive.followTrajectory(CalcKinematics(BACKDROP_DEPOSIT_PUSHBACK_AMOUNT, CAUTION_SPEED));
-        servoClaw.setPosition(RobotConstants.CLAW_OPEN); // note: reinforce
+        servoClaw.setPosition(RobotConstants.CLAW_DEPOSIT); // note: reinforce
         //Delay(800); // wait for claw to open
 
         servoFlap.setPosition(RobotConstants.FLAP_CLOSE);
@@ -842,7 +843,7 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
     private double[] SortBackdropValueVariance(double[] backdropInRed, double[] backdropInBlue, double[] audienceIn, boolean redBlueDifferent) {
         if (startingPosition == RobotStartingPosition.BACKDROP) {
             if (redBlueDifferent) {
-                return alliance == RobotAlliance.RED ? new double[] {
+                return alliance == AutoState.RobotAlliance.RED ? new double[] {
                         backdropInRed[0],
                         backdropInRed[1],
                         backdropInRed[2]
@@ -852,7 +853,7 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
                         backdropInBlue[0]
                 };
             } else {
-                return alliance == RobotAlliance.RED ? new double[] {
+                return alliance == AutoState.RobotAlliance.RED ? new double[] {
                         backdropInRed[0],
                         backdropInRed[1],
                         backdropInRed[2],
@@ -864,7 +865,7 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
             }
 
         } else {
-            return alliance == RobotAlliance.RED ? new double[] {
+            return alliance == AutoState.RobotAlliance.RED ? new double[] {
                     audienceIn[0],
                     audienceIn[1],
                     audienceIn[2]
@@ -878,7 +879,7 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
 
     private double[] OldSortPurpleVariance() {
         if (startingPosition == RobotStartingPosition.BACKDROP) {
-            return alliance == RobotAlliance.RED ? new double[] {
+            return alliance == AutoState.RobotAlliance.RED ? new double[] {
                     BACKDROP_RED_PURPLE_PIXEL_VARIANCE[0],
                     BACKDROP_RED_PURPLE_PIXEL_VARIANCE[1],
                     BACKDROP_RED_PURPLE_PIXEL_VARIANCE[2]
@@ -888,7 +889,7 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
                     BACKDROP_RED_PURPLE_PIXEL_VARIANCE[0]
             };
         } else {
-            return alliance == RobotAlliance.RED ? new double[] {
+            return alliance == AutoState.RobotAlliance.RED ? new double[] {
                     AUDIENCE_PURPLE_PIXEL_VARIANCE[0],
                     AUDIENCE_PURPLE_PIXEL_VARIANCE[1],
                     AUDIENCE_PURPLE_PIXEL_VARIANCE[2]
@@ -901,7 +902,7 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
     }
 
     private double[] SortPurpleAlignVariance() {
-        return alliance == RobotAlliance.RED ? new double[] {
+        return alliance == AutoState.RobotAlliance.RED ? new double[] {
                 AUDIENCE_PURPLE_PIXEL_ALIGN_VARIANCE[0],
                 AUDIENCE_PURPLE_PIXEL_ALIGN_VARIANCE[1],
                 AUDIENCE_PURPLE_PIXEL_ALIGN_VARIANCE[2],
@@ -913,7 +914,7 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
     }
 
     private Pose2d[] SortYellowBackdropAlign() {
-        return alliance == RobotAlliance.RED ?
+        return alliance == AutoState.RobotAlliance.RED ?
                 RED_YELLOW_PIXEL_BACKDROP_POSES : BLUE_YELLOW_PIXEL_BACKUP_POSES;
     }
 

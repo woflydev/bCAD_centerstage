@@ -99,9 +99,9 @@ public class LiftSubsystem extends SubsystemBase {
 
     public double getPosition() { return liftLM.getCurrentPosition(); }
 
-    public void autoRun() {
+    public void AutoRun() {
         int target = 250;
-        while (getPosition() < target-10) {
+        while (getPosition() < target - 10) {
             liftLM.motor.setTargetPosition(target);
             liftRM.motor.setTargetPosition(target);
 
@@ -113,13 +113,13 @@ public class LiftSubsystem extends SubsystemBase {
         }
     }
 
-    public void autoHome() {
+    public void AutoHome() {
         int target = 0;
         deposit.elbow.turnToAngle(260);
         deposit.wrist.turnToAngle(170);
         deposit.spin.turnToAngle(deposit.transferSpin);
         deposit.grab();
-        deposit.outtaking = false;
+        deposit.outtakeBusy = false;
 
         while(getPosition() > target + 10) {
             liftLM.motor.setTargetPosition(target);

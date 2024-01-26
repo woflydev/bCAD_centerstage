@@ -22,18 +22,13 @@ public class PlaceCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        deposit.currentlyPlacing = true;
-        timer = new ElapsedTime();
-        timer.reset();
-
-        //deposit.V4B.turnToAngle(126);
+        deposit.outtakeBusy = true;
         deposit.elbow.turnToAngle(110);
-        deposit.outtaking = true;
     }
 
     @Override
     public void execute() {
-        elevation = 100+ lift.liftOffset;
+        elevation = 100 + lift.liftOffset;
 
         lift.liftLM.motor.setTargetPosition(elevation);
         lift.liftRM.motor.setTargetPosition(elevation);
@@ -47,12 +42,11 @@ public class PlaceCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        deposit.currentlyPlacing = false;
+        deposit.outtakeBusy = false;
     }
 
     @Override
     public boolean isFinished() {
-        if(lift.liftLM.getCurrentPosition() > elevation-10) { return true; }
-        else return false;
+        return lift.liftLM.getCurrentPosition() > elevation - 10;
     }
 }

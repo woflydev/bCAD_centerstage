@@ -6,13 +6,13 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import org.firstinspires.ftc.teamcode.drive.hardware.DepositSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
 
-public class ScoreCommand extends CommandBase {
+public class AutoScoreCommand extends CommandBase {
     private final DepositSubsystem deposit;
     private final LiftSubsystem lift;
+    private SequentialCommandGroup commandGroup;
+    private int elevation;
 
-    SequentialCommandGroup commandGroup;
-
-    public ScoreCommand(DepositSubsystem deposit, LiftSubsystem lift) {
+    public AutoScoreCommand(DepositSubsystem deposit, LiftSubsystem lift) {
         this.deposit = deposit;
         this.lift = lift;
         addRequirements(deposit, lift);
@@ -20,20 +20,29 @@ public class ScoreCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        commandGroup = new SequentialCommandGroup(
+        deposit.outtakeBusy = true;
+        /*commandGroup = new SequentialCommandGroup(
                 new PlaceCommand(deposit, lift),
                 new FlattenCommand(deposit)
         );
-        commandGroup.schedule();
+        commandGroup.schedule();*/
     }
 
     @Override
     public void execute() {
+        deposit.elbow.turnToAngle(110); AutoWait();
+        lift.AutoRun();
+        deposit.spin.turnToAngle(deposit.flatSpin); AutoWait();
+        deposit.release(); AutoWait();
+        lift.AutoHome();
+    }
 
+    public void AutoWait() {
+        try { Thread.sleep(400); } catch (Exception e) { System.out.println("Exception occurred during delay!"); }
     }
 
     @Override
-    public void end(boolean interrupted) { }
+    public void end(boolean interrupted) { deposit.outtakeBusy = false; }
 
     @Override
     public boolean isFinished() {

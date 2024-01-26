@@ -6,6 +6,8 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AutoState;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AutoState.*;
 import org.firstinspires.ftc.teamcode.drive.hardware.DepositSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.DroneLauncherSubsystem;
@@ -14,6 +16,7 @@ import org.firstinspires.ftc.teamcode.drive.hardware.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
 
 abstract public class OpModeTemplate extends CommandOpMode {
+    protected RootAutoState autoState = RootAutoState.BA_PLAY;
     protected DriveSubsystem drivebase;
     protected DepositSubsystem deposit;
     protected IntakeSubsystem intake;
@@ -41,11 +44,6 @@ abstract public class OpModeTemplate extends CommandOpMode {
 
         drivebase = new DriveSubsystem(hardwareMap);
         deposit = new DepositSubsystem(hardwareMap);
-
-        ElapsedTime wait = new ElapsedTime();
-        wait.reset();
-        while (wait.seconds() < 2) { short x; }
-
         intake = new IntakeSubsystem(hardwareMap, telemetry, gamepad1, gamepad2);
         hang = new HangSubsystem(hardwareMap, gamepad2, telemetry);
         shooter = new DroneLauncherSubsystem(hardwareMap);
