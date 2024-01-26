@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.subsystems;
+package org.firstinspires.ftc.teamcode.drive.hardware;
 
 public class LinearRegression {
     private final double intercept, slope;

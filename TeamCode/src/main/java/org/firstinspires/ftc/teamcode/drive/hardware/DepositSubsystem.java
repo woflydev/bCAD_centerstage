@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.subsystems;
+package org.firstinspires.ftc.teamcode.drive.hardware;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.ServoEx;
@@ -26,7 +26,6 @@ public class DepositSubsystem extends SubsystemBase {
     public boolean currentlyPlacing;
     public boolean currentlyHoming;
     public boolean currentlyTransfering;
-
 
     public DepositSubsystem(HardwareMap hardwareMap) {
         // Assign variables here with parameters

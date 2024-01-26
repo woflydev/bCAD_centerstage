@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.subsystems;
+package org.firstinspires.ftc.teamcode.drive.hardware;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.ServoEx;
