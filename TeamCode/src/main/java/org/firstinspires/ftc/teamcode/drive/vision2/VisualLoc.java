@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.vision2;
 
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.*;
 import static java.lang.Thread.sleep;
 
 import android.annotation.SuppressLint;
@@ -309,9 +310,9 @@ public class VisualLoc implements Localizer {
             ArrayList<Double> wheelDeltas = differences((ArrayList<Double>) wheelPositions, lastWheelPositions);
             Pose2d robotPoseDelta = MecanumKinematics.wheelToRobotVelocities(
                     wheelDeltas,
-                    DriveConstants.TRACK_WIDTH,
-                    DriveConstants.wheelBase,
-                    RobotConstants.RR_LATERAL_MULTI
+                    TRACK_WIDTH,
+                    WHEEL_RADIUS,
+                    RR_LATERAL_MULTI
             );
             Double finalHeadingDelta = useExternalHeading ?
                     Angle.normDelta(extHeading - lastExtHeading) :
@@ -327,9 +328,9 @@ public class VisualLoc implements Localizer {
         if (wheelVelocities != null) {
             poseVelocity = MecanumKinematics.wheelToRobotVelocities(
                     wheelVelocities,
-                    DriveConstants.TRACK_WIDTH,
-                    DriveConstants.wheelBase,
-                    RobotConstants.RR_LATERAL_MULTI
+                    TRACK_WIDTH,
+                    WHEEL_RADIUS,
+                    RR_LATERAL_MULTI
             );
             if (useExternalHeading && extHeadingVel != null) {
                 if (poseVelocity == null) {

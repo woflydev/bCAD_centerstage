@@ -11,6 +11,7 @@ import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConsta
 import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.kA;
 import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.kStatic;
 import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.*;
 
 import androidx.annotation.NonNull;
 
@@ -58,10 +59,10 @@ import java.util.List;
  */
 @Config
 public class bCADMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(RobotConstants.RR_TRANSLATIONAL_PID_kP, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(RobotConstants.RR_HEADING_PID_kP, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(RR_TRANSLATIONAL_PID_kP, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(RR_HEADING_PID_kP, 0, 0);
 
-    public static double LATERAL_MULTIPLIER = RobotConstants.RR_LATERAL_MULTI;
+    public static double LATERAL_MULTIPLIER = RR_LATERAL_MULTI;
 
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
@@ -134,6 +135,8 @@ public class bCADMecanumDrive extends MecanumDrive {
 
         List<Integer> lastTrackingEncPositions = new ArrayList<>();
         List<Integer> lastTrackingEncVels = new ArrayList<>();
+
+        setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(
                 follower, HEADING_PID, batteryVoltageSensor,
