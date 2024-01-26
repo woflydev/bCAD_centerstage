@@ -23,12 +23,10 @@ abstract public class OpModeTemplate extends CommandOpMode {
 
     protected IMU imu;
 
-    protected GamepadEx driveOp;
-    protected GamepadEx toolOp;
+    protected GamepadEx gamepad1Ex;
+    protected GamepadEx gamepad2Ex;
 
-    protected void initHardware(boolean isAuto) {
-
-        // Initialise the imuGyro with the correct orientation
+    protected void InitBlock() {
         imu = hardwareMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(
                 new RevHubOrientationOnRobot(
@@ -38,32 +36,29 @@ abstract public class OpModeTemplate extends CommandOpMode {
         ));
         imu.resetYaw();
 
-
-        driveOp = new GamepadEx(gamepad1);
-        toolOp = new GamepadEx(gamepad2);
+        gamepad1Ex = new GamepadEx(gamepad1);
+        gamepad2Ex = new GamepadEx(gamepad2);
 
         drivebase = new DriveSubsystem(hardwareMap);
         deposit = new DepositSubsystem(hardwareMap);
 
         ElapsedTime wait = new ElapsedTime();
         wait.reset();
-        while(wait.seconds() < 2) {
-        }
+        while (wait.seconds() < 2) { short x; }
 
-        intake = new IntakeSubsystem(hardwareMap, driveOp, telemetry, gamepad1, gamepad2);
+        intake = new IntakeSubsystem(hardwareMap, gamepad1Ex, telemetry, gamepad1, gamepad2);
         hang = new HangSubsystem(hardwareMap, gamepad2, telemetry);
         shooter = new DroneLauncherSubsystem(hardwareMap);
         lift = new LiftSubsystem(hardwareMap, telemetry, gamepad2, deposit, lift);
 
-
         telemetry.addLine("initialization complete");
         telemetry.update();
-
 
         register(intake, drivebase, hang, shooter, deposit);
 
     }
-    protected void rumbleGamepads() {
+
+    protected void RumbleGamepad() {
         gamepad1.rumble(500);
         gamepad2.rumble(500);
     }

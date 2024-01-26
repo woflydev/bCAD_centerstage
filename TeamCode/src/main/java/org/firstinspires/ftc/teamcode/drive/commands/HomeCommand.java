@@ -50,7 +50,6 @@ public class HomeCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if(lift.leftMotor.getCurrentPosition() < 10) { return true; }
-        else return false;
+        return lift.leftMotor.getCurrentPosition() < 10;
     }
 }

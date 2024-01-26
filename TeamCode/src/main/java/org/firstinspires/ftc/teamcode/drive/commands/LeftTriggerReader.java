@@ -8,24 +8,20 @@ public class LeftTriggerReader extends Trigger {
     GamepadEx gamepad1;
     GamepadEx gamepad2;
     boolean doubleGamepad;
-    public LeftTriggerReader(GamepadEx gamepad1) {
-        this.gamepad1 = gamepad1;
-        doubleGamepad = false;
-    }
 
     public LeftTriggerReader(GamepadEx gamepad1, GamepadEx gamepad2) {
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
         doubleGamepad = true;
-
     }
+
+    // note: instead of returning a float from 0 to 1, it returns a bool
+    @Override
     public boolean get() {
         if(!doubleGamepad) {
-            if(gamepad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.2) return true;
-            else return false;
+            return gamepad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.2;
         } else {
-            if(gamepad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.2 || gamepad2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.2) return true;
-            else return false;
+            return gamepad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.2 || gamepad2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.2;
         }
     }
 }

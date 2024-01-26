@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode.drive.Robotv9;
 
 import com.arcrobotics.ftclib.command.button.GamepadButton;
+import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.arcrobotics.ftclib.gamepad.TriggerReader;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.drive.commands.HomeCommand;
@@ -17,40 +18,77 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
 
     @Override
     public void initialize() {
-        initHardware(false);
+        InitBlock();
         scoreCommand = new ScoreCommand(deposit, lift);
 
-        new GamepadButton(toolOp, GamepadKeys.Button.START).toggleWhenPressed(
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.START).toggleWhenPressed(
                 () -> intake.openCover(),
                 () -> intake.closeCover()
         );
 
-        new GamepadButton(toolOp, GamepadKeys.Button.A).toggleWhenPressed(() -> deposit.grab(), () -> deposit.release());
-        new GamepadButton(toolOp, GamepadKeys.Button.BACK).toggleWhenPressed(() -> shooter.shoot(),  () -> shooter.reset());
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.A).toggleWhenPressed(
+                () -> deposit.grab(),
+                () -> deposit.release()
+        );
 
-        new GamepadButton(toolOp, GamepadKeys.Button.X).whenPressed(scoreCommand);
-        new GamepadButton(toolOp, GamepadKeys.Button.Y).whenPressed(new HomeCommand(deposit, lift));
-        new GamepadButton(toolOp, GamepadKeys.Button.B).whenPressed(new TransferCommand(deposit, lift, intake));
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.BACK).toggleWhenPressed(
+                () -> shooter.shoot(),
+                () -> shooter.reset()
+        );
 
-        new GamepadButton(toolOp, GamepadKeys.Button.LEFT_BUMPER).whenPressed(() -> deposit.mosaicSpin(1, telemetry)).whenReleased(() -> deposit.mosaicSpin(0, telemetry));
-        new GamepadButton(toolOp, GamepadKeys.Button.RIGHT_BUMPER).whenPressed(() -> deposit.mosaicSpin(-1, telemetry)).whenReleased(() -> deposit.mosaicSpin(0, telemetry));
-        new GamepadButton(toolOp, GamepadKeys.Button.DPAD_UP).whenPressed(() -> lift.liftOffset += 10);
-        new GamepadButton(toolOp, GamepadKeys.Button.DPAD_DOWN).whenPressed(() -> lift.liftOffset += -10);
+        // note: will not be scheduled unless button becomes INACTIVE -> ACTIVE again
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.X).whenPressed(scoreCommand);
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.Y).whenPressed(new HomeCommand(deposit, lift));
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.B).whenPressed(new TransferCommand(deposit, lift, intake));
 
-        new GamepadButton(toolOp, GamepadKeys.Button.DPAD_LEFT).whenPressed(() -> deposit.manualWristControl(1, telemetry));
-        new GamepadButton(toolOp, GamepadKeys.Button.DPAD_RIGHT).whenPressed(() -> deposit.manualWristControl(-1, telemetry));
+        // note: will not be scheduled unless button becomes INACTIVE -> ACTIVE again
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.LEFT_BUMPER)
+                .whenPressed(() -> deposit.mosaicSpin(1, telemetry))
+                .whenReleased(() -> deposit.mosaicSpin(0, telemetry));
 
-        new RightTriggerReader(toolOp, driveOp).whenActive(intake::spin).whenInactive(intake::stop);
-        new LeftTriggerReader(toolOp, driveOp).whenActive(intake::Rspin).whenInactive(intake::stop);
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(() -> deposit.mosaicSpin(-1, telemetry))
+                .whenReleased(() -> deposit.mosaicSpin(0, telemetry));
 
-        new GamepadButton(driveOp, GamepadKeys.Button.BACK).whenPressed(() -> imu.resetYaw());
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.DPAD_UP)
+                .whenPressed(() -> lift.liftOffset += 10);
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(() -> lift.liftOffset += -10);
 
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.DPAD_LEFT)
+                .whenPressed(() -> deposit.manualWristControl(1, telemetry));
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.DPAD_RIGHT)
+                .whenPressed(() -> deposit.manualWristControl(-1, telemetry));
+
+        new RightTriggerReader(gamepad2Ex, gamepad1Ex).whenActive(intake::spin).whenInactive(intake::stop);
+        new LeftTriggerReader(gamepad2Ex, gamepad1Ex).whenActive(intake::Rspin).whenInactive(intake::stop);
+
+        new GamepadButton(gamepad1Ex, GamepadKeys.Button.BACK)
+                .whenPressed(() -> imu.resetYaw());
     }
 
     @Override
     public void run() {
         super.run();
         MainLoop();
+        RuntimeConfiguration();
+        StatusTelemetry();
+    }
+
+    public void RuntimeConfiguration() {
+        if (!deposit.currentlyPlacing && !deposit.currentlyHoming && !deposit.currentlyTransfering) {
+            lift.run(gamepad2Ex.getLeftY());
+        }
+
+        drivebase.userControlledDrive(gamepad1, imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
+        deposit.manualV4BControl(gamepad2Ex.getRightY(), telemetry);
+        hang.run(gamepad2);
+    }
+
+    public void StatusTelemetry() {
+        telemetry.addData("Wrist Position", deposit.Wrist.getAngle());
+        telemetry.addData("Slide position", lift.leftMotor.motor.getCurrentPosition());
+        telemetry.update();
     }
 
     public void MainLoop() {}

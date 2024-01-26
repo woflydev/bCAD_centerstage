@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.concurrent.TimeUnit;
 
@@ -46,20 +47,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     }
 
-    @Override
-    public void periodic() {
-//        telemetry.addData("Color Sensor Distance: ", is.getDistance(DistanceUnit.MM));
-//        int threshold = 30;
-//
-//        if(is.getDistance(DistanceUnit.MM) < threshold && !driversAlerted) {
-//            gamepad1.rumble(800);
-//            gamepad2.rumble(800);
-//            driversAlerted = true;
-//        } else if (is.getDistance(DistanceUnit.MM) > threshold) {
-//            driversAlerted = false;
-//        }
-    }
-
     public void spin() {
         intakeSpinner.set(-0.8);
         IntakeCover.turnToAngle(200);
@@ -85,14 +72,17 @@ public class IntakeSubsystem extends SubsystemBase {
     public void openCover() {IntakeCover.turnToAngle(114);}
     public void closeCover() {IntakeCover.turnToAngle(200);}
 
+    @Override
+    public void periodic() {
+        telemetry.addData("Color Sensor Distance: ", is.getDistance(DistanceUnit.MM));
+        int threshold = 30;
 
-//    @Override
-//    public void periodic() {
-//        if (intakeCurrentlySpinning) {
-//            intakeSpinner.set(0.7);
-//        } else {
-//            intakeSpinner.set(0);
-//        }
-//
-//    }
+        if (is.getDistance(DistanceUnit.MM) < threshold && !driversAlerted) {
+            gamepad1.rumble(800);
+            gamepad2.rumble(800);
+            driversAlerted = true;
+        } else if (is.getDistance(DistanceUnit.MM) > threshold) {
+            driversAlerted = false;
+        }
+    }
 }

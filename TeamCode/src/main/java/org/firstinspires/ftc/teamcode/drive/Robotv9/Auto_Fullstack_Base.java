@@ -74,21 +74,12 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
 
     public void initialize() {
         autoAlreadyRun = false;
-        initHardware(false);
+        InitBlock();
 
         deposit.V4B.turnToAngle(180);
-
-        ElapsedTime wait = new ElapsedTime();
-        wait.reset();
-        while(wait.seconds() < 2) {
-        }
-
+        timeout(2);
         deposit.Gripper.turnToAngle(110);
-
-        wait.reset();
-        while(wait.seconds() < 2) {
-        }
-
+        timeout(2);
         deposit.V4B.turnToAngle(270);
 
         drive = new bCADMecanumDrive(hardwareMap, telemetry);
@@ -96,74 +87,13 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         VisionPropDetection();
     }
 
-    public void Score() {
-        new ScoreCommand(deposit, lift).schedule();
-
-        ElapsedTime wait = new ElapsedTime();
-        wait.reset();
-        while(wait.seconds() < 1) {}
-
-        lift.autoRun();
-        deposit.release();
-
-        wait.reset();
-        while(wait.seconds() < 0.5) {}
-        wait.reset();
-
-        lift.autoHome();
-    }
-
-    public void CorrectBackdropAngle(TrajectorySequence current) {
-        double turnValue = Math.toRadians(90 - Math.toDegrees(drive.getExternalHeading()));
-
-        if(turnValue > Math.abs(Math.toRadians(1))) {
-            TrajectorySequence corrective = drive.trajectorySequenceBuilder(current.end())
-                    .turn(turnValue)
-                    .build();
-
-            drive.followTrajectorySequence(corrective);
-        }
-    }
-
-    public void timeout(double time) {
-        ElapsedTime wait = new ElapsedTime();
-        wait.reset();
-        while (wait.seconds() < time) { short x; }
-    }
-
-    public void cycle() {
-        drive.followTrajectorySequence(backboardToStack);
-
-        intake.spin();
-
-        timeout(0.5);
-
-        drive.followTrajectorySequence(intakeProne);
-
-        timeout(1);
-
-        new TransferCommand(deposit, lift, intake).schedule();
-
-        timeout(0.5);
-
-        intake.Rspin();
-
-        drive.followTrajectorySequence(stackToBackboard);
-
-        Score();
-    }
-
     public void run() {
         // TODO: migrate to async operation
         StatusTelemetry();
         if (!autoAlreadyRun) {
             autoAlreadyRun = true;
-
             drive.setPoseEstimate(new Pose2d(-36.70, 67.40, Math.toRadians(90.00)));
-
             drive.followTrajectorySequence(chosenSequence);
-
-            // increase i term
 
             if(chosenSequence == rightPurple) {
                 drive.followTrajectorySequence(rightPixelAvoidance);
@@ -193,9 +123,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
             telemetry.update();
 
             Score();
-
-            cycle();
-
+            Cycle();
         }
 
     }
@@ -310,5 +238,58 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                 .back(10)
                 .forward(10)
                 .build();
+    }
+
+    public void Score() {
+        new ScoreCommand(deposit, lift).schedule();
+
+        timeout(1);
+
+        lift.autoRun();
+        deposit.release();
+
+        timeout(0.5);
+
+        lift.autoHome();
+    }
+
+    public void CorrectBackdropAngle(TrajectorySequence current) {
+        double turnValue = Math.toRadians(90 - Math.toDegrees(drive.getExternalHeading()));
+
+        if(turnValue > Math.abs(Math.toRadians(1))) {
+            TrajectorySequence corrective = drive.trajectorySequenceBuilder(current.end())
+                    .turn(turnValue)
+                    .build();
+
+            drive.followTrajectorySequence(corrective);
+        }
+    }
+
+    public void timeout(double time) {
+        ElapsedTime wait = new ElapsedTime();
+        wait.reset();
+        while (wait.seconds() < time) { short x; }
+    }
+
+    public void Cycle() {
+        drive.followTrajectorySequence(backboardToStack);
+
+        intake.spin();
+
+        timeout(0.5);
+
+        drive.followTrajectorySequence(intakeProne);
+
+        timeout(1);
+
+        new TransferCommand(deposit, lift, intake).schedule();
+
+        timeout(0.5);
+
+        intake.Rspin();
+
+        drive.followTrajectorySequence(stackToBackboard);
+
+        Score();
     }
 }

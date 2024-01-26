@@ -18,8 +18,6 @@ public class FlattenCommand extends CommandBase {
     public void initialize() {
         timer = new ElapsedTime();
         timer.reset();
-
-
     }
 
     @Override
@@ -34,6 +32,6 @@ public class FlattenCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timer.milliseconds()>1000;
+        return timer.milliseconds() > 1000;
     }
 }
