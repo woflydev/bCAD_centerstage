@@ -55,10 +55,10 @@ import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.FSM_Auto_State.*;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.FSM_Outtake;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
-import org.firstinspires.ftc.teamcode.drive.rr.OdysseyMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.rr.bCADMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.vision2.VisualLoc;
 import org.firstinspires.ftc.teamcode.drive.vision2.VisionPropPipeline;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.drive.rr.trajectorysequence.TrajectorySequence;
 import org.opencv.core.Point;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -67,7 +67,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
 @Config
 public class Auto_Fullstack_Base extends LinearOpMode {
-    private OdysseyMecanumDrive drive;
+    private bCADMecanumDrive drive;
     private VisualLoc camLoc;
     private MecanumDrive.MecanumLocalizer mecLoc;
     private FSM_RootAutoState autoState = FSM_RootAutoState.BA_PLAY;
@@ -146,7 +146,7 @@ public class Auto_Fullstack_Base extends LinearOpMode {
         MoveElbow(RobotConstants.ELBOW_STANDBY); AutoWait();
         servoClaw.setPosition(RobotConstants.CLAW_CLOSE);
 
-        drive = new OdysseyMecanumDrive(hardwareMap, telemetry);
+        drive = new bCADMecanumDrive(hardwareMap, telemetry);
         drive.setPoseEstimate(START_POSE);
 
         telemetry.addData("TEAM_PROP_LOCATION", randomization);
@@ -931,8 +931,8 @@ public class Auto_Fullstack_Base extends LinearOpMode {
     public Trajectory CalcKinematics(double tiles, double speed) {
         return drive.trajectoryBuilder(drive.getPoseEstimate())
                 .forward(tiles * INCHES_PER_TILE,
-                        OdysseyMecanumDrive.getVelocityConstraint(speed, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        OdysseyMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                        bCADMecanumDrive.getVelocityConstraint(speed, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        bCADMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
     }
 

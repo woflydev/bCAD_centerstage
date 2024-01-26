@@ -23,7 +23,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
-import org.firstinspires.ftc.teamcode.drive.rr.OdysseyMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.rr.bCADMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
@@ -62,7 +62,7 @@ public class VisualLoc implements Localizer {
 
     public boolean useCamera;
 
-    private OdysseyMecanumDrive drive;
+    private bCADMecanumDrive drive;
 
     /**
      * {@link #aprilTag} is the variable to store our instance of the AprilTag processor.
@@ -161,7 +161,7 @@ public class VisualLoc implements Localizer {
         return poseVelocity;
     }
 
-    public VisualLoc(HardwareMap map, String front, Pose2d startingPose, Telemetry t, OdysseyMecanumDrive d, boolean useCamera) {
+    public VisualLoc(HardwareMap map, String front, Pose2d startingPose, Telemetry t, bCADMecanumDrive d, boolean useCamera) {
         this.hardwareMap = map;
         this.poseEstimate = startingPose;
         this.poseVelocity = new Pose2d(0, 0, 0);
