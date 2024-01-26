@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode.drive.auto;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.drive.Robotv8.Auto_Fullstack_Base;
-import org.firstinspires.ftc.teamcode.drive.Robotv8.RobotInfo.FSM_Auto_State.RobotAlliance;
-import org.firstinspires.ftc.teamcode.drive.Robotv8.RobotInfo.FSM_Auto_State.RobotParkingLocation;
-import org.firstinspires.ftc.teamcode.drive.Robotv8.RobotInfo.FSM_Auto_State.RobotStartingPosition;
-import org.firstinspires.ftc.teamcode.drive.Robotv8.RobotInfo.FSM_Auto_State.RobotTaskFinishBehaviour;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.Auto_Fullstack_Base;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.FSM_Auto_State.RobotAlliance;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.FSM_Auto_State.RobotParkingLocation;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.FSM_Auto_State.RobotStartingPosition;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.FSM_Auto_State.RobotTaskFinishBehaviour;
 import org.opencv.core.Point;
 
 @Config
