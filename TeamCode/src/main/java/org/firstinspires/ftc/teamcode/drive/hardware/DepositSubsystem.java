@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.drive.hardware;
 
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants.*;
+
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
-import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -11,11 +12,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class DepositSubsystem extends SubsystemBase {
     // Servos
-    public ServoEx Wrist;
-    public ServoEx Gripper;
-    public SimpleServo V4B;
-    public AnalogInput V4B_Analog;
-    public ServoEx Spin;
+    public ServoEx wrist;
+    public ServoEx claw;
+    public SimpleServo elbow;
+    public ServoEx spin;
 
     public int closedPosition = 140;
     public int openPosition = 30;
@@ -28,92 +28,69 @@ public class DepositSubsystem extends SubsystemBase {
     public boolean currentlyTransfering;
 
     public DepositSubsystem(HardwareMap hardwareMap) {
-        // Assign variables here with parameters
-//        GS = new SimpleServo(hardwareMap, "GS", 0, 360, AngleUnit.DEGREES);
-
         int MIN_ANGLE = 0;
         int MAX_ANGLE = 355;
 
-        V4B = new SimpleServo(hardwareMap, "V4B", MIN_ANGLE, MAX_ANGLE, AngleUnit.DEGREES);
+        elbow = new SimpleServo(hardwareMap, SERVO_ELBOW, MIN_ANGLE, MAX_ANGLE, AngleUnit.DEGREES);
 
-        V4B.setInverted(true);
+        elbow.setInverted(true);
 
-        V4B_Analog = hardwareMap.get(AnalogInput.class, "VA");
+        wrist = new SimpleServo(hardwareMap, SERVO_WRIST, 0, 260, AngleUnit.DEGREES);
+        claw = new SimpleServo(hardwareMap, SERVO_CLAW, 0, 180, AngleUnit.DEGREES);
+        spin = new SimpleServo(hardwareMap, SERVO_SPIN, 0, 180, AngleUnit.DEGREES);
 
-        Wrist = new SimpleServo(hardwareMap, "W", 0, 260, AngleUnit.DEGREES);
-        Gripper = new SimpleServo(hardwareMap, "G", 0, 180, AngleUnit.DEGREES);
-        Spin = new SimpleServo(hardwareMap, "Spin", 0, 180, AngleUnit.DEGREES);
-
-        V4B.turnToAngle(240);
-        Wrist.turnToAngle(170);
-        Spin.turnToAngle(transferSpin);
-        Gripper.turnToAngle(transferGrip);
+        elbow.turnToAngle(240);
+        wrist.turnToAngle(170);
+        spin.turnToAngle(transferSpin);
+        claw.turnToAngle(transferGrip);
         outtaking = false;
-
     }
 
     @Override
     public void periodic() {
-        if(outtaking) {
-            double difference = V4B.getAngle() - 60;
-            Wrist.turnToAngle(190-difference);
+        if (outtaking) {
+            double difference = elbow.getAngle() - 60;
+            wrist.turnToAngle(190 - difference);
         }
     }
 
-
-    public double getV4BPos() {
-        return(V4B_Analog.getVoltage() / 3.3 * 360);
-    }
-
-
-    public void manualV4BControl(double angle, Telemetry telemetry) {
+    public void manualElbowControl(double angle, Telemetry telemetry) {
         int scaling = 8;
-
-        V4B.rotateByAngle(angle  * scaling);
-
-        telemetry.addData("V4B: ", V4B.getAngle());
+        elbow.rotateByAngle(angle  * scaling);
+        telemetry.addData("V4B: ", elbow.getAngle());
     }
 
     public void manualWristControl(double angle, Telemetry telemetry) {
         int scaling = 10;
-
-        Wrist.rotateByAngle(-angle  * scaling);
-
-        telemetry.addData("Wrist: ", Wrist.getAngle());
+        wrist.rotateByAngle(-angle  * scaling);
+        telemetry.addData("Wrist: ", wrist.getAngle());
     }
 
     public void manualSpinControl(double angle, Telemetry telemetry) {
         int scaling = 5;
-
-        Spin.rotateByAngle(-angle  * scaling);
-
-        telemetry.addData("Spin: ", Spin.getAngle());
+        spin.rotateByAngle(-angle  * scaling);
+        telemetry.addData("Spin: ", spin.getAngle());
     }
 
     public void mosaicSpin(double direction, Telemetry telemetry) {
         if(direction == 1) {
-            Spin.turnToAngle(flatSpin - 60);
+            spin.turnToAngle(flatSpin - 60);
         } else if (direction == -1){
-            Spin.turnToAngle(flatSpin + 60);
+            spin.turnToAngle(flatSpin + 60);
         } else {
-            Spin.turnToAngle(flatSpin);
+            spin.turnToAngle(flatSpin);
         }
     }
-
 
     public void place() {
-        V4B.turnToAngle(324);
-        Wrist.turnToAngle(165);
+        elbow.turnToAngle(324);
+        wrist.turnToAngle(165);
     }
 
-    public void grab() { Gripper.turnToAngle(closedPosition); }
-    public void release() { Gripper.turnToAngle(openPosition); }
+    public void grab() { claw.turnToAngle(closedPosition); }
+    public void release() { claw.turnToAngle(openPosition); }
 
     public boolean withinUncertainty(double currentPos, double wantedPos, double range) {
-        if((currentPos < wantedPos + range) && currentPos > wantedPos - range) {
-            return true;
-        } else {
-            return false;
-        }
+        return (currentPos < wantedPos + range) && currentPos > wantedPos - range;
     }
 }

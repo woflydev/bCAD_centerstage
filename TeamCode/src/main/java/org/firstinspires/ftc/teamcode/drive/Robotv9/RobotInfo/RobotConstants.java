@@ -4,21 +4,20 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class RobotConstants {
-    // -------------------------------------------------------------- CONTROLLER CONFIG
-    public static final double JOYSTICK_DEADZONE = 0.03;
-
     // -------------------------------------------------------------- ROBOT CONFIG
 
     public static final String FRONT_LEFT = "frontL";
     public static final String FRONT_RIGHT = "frontR";
     public static final String BACK_LEFT = "backL";
     public static final String BACK_RIGHT = "backR";
-    public static final String ARM_R = "armR";
-    public static final String ARM_L = "armL";
+    public static final String LIFT_R = "liftR";
+    public static final String LIFT_L = "liftL";
     public static final String INTAKE_MOTOR = "intake";
     public static final String SERVO_FLAP = "flap";
     public static final String SERVO_CLAW = "claw";
     public static final String SERVO_WRIST = "wrist";
+    public static final String SERVO_SPIN = "spin";
+    public static final String SERVO_ELBOW = "elbow";
     public static final String SERVO_ELBOW_L = "elbowL";
     public static final String SERVO_ELBOW_R = "elbowR";
     public static final String SERVO_PLANE = "plane";
@@ -29,14 +28,12 @@ public class RobotConstants {
     public static final String FRONT_CAMERA = "Webcam 1";
     public static final String BACK_CAMERA = "Webcam 2";
 
-    public static final int PERMISSION_TIMEOUT = 5000;
-
+    public static final double MAX_LIFT_SPEED = 0.6;
     public static final int MAX_OUTTAKE_SPEED = 2800;
+    public static final int LIFT_RESET_TIMEOUT = 4; // note: how many seconds the lift should be active for before brought down automatically
     public static final int MAX_OUTTAKE_HEIGHT = 3200;
     public static final int MIN_OUTTAKE_HEIGHT = 0;
     public static final int ARM_ADJUSTMENT_INCREMENT = 40; // used to be 50
-    public static final int ARM_BOOST_MODIFIER = 1;
-    public static final int ARM_RESET_TIMEOUT = 3;
 
     public static final double FLAP_CLOSE = 0.42;
     public static final double FLAP_OPEN = 1.00;
@@ -54,23 +51,6 @@ public class RobotConstants {
     public static final double PLANE_ACTIVE = 0;
     public static final double WHATEVER_THE_FUCK_THAT_THING_IS_OFF = 0.6;
     public static final double WHATEVER_THE_FUCK_THAT_THING_IS_ON = 0.35;
-
-    // hanging
-    public static final double ELBOW_HANG_STABILIZATION = 0.343;
-    public static final double WRIST_HANG_STABILIZATION = 0.19;
-
-
-    public static final double MAX_ACCELERATION_DEVIATION = 10; // higher = less smoothing
-    public static final double BASE_DRIVE_SPEED_MODIFIER = 1; // higher = less speed
-    public static final double PRECISION_DRIVE_SPEED_MODIFIER = 3.35;
-
-    public static final double MAX_MANUAL_INTAKE_POWER = 0.65; // note: old 0.55
-
-    public static final double PPR = 375; // gobuilda motor 85203 Series
-    public static final double ENCODER_TICKS_PER_TILE = 640; // in encoder ticks
-
-    // -------------------------------------------------------------- RR
-    public static final boolean STARTUP_USE_LOCALIZER = false;
 
     // -------------------------------------------------------------- JUNCTION PRESETS
 

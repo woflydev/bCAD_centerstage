@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.hardware;
 
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants.*;
+
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -27,10 +29,10 @@ public class DriveSubsystem extends SubsystemBase {
     double START_DRIVE_SLOWDOWN_AT_DEGREES = 15;
 
     public DriveSubsystem(HardwareMap hardwareMap) {
-        frontLM = hardwareMap.get(DcMotorEx.class, "FrontLeft");
-        frontRM = hardwareMap.get(DcMotorEx.class, "FrontRight");
-        backLM = hardwareMap.get(DcMotorEx.class, "RearLeft");
-        backRM = hardwareMap.get(DcMotorEx.class, "RearRight");
+        frontLM = hardwareMap.get(DcMotorEx.class, FRONT_LEFT);
+        frontRM = hardwareMap.get(DcMotorEx.class, FRONT_RIGHT);
+        backLM = hardwareMap.get(DcMotorEx.class, BACK_LEFT);
+        backRM = hardwareMap.get(DcMotorEx.class, BACK_RIGHT);
 
         frontLM.setDirection(DcMotorEx.Direction.REVERSE);
         backLM.setDirection(DcMotorEx.Direction.REVERSE);

@@ -21,10 +21,10 @@ abstract public class OpModeTemplate extends CommandOpMode {
     protected DroneLauncherSubsystem shooter;
     protected LiftSubsystem lift;
 
-    protected IMU imu;
-
     protected GamepadEx gamepad1Ex;
     protected GamepadEx gamepad2Ex;
+
+    protected IMU imu;
 
     protected void InitBlock() {
         imu = hardwareMap.get(IMU.class, "imu");
@@ -46,7 +46,7 @@ abstract public class OpModeTemplate extends CommandOpMode {
         wait.reset();
         while (wait.seconds() < 2) { short x; }
 
-        intake = new IntakeSubsystem(hardwareMap, gamepad1Ex, telemetry, gamepad1, gamepad2);
+        intake = new IntakeSubsystem(hardwareMap, telemetry, gamepad1, gamepad2);
         hang = new HangSubsystem(hardwareMap, gamepad2, telemetry);
         shooter = new DroneLauncherSubsystem(hardwareMap);
         lift = new LiftSubsystem(hardwareMap, telemetry, gamepad2, deposit, lift);
@@ -55,7 +55,6 @@ abstract public class OpModeTemplate extends CommandOpMode {
         telemetry.update();
 
         register(intake, drivebase, hang, shooter, deposit);
-
     }
 
     protected void RumbleGamepad() {

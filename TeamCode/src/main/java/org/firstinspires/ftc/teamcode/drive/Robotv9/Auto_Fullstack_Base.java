@@ -76,11 +76,11 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         autoAlreadyRun = false;
         InitBlock();
 
-        deposit.V4B.turnToAngle(180);
+        deposit.elbow.turnToAngle(180);
         timeout(2);
-        deposit.Gripper.turnToAngle(110);
+        deposit.claw.turnToAngle(110);
         timeout(2);
-        deposit.V4B.turnToAngle(270);
+        deposit.elbow.turnToAngle(270);
 
         drive = new bCADMecanumDrive(hardwareMap, telemetry);
         BuildTrajectories();
@@ -286,7 +286,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
 
         timeout(0.5);
 
-        intake.Rspin();
+        intake.reverseSpin();
 
         drive.followTrajectorySequence(stackToBackboard);
 

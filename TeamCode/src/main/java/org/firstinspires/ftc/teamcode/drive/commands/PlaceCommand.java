@@ -27,7 +27,7 @@ public class PlaceCommand extends CommandBase {
         timer.reset();
 
         //deposit.V4B.turnToAngle(126);
-        deposit.V4B.turnToAngle(110);
+        deposit.elbow.turnToAngle(110);
         deposit.outtaking = true;
     }
 
@@ -35,14 +35,14 @@ public class PlaceCommand extends CommandBase {
     public void execute() {
         elevation = 100+ lift.liftOffset;
 
-        lift.leftMotor.motor.setTargetPosition(elevation);
-        lift.rightMotor.motor.setTargetPosition(elevation);
+        lift.liftLM.motor.setTargetPosition(elevation);
+        lift.liftRM.motor.setTargetPosition(elevation);
 
-        lift.leftMotor.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lift.rightMotor.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift.liftLM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift.liftRM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        lift.leftMotor.motor.setPower(1);
-        lift.rightMotor.motor.setPower(1);
+        lift.liftLM.motor.setPower(1);
+        lift.liftRM.motor.setPower(1);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class PlaceCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if(lift.leftMotor.getCurrentPosition() > elevation-10) { return true; }
+        if(lift.liftLM.getCurrentPosition() > elevation-10) { return true; }
         else return false;
     }
 }

@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.Robotv9;
 
 import com.arcrobotics.ftclib.command.button.GamepadButton;
-import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.gamepad.TriggerReader;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.drive.commands.HomeCommand;
@@ -61,7 +59,7 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
                 .whenPressed(() -> deposit.manualWristControl(-1, telemetry));
 
         new RightTriggerReader(gamepad2Ex, gamepad1Ex).whenActive(intake::spin).whenInactive(intake::stop);
-        new LeftTriggerReader(gamepad2Ex, gamepad1Ex).whenActive(intake::Rspin).whenInactive(intake::stop);
+        new LeftTriggerReader(gamepad2Ex, gamepad1Ex).whenActive(intake::reverseSpin).whenInactive(intake::stop);
 
         new GamepadButton(gamepad1Ex, GamepadKeys.Button.BACK)
                 .whenPressed(() -> imu.resetYaw());
@@ -81,13 +79,13 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
         }
 
         drivebase.userControlledDrive(gamepad1, imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
-        deposit.manualV4BControl(gamepad2Ex.getRightY(), telemetry);
+        deposit.manualElbowControl(gamepad2Ex.getRightY(), telemetry);
         hang.run(gamepad2);
     }
 
     public void StatusTelemetry() {
-        telemetry.addData("Wrist Position", deposit.Wrist.getAngle());
-        telemetry.addData("Slide position", lift.leftMotor.motor.getCurrentPosition());
+        telemetry.addData("Wrist Position", deposit.wrist.getAngle());
+        telemetry.addData("Slide position", lift.liftLM.motor.getCurrentPosition());
         telemetry.update();
     }
 

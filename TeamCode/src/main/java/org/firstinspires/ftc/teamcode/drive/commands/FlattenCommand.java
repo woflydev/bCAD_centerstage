@@ -21,13 +21,11 @@ public class FlattenCommand extends CommandBase {
     }
 
     @Override
-    public void execute() {
-
-    }
+    public void execute() { }
 
     @Override
     public void end(boolean interrupted) {
-        deposit.Spin.turnToAngle(deposit.flatSpin);
+        deposit.spin.turnToAngle(deposit.flatSpin);
     }
 
     @Override

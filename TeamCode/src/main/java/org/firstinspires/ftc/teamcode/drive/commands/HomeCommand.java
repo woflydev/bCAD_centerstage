@@ -24,23 +24,23 @@ public class HomeCommand extends CommandBase {
         timer = new ElapsedTime();
         timer.reset();
 
-        deposit.V4B.turnToAngle(260);
-        deposit.Wrist.turnToAngle(170);
-        deposit.Spin.turnToAngle(deposit.transferSpin);
+        deposit.elbow.turnToAngle(260);
+        deposit.wrist.turnToAngle(170);
+        deposit.spin.turnToAngle(deposit.transferSpin);
         deposit.grab();
         deposit.outtaking = false;
     }
 
     @Override
     public void execute() {
-        lift.leftMotor.motor.setTargetPosition(0);
-        lift.rightMotor.motor.setTargetPosition(0);
+        lift.liftLM.motor.setTargetPosition(0);
+        lift.liftRM.motor.setTargetPosition(0);
 
-        lift.leftMotor.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lift.rightMotor.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift.liftLM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift.liftRM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        lift.leftMotor.motor.setPower(1);
-        lift.rightMotor.motor.setPower(1);
+        lift.liftLM.motor.setPower(1);
+        lift.liftRM.motor.setPower(1);
     }
 
     @Override
@@ -50,6 +50,6 @@ public class HomeCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return lift.leftMotor.getCurrentPosition() < 10;
+        return lift.liftLM.getCurrentPosition() < 10;
     }
 }

@@ -136,7 +136,7 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
         START_POSE = this.alliance == RobotAlliance.RED ? RED_STARTING_POSES[startingPositionIndex] : BLUE_STARTING_POSES[startingPositionIndex];
         PARKING_POSE = this.alliance == RobotAlliance.RED ? RED_PARKING_POSES[parkingLocationIndex] : BLUE_PARKING_POSES[parkingLocationIndex];
 
-        locMode = RobotConstants.STARTUP_USE_LOCALIZER ? RobotLocMode.CAM : RobotLocMode.MEC;
+        locMode = RobotLocMode.MEC;
     }
 
     // note: custom behaviour -----------------------------------------------------------
@@ -679,8 +679,8 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
         frontRM.setDirection(DcMotorSimple.Direction.REVERSE);
         backRM.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        armR = hardwareMap.get(DcMotorEx.class, RobotConstants.ARM_R);
-        armL = hardwareMap.get(DcMotorEx.class, RobotConstants.ARM_L);
+        armR = hardwareMap.get(DcMotorEx.class, RobotConstants.LIFT_R);
+        armL = hardwareMap.get(DcMotorEx.class, RobotConstants.LIFT_L);
 
         armR.setDirection(DcMotorSimple.Direction.REVERSE);
         armL.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -964,7 +964,7 @@ public class Auto_Fullstack_Base_Old extends LinearOpMode {
                 }
             }*/
 
-            if ((armL.getCurrentPosition() <= 20 || armR.getCurrentPosition() <= 20) || armTimer.seconds() >= RobotConstants.ARM_RESET_TIMEOUT) {
+            if ((armL.getCurrentPosition() <= 20 || armR.getCurrentPosition() <= 20) || armTimer.seconds() >= RobotConstants.LIFT_RESET_TIMEOUT) {
                 armR.setVelocity(0);
                 armL.setVelocity(0);
             }
