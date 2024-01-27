@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -56,21 +57,21 @@ public class IntakeSubsystem extends SubsystemBase {
     public void closeFlap() { servoFlap.turnToAngle(RobotConstants.FLAP_CLOSE); }
 
     // note: rumble not being tested
-    /*@Override
+    @Override
     public void periodic() {
-        telemetry.addData("Color Sensor Distance: ", is.getDistance(DistanceUnit.MM));
+        telemetry.addData("Color Sensor Distance", is.getDistance(DistanceUnit.MM));
         int threshold = 30;
 
         if (is.getDistance(DistanceUnit.MM) < threshold && !driversAlerted) {
-            gamepad1.rumble(800);
-            gamepad2.rumble(800);
+            gamepad1.rumble(400);
+            gamepad2.rumble(400);
             driversAlerted = true;
         } else if (is.getDistance(DistanceUnit.MM) > threshold) {
             driversAlerted = false;
         }
     }
 
-    public void manualCoverControl(double angle, Telemetry telemetry) {
+    /*public void manualCoverControl(double angle, Telemetry telemetry) {
         int scaling = 8;
         servoFlap.rotateByAngle(angle  * scaling);
         telemetry.addData("Intake Cover: ", servoFlap.getAngle());
