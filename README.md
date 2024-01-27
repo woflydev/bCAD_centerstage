@@ -1,4 +1,3 @@
-# Road Runner Quickstart
+# BreakingCAD (13710) x Team Odyssey (17556)
 
-Check out the [docs](https://rr.brott.dev/docs/v1-0/tuning/).
-
+A frankenstein monster repository, using code developed by 17556 to enhance the existing hardware capabilities of hardware designed and constructed by 13710.
