@@ -6,6 +6,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.*;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.hardware.DepositSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.DroneLauncherSubsystem;
@@ -28,7 +29,7 @@ abstract public class OpModeTemplate extends CommandOpMode {
     protected IMU imu;
 
     protected void InitBlock() {
-        imu = hardwareMap.get(IMU.class, "imu");
+        imu = hardwareMap.get(IMU.class, RobotConstants.HUB_IMU);
         imu.initialize(new IMU.Parameters(
                 new RevHubOrientationOnRobot(
                         RevHubOrientationOnRobot.LogoFacingDirection.LEFT,

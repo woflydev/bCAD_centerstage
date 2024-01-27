@@ -18,45 +18,35 @@ public class RobotConstants {
     public static final String SERVO_WRIST = "wrist";
     public static final String SERVO_SPIN = "spin";
     public static final String SERVO_ELBOW = "elbow";
-    public static final String SERVO_ELBOW_L = "elbowL";
-    public static final String SERVO_ELBOW_R = "elbowR";
     public static final String SERVO_PLANE = "plane";
-    public static final String SERVO_WHATEVER_THE_FUCK_THAT_THING_IS = "presser";
-    public static final String SERVO_HANG_R = "hangR";
-    public static final String SERVO_HANG_L = "hangL";
     public static final String HUB_IMU = "imu";
     public static final String FRONT_CAMERA = "Webcam 1";
     public static final String BACK_CAMERA = "Webcam 2";
+    public static final String SERVO_HANG_R = "hangR";
+    public static final String SERVO_HANG_L = "hangL";
 
     public static final double MAX_LIFT_SPEED = 0.6;
-    public static final int MAX_OUTTAKE_SPEED = 2800;
     public static final int LIFT_RESET_TIMEOUT = 4; // note: how many seconds the lift should be active for before brought down automatically
     public static final int MAX_OUTTAKE_HEIGHT = 3200;
     public static final int MIN_OUTTAKE_HEIGHT = 0;
-    public static final int ARM_ADJUSTMENT_INCREMENT = 40; // used to be 50
 
     public static final double FLAP_CLOSE = 200;
     public static final double FLAP_OPEN = 114;
-
     public static final double CLAW_CLOSE = 140;
     public static final double CLAW_OPEN = 80;
     public static final double CLAW_DEPOSIT = 30;
+    public static final double ELBOW_PICKUP = 260;
+    public static final double ELBOW_HOME = 260;
+    public static final double ELBOW_ACTIVE = 110;
+    public static final int SPIN_HOME = 27;
+    public static final int SPIN_DEPOSIT = SPIN_HOME + 90;
 
     public static final double WRIST_PICKUP = 0.133;
     public static final double WRIST_HOME = 170;
     public static final double WRIST_ACTIVE = 0.63;
 
-    public static final double ELBOW_PICKUP = 260;
-    public static final double ELBOW_HOME = 260;
-    public static final double ELBOW_ACTIVE = 110;
-
-    public static final int SPIN_HOME = 27;
-    public static final int SPIN_DEPOSIT = SPIN_HOME + 90;
-
     public static final double PLANE_STANDBY = 0.19;
     public static final double PLANE_ACTIVE = 0;
-    public static final double WHATEVER_THE_FUCK_THAT_THING_IS_OFF = 0.6;
-    public static final double WHATEVER_THE_FUCK_THAT_THING_IS_ON = 0.35;
 
     // -------------------------------------------------------------- JUNCTION PRESETS
 
