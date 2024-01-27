@@ -4,7 +4,6 @@ import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState.Outtake;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.HomeCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.subcommands.LeftTriggerReader;
@@ -75,26 +74,27 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
     public void run() {
         super.run();
         MainLoop();
-        RuntimeConfiguration();
+        RuntimeControls();
         StatusTelemetry();
     }
 
-    public void RuntimeConfiguration() {
+    public void RuntimeControls() {
         // note: single driver pixel control
-        if (gamepad1.left_bumper && deposit.outtakeState == Outtake.IDLE) {
-            new TransferAndStandbyCommand(deposit, lift, intake);
-        } else if (deposit.outtakeState == Outtake.GRABBED_AND_READY) { // note: will only be GRABBED_AND_READY after transfer
-                 if (gamepad1.a) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_LOW);
-            else if (gamepad1.b) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_MID);
-            else if (gamepad1.y) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_HIGH);
-        } else if (deposit.outtakeState == Outtake.PENDING_DEPOSIT) {
-            if (gamepad1.a || gamepad1.b || gamepad1.y) new DepositAndResetCommand(deposit, lift);
+        switch (deposit.outtakeState) {
+            case IDLE:
+                if (gamepad1.left_bumper) new TransferAndStandbyCommand(deposit, lift, intake);
+                break;
+            case GRABBED_AND_READY: // note: will only be GRABBED_AND_READY after transfer
+                     if (gamepad1.a) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_LOW);
+                else if (gamepad1.b) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_MID);
+                else if (gamepad1.y) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_HIGH);
+                break;
+            case PENDING_DEPOSIT:
+                if (gamepad1.a || gamepad1.b || gamepad1.y) new DepositAndResetCommand(deposit, lift);
+                break;
         }
 
-        if (!deposit.outtakeBusy) {
-            // note: allows for manual lift operation by driver2
-            lift.run(gamepad2Ex.getLeftY());
-        }
+        if (!deposit.outtakeBusy) lift.run(gamepad2Ex.getLeftY()); // note: allows for manual lift operation by driver2
 
         drivebase.Mecanum(gamepad1, imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
         deposit.manualElbowControl(gamepad2Ex.getRightY(), telemetry);
