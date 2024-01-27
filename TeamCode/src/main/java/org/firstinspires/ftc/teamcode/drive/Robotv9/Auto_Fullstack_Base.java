@@ -359,9 +359,9 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
 
     private Pose2d[] SortPurpleSpikemarkAlign() {
         if (alliance == RobotAlliance.RED) {
-            return startingPosition == RobotStartingPosition.BACKDROP ? RED_PURPLE_PIXEL_SPIKEMARK_POSES : ApplyAudienceOffset(RED_PURPLE_PIXEL_SPIKEMARK_POSES);
+            return startingPosition == RobotStartingPosition.BACKDROP ? RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP : RED_PURPLE_SPIKEMARK_AUDIENCE;
         } else {
-            return startingPosition == RobotStartingPosition.BACKDROP ? BLUE_PURPLE_PIXEL_SPIKEMARK_POSES : ApplyAudienceOffset(BLUE_PURPLE_PIXEL_SPIKEMARK_POSES);
+            return startingPosition == RobotStartingPosition.BACKDROP ? BLUE_PURPLE_SPIKEMARK_BACKDROP : BLUE_PURPLE_SPIKEMARK_AUDIENCE;
         }
     }
 
@@ -369,7 +369,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         Pose2d[] returnArray = new Pose2d[input.length];
         for (int i = 0; i < input.length; i++) {
             Pose2d pose = input[i];
-            returnArray[i] = new Pose2d(pose.getX() - AUDIENCE_OFFSET_AMOUNT, pose.getY(), pose.getHeading());
+            returnArray[i] = new Pose2d(pose.getX() - AUDIENCE_OFFSET_AMOUNT, pose.getY(), Math.toRadians(AUDIENCE_HEADING_VARIATION));
         }
         return returnArray;
     }
