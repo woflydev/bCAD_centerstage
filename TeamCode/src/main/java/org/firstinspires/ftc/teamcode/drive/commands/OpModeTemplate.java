@@ -4,10 +4,8 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AutoState;
-import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AutoState.*;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.*;
 import org.firstinspires.ftc.teamcode.drive.hardware.DepositSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.DroneLauncherSubsystem;

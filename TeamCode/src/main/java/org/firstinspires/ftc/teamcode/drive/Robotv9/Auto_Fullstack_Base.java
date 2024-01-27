@@ -6,17 +6,16 @@ import android.annotation.SuppressLint;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AutoState.*;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.*;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.commands.OpModeTemplate;
-import org.firstinspires.ftc.teamcode.drive.commands.AutoScoreCommand;
-import org.firstinspires.ftc.teamcode.drive.commands.TransferCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.AutoScoreCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.TransferAndStandbyCommand;
 import org.firstinspires.ftc.teamcode.drive.rr.bCADMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.rr.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.drive.vision2.VisionPropPipeline;
@@ -55,10 +54,6 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     private TrajectorySequence rightPurple;
     private TrajectorySequence leftPurple;
     private TrajectorySequence middlePurple;
-    private TrajectorySequence rightPixelAvoidance;
-    private TrajectorySequence middlePixelAvoidance;
-    private TrajectorySequence leftPixelAvoidance;
-    private TrajectorySequence chosenSequence;
     private TrajectorySequence backboardToStack;
     private TrajectorySequence stackToBackboard;
     private TrajectorySequence intakeProne;
@@ -91,7 +86,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         drive = new bCADMecanumDrive(hardwareMap, telemetry);
         workingYellowBackdropAlign = SortYellowBackdropAlign();
         workingPurpleSpikemarkAlign = SortPurpleSpikemarkAlign();
-        BuildTrajectories();
+
         VisionPropDetection();
     }
 
@@ -104,6 +99,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                 StatusTelemetry();
                 HandlePurple();
                 HandleYellow();
+                HandleCycle();
 
                 drive.update();
             }
@@ -171,6 +167,58 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         }
     }
 
+    private void HandleCycle() {
+        if (startingPosition == RobotStartingPosition.BACKDROP) {
+            switch (autoState) {
+                case BA_MOVING_TO_CYCLE:
+                    if (!drive.isBusy()) {
+                        TrajectorySequence cycleTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                                .lineToLinearHeading(STAGE_DOOR_POSES[allianceIndex])
+                                .waitSeconds(0.001)
+                                .splineToLinearHeading(CYCLING_STACK_KNOCK_POSES[allianceIndex], CYCLING_STACK_KNOCK_POSES[allianceIndex].getHeading())
+                                .waitSeconds(0.001)
+                                .lineToLinearHeading(CYCLING_STACK_INNER_POSES[allianceIndex])
+                                .build();
+                        drive.followTrajectorySequence(cycleTrajectory); // note: blocking
+                        ExecuteRotation(180, true);
+                        autoState = RootAutoState.BA_INTAKE_PIXELS_FROM_STACK;
+                    }
+                    break;
+                case BA_INTAKE_PIXELS_FROM_STACK:
+                    if (!drive.isBusy()) {
+                        intake.spin();
+                        drive.followTrajectory(CalcKinematics(3, CAUTION_SPEED));
+                        timeout(0.5);
+
+                        TrajectorySequence toBackdropTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                                .lineToConstantHeading(CYCLE_RETURN_POSES[allianceIndex].vec())
+                                .waitSeconds(0.001)
+                                .lineToConstantHeading(BACKDROP_CENTER_POSES[allianceIndex].vec())
+                                .build();
+
+                        drive.followTrajectorySequenceAsync(toBackdropTrajectory);
+
+                        autoTimer.reset();
+                        autoState = RootAutoState.BA_MOVING_BACK_FROM_CYCLE;
+                    }
+                    break;
+                case BA_MOVING_BACK_FROM_CYCLE:
+                    if (autoTimer.seconds() >= 2) {
+                        intake.reverseSpin();
+                        new TransferAndStandbyCommand(deposit, lift, intake).schedule();
+                        autoState = RootAutoState.BA_DEPOSIT_WHITE;
+                    }
+                    break;
+                case BA_DEPOSIT_WHITE:
+                    if (!drive.isBusy()) {
+                        intake.stop();
+                        ExecuteRotation(180, false);
+                        Score();
+                    }
+            }
+        }
+    }
+
     private void StatusTelemetry() {
         telemetry.addData("Autonomous Clock", autoTimer.seconds());
         telemetry.addData("Robot X", drive.getPoseEstimate().getX());
@@ -222,65 +270,6 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
             telemetry.update();
         }
         webcam.closeCameraDevice();
-
-        switch(randomization) {
-            case LOCATION_1:
-                chosenSequence = leftPurple;
-                break;
-            default:
-            case LOCATION_2:
-                chosenSequence = middlePurple;
-                break;
-            case LOCATION_3:
-                chosenSequence = rightPurple;
-                break;
-        }
-    }
-
-    private void BuildTrajectories() {
-        rightPurple = drive.trajectorySequenceBuilder(new Pose2d(-36.70, 67.40, Math.toRadians(90.00)))
-                .lineTo(new Vector2d(-43.82, 42.04))
-                .build();
-        leftPurple = drive.trajectorySequenceBuilder(new Pose2d(-36.70, 67.40, Math.toRadians(90.00)))
-                .lineToSplineHeading(new Pose2d(-45.45, 51.39, Math.toRadians(130.00)))
-                .lineToLinearHeading(new Pose2d(-28.84, 38.78, Math.toRadians(145.00)))
-                .build();
-        middlePurple = drive.trajectorySequenceBuilder(new Pose2d(-36.70, 67.40, Math.toRadians(90.00)))
-                .lineTo(new Vector2d(-36.11, 39.82))
-                .build();
-
-        rightPixelAvoidance = drive.trajectorySequenceBuilder(rightPurple.start())
-                .lineTo(new Vector2d(-37.05, 13.86))
-                .lineTo(new Vector2d(14.00, 14.00))
-                .lineToLinearHeading(new Pose2d(48.00, 32.00, Math.toRadians(180.00)))
-                .build();
-
-        middlePixelAvoidance = drive.trajectorySequenceBuilder(new Pose2d(-48.12, 49.90, Math.toRadians(180.00)))
-                .lineTo(new Vector2d(-47.83, 12.53))
-                .lineTo(new Vector2d(14.00, 14.00))
-                .lineToLinearHeading(new Pose2d(48, 39, Math.toRadians(180.00)))
-                .build();
-
-        leftPixelAvoidance = drive.trajectorySequenceBuilder(new Pose2d(-36.45, 51.97, Math.toRadians(180.00)))
-                .lineTo(new Vector2d(-36.60, 12.65))
-                .lineTo(new Vector2d(14.00, 14.00))
-                .lineToLinearHeading(new Pose2d(48.00, 46.00, Math.toRadians(180.00)))
-                .build();
-
-        backboardToStack = drive.trajectorySequenceBuilder(new Pose2d(41.18, 30.72, Math.toRadians(180.00)))
-                .lineTo(new Vector2d(6.45, 6.45))
-                .splineToLinearHeading(new Pose2d(-62.00, 14.00, Math.toRadians(180.00)), Math.toRadians(180.00))
-                .build();
-
-        stackToBackboard = drive.trajectorySequenceBuilder(backboardToStack.end())
-                .lineToLinearHeading(new Pose2d(9.42, 3.93, Math.toRadians(180.00)))
-                .lineToLinearHeading(new Pose2d(48, 34.33, Math.toRadians(180.00)))
-                .build();
-
-        intakeProne = drive.trajectorySequenceBuilder(backboardToStack.end())
-                .back(10)
-                .forward(10)
-                .build();
     }
 
     public void ExecuteRotation(double heading, boolean async) {
@@ -341,27 +330,5 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         ElapsedTime wait = new ElapsedTime();
         wait.reset();
         while (wait.seconds() < time) { short x; }
-    }
-
-    public void Cycle() {
-        drive.followTrajectorySequence(backboardToStack);
-
-        intake.spin();
-
-        timeout(0.5);
-
-        drive.followTrajectorySequence(intakeProne);
-
-        timeout(1);
-
-        new TransferCommand(deposit, lift, intake).schedule();
-
-        timeout(0.5);
-
-        intake.reverseSpin();
-
-        drive.followTrajectorySequence(stackToBackboard);
-
-        Score();
     }
 }

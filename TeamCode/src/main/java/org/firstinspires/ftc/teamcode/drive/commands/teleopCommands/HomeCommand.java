@@ -1,20 +1,16 @@
-package org.firstinspires.ftc.teamcode.drive.commands;
+package org.firstinspires.ftc.teamcode.drive.commands.teleopCommands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.hardware.DepositSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
 
-public class PlaceCommand extends CommandBase {
+public class HomeCommand extends CommandBase {
     private final DepositSubsystem deposit;
     private final LiftSubsystem lift;
-    private ElapsedTime timer;
-    int elevation;
-    int delay;
 
-    public PlaceCommand(DepositSubsystem deposit, LiftSubsystem lift) {
+    public HomeCommand(DepositSubsystem deposit, LiftSubsystem lift) {
         this.deposit = deposit;
         this.lift = lift;
         addRequirements(deposit, lift);
@@ -23,15 +19,17 @@ public class PlaceCommand extends CommandBase {
     @Override
     public void initialize() {
         deposit.outtakeBusy = true;
-        deposit.elbow.turnToAngle(110);
+
+        deposit.elbow.turnToAngle(260);
+        deposit.wrist.turnToAngle(170);
+        deposit.spin.turnToAngle(deposit.transferSpin);
+        deposit.clawReset();
     }
 
     @Override
     public void execute() {
-        elevation = 100 + lift.liftOffset;
-
-        lift.liftLM.motor.setTargetPosition(elevation);
-        lift.liftRM.motor.setTargetPosition(elevation);
+        lift.liftLM.motor.setTargetPosition(0);
+        lift.liftRM.motor.setTargetPosition(0);
 
         lift.liftLM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift.liftRM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -47,6 +45,6 @@ public class PlaceCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return lift.liftLM.getCurrentPosition() > elevation - 10;
+        return lift.liftLM.getCurrentPosition() < 10;
     }
 }

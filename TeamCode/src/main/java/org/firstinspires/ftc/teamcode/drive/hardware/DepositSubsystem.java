@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState.Outtake;
 
 public class DepositSubsystem extends SubsystemBase {
     // Servos
@@ -20,6 +21,8 @@ public class DepositSubsystem extends SubsystemBase {
     public int transferSpin = 27;
     public int flatSpin = transferSpin + 90;
     public boolean outtakeBusy;
+
+    public Outtake outtakeState = Outtake.IDLE;
 
     public DepositSubsystem(HardwareMap hardwareMap) {
         int MIN_ANGLE = 0;
@@ -81,8 +84,9 @@ public class DepositSubsystem extends SubsystemBase {
         wrist.turnToAngle(165);
     }
 
-    public void grab() { claw.turnToAngle(CLAW_CLOSE); }
-    public void release() { claw.turnToAngle(CLAW_DEPOSIT); }
+    public void clawGrab() { claw.turnToAngle(CLAW_CLOSE); }
+    public void clawReset() { claw.turnToAngle(CLAW_OPEN); }
+    public void clawDeposit() { claw.turnToAngle(CLAW_DEPOSIT); }
 
     public boolean withinUncertainty(double currentPos, double wantedPos, double range) {
         return (currentPos < wantedPos + range) && currentPos > wantedPos - range;

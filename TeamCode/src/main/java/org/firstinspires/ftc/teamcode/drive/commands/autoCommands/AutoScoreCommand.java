@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.commands;
+package org.firstinspires.ftc.teamcode.drive.commands.autoCommands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -21,11 +21,6 @@ public class AutoScoreCommand extends CommandBase {
     @Override
     public void initialize() {
         deposit.outtakeBusy = true;
-        /*commandGroup = new SequentialCommandGroup(
-                new PlaceCommand(deposit, lift),
-                new FlattenCommand(deposit)
-        );
-        commandGroup.schedule();*/
     }
 
     @Override
@@ -33,7 +28,7 @@ public class AutoScoreCommand extends CommandBase {
         deposit.elbow.turnToAngle(110); AutoWait();
         lift.AutoRun();
         deposit.spin.turnToAngle(deposit.flatSpin); AutoWait();
-        deposit.release(); AutoWait();
+        deposit.clawDeposit(); AutoWait();
         lift.AutoHome();
     }
 

@@ -4,25 +4,34 @@ import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.drive.commands.HomeCommand;
-import org.firstinspires.ftc.teamcode.drive.commands.LeftTriggerReader;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState.Outtake;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
+import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.HomeCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.LeftTriggerReader;
 import org.firstinspires.ftc.teamcode.drive.commands.OpModeTemplate;
-import org.firstinspires.ftc.teamcode.drive.commands.RightTriggerReader;
-import org.firstinspires.ftc.teamcode.drive.commands.ScoreCommand;
-import org.firstinspires.ftc.teamcode.drive.commands.TransferCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.RaiseAndPrimeCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.RightTriggerReader;
+import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.DepositAndResetCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.TransferAndStandbyCommand;
 
 public class TeleOp_Fullstack_Base extends OpModeTemplate {
     @Override
     public void initialize() {
         InitBlock();
+
+        // note: ------------------------driver 1------------------------------------------------------------
+        new GamepadButton(gamepad1Ex, GamepadKeys.Button.BACK)
+                .whenPressed(() -> imu.resetYaw());
+
+        // note: ------------------------driver 2------------------------------------------------------------
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.START).toggleWhenPressed(
                 () -> intake.openCover(),
                 () -> intake.closeCover()
         );
 
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.A).toggleWhenPressed(
-                () -> deposit.grab(),
-                () -> deposit.release()
+                () -> deposit.clawGrab(),
+                () -> deposit.clawDeposit()
         );
 
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.BACK).toggleWhenPressed(
@@ -31,9 +40,9 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
         );
 
         // note: will not be scheduled unless button becomes INACTIVE -> ACTIVE again
-        new GamepadButton(gamepad2Ex, GamepadKeys.Button.X).whenPressed(new ScoreCommand(deposit, lift));
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.X).whenPressed(new DepositAndResetCommand(deposit, lift));
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.Y).whenPressed(new HomeCommand(deposit, lift));
-        new GamepadButton(gamepad2Ex, GamepadKeys.Button.B).whenPressed(new TransferCommand(deposit, lift, intake));
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.B).whenPressed(new TransferAndStandbyCommand(deposit, lift, intake));
 
         // note: will not be scheduled unless button becomes INACTIVE -> ACTIVE again
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.LEFT_BUMPER)
@@ -60,9 +69,6 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
         new LeftTriggerReader(gamepad2Ex, gamepad1Ex)
                 .whenActive(intake::reverseSpin)
                 .whenInactive(intake::stop);
-
-        new GamepadButton(gamepad1Ex, GamepadKeys.Button.BACK)
-                .whenPressed(() -> imu.resetYaw());
     }
 
     @Override
@@ -74,6 +80,16 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
     }
 
     public void RuntimeConfiguration() {
+        if (gamepad1.left_bumper && deposit.outtakeState == Outtake.IDLE) {
+            new TransferAndStandbyCommand(deposit, lift, intake);
+        } else if (deposit.outtakeState == Outtake.GRABBED_AND_READY) { // note: will only be GRABBED_AND_READY after transfer
+            if (gamepad1.a) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_LOW);
+            if (gamepad1.b) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_MID);
+            if (gamepad1.y) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_HIGH);
+        } else if (deposit.outtakeState == Outtake.PENDING_DEPOSIT) {
+            if (gamepad1.a || gamepad1.b || gamepad1.y) new DepositAndResetCommand(deposit, lift);
+        }
+
         if (!deposit.outtakeBusy) {
             // note: allows for manual lift operation by driver2
             lift.run(gamepad2Ex.getLeftY());

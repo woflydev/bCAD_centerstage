@@ -50,6 +50,12 @@ public class RobotAutoConstants {
             new Pose2d(12, 38, Math.toRadians(270)),
             new Pose2d(10, 42, Math.toRadians(225))
     };
+
+    // note: below vars used for cycling
+    public static final Pose2d[] CYCLING_STACK_KNOCK_POSES = {
+            new Pose2d(new Vector2d(-55, -2), Math.toRadians(180)),
+            new Pose2d(new Vector2d(-55, 2), Math.toRadians(180))
+    };
     public static final Pose2d[] CYCLING_STACK_INNER_POSES = {
             // note: again, red is first
             new Pose2d(new Vector2d(-57.5, -12), Math.toRadians(180.00)),

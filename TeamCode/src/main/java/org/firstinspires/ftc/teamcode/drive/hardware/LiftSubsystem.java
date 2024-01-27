@@ -27,7 +27,7 @@ public class LiftSubsystem extends SubsystemBase {
 
     public static int top;
     public int liftOffset = 0;
-    public int targetLiftPosition = 0;
+    public int targetLiftPosition;
 
     public LiftSubsystem(HardwareMap hMap, Telemetry telemetry, Gamepad gamepad2, DepositSubsystem deposit, LiftSubsystem lift){
         this.telemetry = telemetry;
@@ -49,6 +49,7 @@ public class LiftSubsystem extends SubsystemBase {
         liftRM.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
+    // note: this is only run IF deposit.outtakeBusy is false.
     public void run(double joystickY) {
         PassiveResetCheck(); // note: passive check should come first
         ManualLift(joystickY);
@@ -59,7 +60,7 @@ public class LiftSubsystem extends SubsystemBase {
         double motorPowers = Range.clip(Math.abs(joystickY), 0.2, 1);
 
         targetLiftPosition = target;
-        UpdateLift(true, motorPowers);
+        //UpdateLift(true, motorPowers); // TODO: re-enable manual joystick controls when i figure out what this thing does
 
         telemetry.addData("Target", joystickY);
         telemetry.addData("Slide Power", motorPowers);
@@ -97,8 +98,7 @@ public class LiftSubsystem extends SubsystemBase {
         return (joystick > 0) ? (top + liftOffset) : ((joystick == 0) ? liftLM.motor.getCurrentPosition() : liftOffset);
     }
 
-    public double getPosition() { return liftLM.getCurrentPosition(); }
-
+    // note: for lift operation during autonomous
     public void AutoRun() {
         int target = 250;
         while (getPosition() < target - 10) {
@@ -118,7 +118,7 @@ public class LiftSubsystem extends SubsystemBase {
         deposit.elbow.turnToAngle(260);
         deposit.wrist.turnToAngle(170);
         deposit.spin.turnToAngle(deposit.transferSpin);
-        deposit.grab();
+        deposit.clawGrab();
         deposit.outtakeBusy = false;
 
         while(getPosition() > target + 10) {
@@ -136,5 +136,5 @@ public class LiftSubsystem extends SubsystemBase {
     @Override
     public void periodic() { }
 
-    public void autoStabilize() { }
+    public double getPosition() { return liftLM.getCurrentPosition(); }
 }

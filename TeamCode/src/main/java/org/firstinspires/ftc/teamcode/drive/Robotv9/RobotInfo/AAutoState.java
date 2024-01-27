@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo;
 
-public class AutoState {
+public class AAutoState {
     public enum RootAutoState {
         BA_PLAY,
         BA_SCANNING,

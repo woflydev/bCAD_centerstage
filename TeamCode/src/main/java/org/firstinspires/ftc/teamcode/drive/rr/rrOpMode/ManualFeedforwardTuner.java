@@ -76,9 +76,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
         drive = new bCADMecanumDrive(hardwareMap, telemetry);
         VisualLoc localizer = new VisualLoc(hardwareMap, "Webcam 1", new Pose2d(0, 0), telemetry, drive, false);
-        if (DriveConstants.USE_LOCALIZER) {
-            drive.setLocalizer(localizer);
-        }
+        drive.setLocalizer(localizer);
 
         final VoltageSensor voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
