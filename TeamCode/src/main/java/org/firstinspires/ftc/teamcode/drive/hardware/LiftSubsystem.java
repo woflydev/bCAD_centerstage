@@ -117,7 +117,7 @@ public class LiftSubsystem extends SubsystemBase {
         int target = 0;
         deposit.elbow.turnToAngle(260);
         deposit.wrist.turnToAngle(170);
-        deposit.spin.turnToAngle(deposit.transferSpin);
+        deposit.spin.turnToAngle(SPIN_HOME);
         deposit.clawGrab();
         deposit.outtakeBusy = false;
 

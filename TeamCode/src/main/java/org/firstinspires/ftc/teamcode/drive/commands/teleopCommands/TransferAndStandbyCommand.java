@@ -29,8 +29,8 @@ public class TransferAndStandbyCommand extends CommandBase {
         deposit.outtakeBusy = true;
         timer.reset();
 
-        deposit.wrist.turnToAngle(260);
-        deposit.spin.turnToAngle(deposit.transferSpin);
+        deposit.wrist.turnToAngle(ELBOW_PICKUP); // note: 260
+        deposit.spin.turnToAngle(SPIN_HOME);
         deposit.clawReset();
 
         deposit.outtakeState = Outtake.ACTIVATED;
@@ -53,7 +53,7 @@ public class TransferAndStandbyCommand extends CommandBase {
                 break;
             case FLAP_OPENING:
                 if (timer.milliseconds() >= 500) {
-                    intake.openCover();
+                    intake.openFlap();
                     deposit.clawReset();
 
                     timer.reset();
@@ -75,13 +75,13 @@ public class TransferAndStandbyCommand extends CommandBase {
                     timer.reset();
                     deposit.outtakeState = Outtake.GRABBED_AND_READY;
                 }
+                break;
         }
     }
 
     @Override
     public void end(boolean interrupted) {
         deposit.outtakeBusy = false;
-
         deposit.elbow.turnToAngle(225);
         lift.liftLM.motor.setTargetPosition(0);
         lift.liftRM.motor.setTargetPosition(0);

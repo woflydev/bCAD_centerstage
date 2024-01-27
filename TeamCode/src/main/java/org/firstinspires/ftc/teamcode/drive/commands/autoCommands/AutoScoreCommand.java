@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.drive.commands.autoCommands;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.hardware.DepositSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
 
@@ -27,7 +28,7 @@ public class AutoScoreCommand extends CommandBase {
     public void execute() {
         deposit.elbow.turnToAngle(110); AutoWait();
         lift.AutoRun();
-        deposit.spin.turnToAngle(deposit.flatSpin); AutoWait();
+        deposit.spin.turnToAngle(RobotConstants.SPIN_DEPOSIT); AutoWait();
         deposit.clawDeposit(); AutoWait();
         lift.AutoHome();
     }

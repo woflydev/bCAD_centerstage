@@ -7,7 +7,6 @@ import android.annotation.SuppressLint;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -25,8 +24,6 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name = "Blue Audience Side", group = "Blue Autos")
-
 public class Auto_Fullstack_Base extends OpModeTemplate {
     private RootAutoState autoState = RootAutoState.BA_PLAY;
     private bCADMecanumDrive drive;
@@ -35,7 +32,6 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     public RobotStartingPosition startingPosition;
     public RobotParkingLocation parkingLocation;
     public RobotTaskFinishBehaviour taskFinishBehaviour;
-    public RobotLocMode locMode;
     private boolean autoAlreadyRun;
     public boolean taskFinishBehaviourSelected;
     public int cycleCounter = 0;
@@ -45,18 +41,13 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     public int dir;
     public Pose2d[] workingYellowBackdropAlign;
     public Pose2d[] workingPurpleSpikemarkAlign;
+    public static Pose2d START_POSE = new Pose2d();
+    public static Pose2d PARKING_POSE = new Pose2d();
     public Point r1;
     public Point r2;
     public Point r3;
 
     private final ElapsedTime autoTimer = new ElapsedTime();
-
-    private TrajectorySequence rightPurple;
-    private TrajectorySequence leftPurple;
-    private TrajectorySequence middlePurple;
-    private TrajectorySequence backboardToStack;
-    private TrajectorySequence stackToBackboard;
-    private TrajectorySequence intakeProne;
 
     public Auto_Fullstack_Base(RobotAlliance alliance,
                                RobotStartingPosition startPos,
@@ -76,23 +67,26 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     public void initialize() {
         autoAlreadyRun = false;
         InitBlock();
+        EnsureAttachmentNormalization();
 
-        deposit.elbow.turnToAngle(180);
-        timeout(2);
-        deposit.claw.turnToAngle(110);
-        timeout(2);
-        deposit.elbow.turnToAngle(270);
-
-        drive = new bCADMecanumDrive(hardwareMap, telemetry);
         workingYellowBackdropAlign = SortYellowBackdropAlign();
         workingPurpleSpikemarkAlign = SortPurpleSpikemarkAlign();
+        START_POSE = this.alliance == RobotAlliance.RED ?
+                RED_STARTING_POSES[startingPositionIndex] :
+                BLUE_STARTING_POSES[startingPositionIndex];
+        PARKING_POSE = this.alliance == RobotAlliance.RED ?
+                RED_PARKING_POSES[parkingLocationIndex] :
+                BLUE_PARKING_POSES[parkingLocationIndex];
 
+        drive = new bCADMecanumDrive(hardwareMap, telemetry);
+        drive.setPoseEstimate(START_POSE);
+
+        SelectTaskFinishBehaviour();
         VisionPropDetection();
     }
 
     public void run() {
         if (!autoAlreadyRun) {
-            drive.setPoseEstimate(new Pose2d(-36.70, 67.40, Math.toRadians(90.00)));
             autoAlreadyRun = true;
 
             while (!isStopRequested() && opModeIsActive()) {
@@ -100,6 +94,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                 HandlePurple();
                 HandleYellow();
                 HandleCycle();
+                HandleFinish();
 
                 drive.update();
             }
@@ -186,7 +181,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                     break;
                 case BA_INTAKE_PIXELS_FROM_STACK:
                     if (!drive.isBusy()) {
-                        intake.spin();
+                        intake.spinAndCloseFlap();
                         drive.followTrajectory(CalcKinematics(3, CAUTION_SPEED));
                         timeout(0.5);
 
@@ -219,6 +214,25 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         }
     }
 
+    private void HandleFinish() {
+        switch (autoState) {
+            case BA_MOVING_TO_PARKING:
+                if (!drive.isBusy()) {
+                    Trajectory parking = drive
+                            .trajectoryBuilder(drive.getPoseEstimate())
+                            .splineToLinearHeading(PARKING_POSE, PARKING_POSE.getHeading()).build();
+
+                    drive.followTrajectory(parking);
+                    ExecuteRotation(alliance == RobotAlliance.RED ? 90 : 270, true); // note: ensure field centric heading on finish
+                    autoState = RootAutoState.BA_PARKED;
+                }
+                break;
+            case BA_PARKED:
+                // todo: other custom logic if parked
+                break;
+        }
+    }
+
     private void StatusTelemetry() {
         telemetry.addData("Autonomous Clock", autoTimer.seconds());
         telemetry.addData("Robot X", drive.getPoseEstimate().getX());
@@ -234,6 +248,37 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         telemetry.addData("Starting Position", startingPosition);
         telemetry.addData("Task Completion Behavior", taskFinishBehaviour);
         telemetry.addData("Parking Location", parkingLocation);
+        telemetry.update();
+    }
+
+    private void SelectTaskFinishBehaviour() {
+        telemetry.addData("TEAM_PROP_LOCATION", randomization);
+        telemetry.addData("SELECTED_ALLIANCE", alliance);
+        telemetry.addLine("====================================");
+        telemetry.addLine("PLEASE SELECT TASK FINISH BEHAVIOUR!");
+        telemetry.addLine("X / SQUARE for CYCLE.");
+        telemetry.addLine("Y / TRIANGLE for CYCLE_TWICE.");
+        telemetry.addLine("B / CIRCLE for DO_NOT_CYCLE.");
+        telemetry.update();
+
+        while (!isStopRequested() && opModeInInit() && !taskFinishBehaviourSelected) {
+            if (gamepad1.x) {
+                taskFinishBehaviour = RobotTaskFinishBehaviour.DO_NOT_CYCLE;
+                taskFinishBehaviourSelected = true;
+            } else if (gamepad1.y) {
+                taskFinishBehaviour = RobotTaskFinishBehaviour.CYCLE;
+                taskFinishBehaviourSelected = true;
+            } else if (gamepad1.b) {
+                taskFinishBehaviour = RobotTaskFinishBehaviour.CYCLE_TWICE_NONONONONO;
+                taskFinishBehaviourSelected = true;
+            }
+        }
+
+        // note: in the event that program is started before selection, defaults to DO_NOT_CYCLE.
+        if (!taskFinishBehaviourSelected) taskFinishBehaviour = RobotTaskFinishBehaviour.DO_NOT_CYCLE;
+
+        telemetry.addLine("INITIALIZATION COMPLETE! TASK FINISH BEHAVIOUR SELECTED!");
+        telemetry.addData("Selected Behaviour", taskFinishBehaviour);
         telemetry.update();
     }
 
@@ -324,7 +369,15 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         return returnArray;
     }
 
-    public void Score() { new AutoScoreCommand(deposit, lift).schedule(); }
+    private void EnsureAttachmentNormalization() {
+        deposit.elbow.turnToAngle(180);
+        timeout(2);
+        deposit.claw.turnToAngle(110);
+        timeout(2);
+        deposit.elbow.turnToAngle(270);
+    }
+
+    private void Score() { new AutoScoreCommand(deposit, lift).schedule(); }
 
     public void timeout(double time) {
         ElapsedTime wait = new ElapsedTime();

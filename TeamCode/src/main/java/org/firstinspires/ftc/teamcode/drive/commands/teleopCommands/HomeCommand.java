@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.commands.teleopCommands;
 
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants.*;
+
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -20,9 +22,9 @@ public class HomeCommand extends CommandBase {
     public void initialize() {
         deposit.outtakeBusy = true;
 
-        deposit.elbow.turnToAngle(260);
-        deposit.wrist.turnToAngle(170);
-        deposit.spin.turnToAngle(deposit.transferSpin);
+        deposit.elbow.turnToAngle(ELBOW_HOME);
+        deposit.wrist.turnToAngle(WRIST_HOME);
+        deposit.spin.turnToAngle(SPIN_HOME);
         deposit.clawReset();
     }
 

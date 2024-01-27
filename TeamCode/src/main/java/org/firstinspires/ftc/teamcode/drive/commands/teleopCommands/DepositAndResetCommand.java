@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.hardware.DepositSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
 
@@ -23,7 +24,7 @@ public class DepositAndResetCommand extends CommandBase {
     @Override
     public void initialize() {
         deposit.outtakeBusy = true;
-        deposit.elbow.turnToAngle(110);
+        deposit.elbow.turnToAngle(RobotConstants.ELBOW_ACTIVE);
     }
 
     @Override

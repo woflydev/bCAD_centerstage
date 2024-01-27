@@ -35,21 +35,24 @@ public class RobotConstants {
     public static final int MIN_OUTTAKE_HEIGHT = 0;
     public static final int ARM_ADJUSTMENT_INCREMENT = 40; // used to be 50
 
-    public static final double FLAP_CLOSE = 0.42;
-    public static final double FLAP_OPEN = 1.00;
+    public static final double FLAP_CLOSE = 200;
+    public static final double FLAP_OPEN = 114;
 
     public static final double CLAW_CLOSE = 140;
     public static final double CLAW_OPEN = 80;
     public static final double CLAW_DEPOSIT = 30;
 
     public static final double WRIST_PICKUP = 0.133;
-    public static final double WRIST_STANDBY_BACK = 0.69;
-    public static final double WRIST_STANDBY = 0.41; // 0.615
+    public static final double WRIST_HOME = 170;
     public static final double WRIST_ACTIVE = 0.63;
-    public static final double ELBOW_PICKUP = 0.050;
-    public static final double ELBOW_STANDBY = 0.143;
-    public static final double ELBOW_STANDBY_BACK = 0.6205;
-    public static final double ELBOW_ACTIVE = 0.49;
+
+    public static final double ELBOW_PICKUP = 260;
+    public static final double ELBOW_HOME = 260;
+    public static final double ELBOW_ACTIVE = 110;
+
+    public static final int SPIN_HOME = 27;
+    public static final int SPIN_DEPOSIT = SPIN_HOME + 90;
+
     public static final double PLANE_STANDBY = 0.19;
     public static final double PLANE_ACTIVE = 0;
     public static final double WHATEVER_THE_FUCK_THAT_THING_IS_OFF = 0.6;

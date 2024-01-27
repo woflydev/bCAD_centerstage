@@ -6,18 +6,16 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 
 public class DroneLauncherSubsystem extends SubsystemBase {
-    public ServoEx Shoot; // Deposit Slide 1
+    public ServoEx planeLauncher;
 
     public DroneLauncherSubsystem(HardwareMap hardwareMap) {
-        // Assign variables here with parameters
-        Shoot = new SimpleServo(hardwareMap, "Shoot", 0, 260, AngleUnit.DEGREES);
-
-        Shoot.turnToAngle(30);
+        planeLauncher = new SimpleServo(hardwareMap, RobotConstants.SERVO_PLANE, 0, 260, AngleUnit.DEGREES);
+        planeLauncher.turnToAngle(30);
     }
 
-    public void shoot() { Shoot.turnToAngle(0); }
-
-    public void reset() { Shoot.turnToAngle(30); }
+    public void launch() { planeLauncher.turnToAngle(0); }
+    public void reset() { planeLauncher.turnToAngle(30); }
 }

@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.drive.commands.teleopCommands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.hardware.DepositSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
@@ -27,7 +27,7 @@ public class RaiseAndPrimeCommand extends CommandBase {
     @Override
     public void initialize() {
         deposit.outtakeBusy = true;
-        deposit.elbow.turnToAngle(110);
+        deposit.elbow.turnToAngle(RobotConstants.ELBOW_ACTIVE);
     }
 
     @Override
@@ -44,8 +44,8 @@ public class RaiseAndPrimeCommand extends CommandBase {
                 break;
             case PRIMED_FOR_DEPOSIT:
                 if (timer.milliseconds() >= 1200) {
-                    intake.closeCover();
-                    deposit.spin.turnToAngle(deposit.flatSpin);
+                    intake.closeFlap();
+                    deposit.spin.turnToAngle(RobotConstants.SPIN_DEPOSIT);
 
                     timer.reset();
                     deposit.outtakeState = ASubsystemState.Outtake.PENDING_DEPOSIT;

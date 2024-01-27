@@ -7,11 +7,10 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
     Telemetry telemetry;
@@ -29,20 +28,20 @@ public class IntakeSubsystem extends SubsystemBase {
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
 
-        intakeM = new Motor(hardwareMap, "Spinner");
+        intakeM = new Motor(hardwareMap, RobotConstants.INTAKE_MOTOR);
         intakeM.setRunMode(Motor.RunMode.RawPower);
         intakeM.setInverted(false);
-        servoFlap = new SimpleServo(hardwareMap, "I", 0, 260, AngleUnit.DEGREES);
+        servoFlap = new SimpleServo(hardwareMap, RobotConstants.SERVO_FLAP, 0, 260, AngleUnit.DEGREES);
 
-        servoFlap.turnToAngle(200);
+        servoFlap.turnToAngle(RobotConstants.FLAP_CLOSE);
         driversAlerted = false;
 
         is = hardwareMap.get(ColorRangeSensor.class, "is"); // note: for rumble
     }
 
-    public void spin() {
+    public void spinAndCloseFlap() {
         intakeM.set(-0.8);
-        servoFlap.turnToAngle(200);
+        servoFlap.turnToAngle(RobotConstants.FLAP_CLOSE);
     }
 
     public void reverseSpin() {
@@ -53,10 +52,8 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeM.set(0);
     }
 
-    public void openCover() {
-        servoFlap.turnToAngle(114);}
-    public void closeCover() {
-        servoFlap.turnToAngle(200);}
+    public void openFlap() { servoFlap.turnToAngle(RobotConstants.FLAP_OPEN); }
+    public void closeFlap() { servoFlap.turnToAngle(RobotConstants.FLAP_CLOSE); }
 
     // note: rumble not being tested
     /*@Override

@@ -7,10 +7,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState.Outtake;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.HomeCommand;
-import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.LeftTriggerReader;
+import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.subcommands.LeftTriggerReader;
 import org.firstinspires.ftc.teamcode.drive.commands.OpModeTemplate;
 import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.RaiseAndPrimeCommand;
-import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.RightTriggerReader;
+import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.subcommands.RightTriggerReader;
 import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.DepositAndResetCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.TransferAndStandbyCommand;
 
@@ -25,8 +25,8 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
 
         // note: ------------------------driver 2------------------------------------------------------------
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.START).toggleWhenPressed(
-                () -> intake.openCover(),
-                () -> intake.closeCover()
+                () -> intake.openFlap(),
+                () -> intake.closeFlap()
         );
 
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.A).toggleWhenPressed(
@@ -35,7 +35,7 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
         );
 
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.BACK).toggleWhenPressed(
-                () -> shooter.shoot(),
+                () -> shooter.launch(),
                 () -> shooter.reset()
         );
 
@@ -64,7 +64,7 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
                 .whenPressed(() -> deposit.manualWristControl(-1, telemetry));
 
         new RightTriggerReader(gamepad2Ex, gamepad1Ex)
-                .whenActive(intake::spin)
+                .whenActive(intake::spinAndCloseFlap)
                 .whenInactive(intake::stop);
         new LeftTriggerReader(gamepad2Ex, gamepad1Ex)
                 .whenActive(intake::reverseSpin)
@@ -80,12 +80,13 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
     }
 
     public void RuntimeConfiguration() {
+        // note: single driver pixel control
         if (gamepad1.left_bumper && deposit.outtakeState == Outtake.IDLE) {
             new TransferAndStandbyCommand(deposit, lift, intake);
         } else if (deposit.outtakeState == Outtake.GRABBED_AND_READY) { // note: will only be GRABBED_AND_READY after transfer
-            if (gamepad1.a) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_LOW);
-            if (gamepad1.b) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_MID);
-            if (gamepad1.y) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_HIGH);
+                 if (gamepad1.a) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_LOW);
+            else if (gamepad1.b) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_MID);
+            else if (gamepad1.y) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_HIGH);
         } else if (deposit.outtakeState == Outtake.PENDING_DEPOSIT) {
             if (gamepad1.a || gamepad1.b || gamepad1.y) new DepositAndResetCommand(deposit, lift);
         }
@@ -95,14 +96,11 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
             lift.run(gamepad2Ex.getLeftY());
         }
 
-        // note: drivetrain
         drivebase.userControlledDrive(gamepad1, imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
-
-        // note: elbow
         deposit.manualElbowControl(gamepad2Ex.getRightY(), telemetry);
-
-        // note: manual hanging control
         hang.run(gamepad2);
+
+        Delay(60); // note: input debouncing
     }
 
     public void StatusTelemetry() {
@@ -112,4 +110,6 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
     }
 
     public void MainLoop() {}
+
+    private void Delay(double time) { try { Thread.sleep((long)time); } catch (Exception e) { System.out.println("Exception!"); } }
 }
