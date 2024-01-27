@@ -151,12 +151,9 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                     if (!drive.isBusy()) {
                         ExecuteRotation(180, false); // note: alignment should be blocking
                         Score();
+
                         autoTimer.reset();
-                        if (taskFinishBehaviour == RobotTaskFinishBehaviour.DO_NOT_CYCLE) {
-                            autoState = RootAutoState.BA_MOVING_TO_PARKING;
-                        } else {
-                            autoState = RootAutoState.BA_MOVING_TO_CYCLE;
-                        }
+                        autoState = (cycleCounter > 0) ? RootAutoState.BA_MOVING_TO_CYCLE : RootAutoState.BA_MOVING_TO_PARKING;
                     }
                     break;
             }
@@ -210,6 +207,10 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                         intake.stop();
                         ExecuteRotation(180, false);
                         Score();
+
+                        // note: depending on the number of cycles to do, moves to parking / initiates another cycle.
+                        cycleCounter--;
+                        autoState = (cycleCounter > 0) ? RootAutoState.BA_MOVING_TO_CYCLE : RootAutoState.BA_MOVING_TO_PARKING;
                     }
             }
         }
@@ -257,20 +258,23 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         telemetry.addData("SELECTED_ALLIANCE", alliance);
         telemetry.addLine("====================================");
         telemetry.addLine("PLEASE SELECT TASK FINISH BEHAVIOUR!");
-        telemetry.addLine("X / SQUARE for CYCLE.");
-        telemetry.addLine("Y / TRIANGLE for CYCLE_TWICE.");
-        telemetry.addLine("B / CIRCLE for DO_NOT_CYCLE.");
+        telemetry.addLine("X / SQUARE for DO_NOT_CYCLE.");
+        telemetry.addLine("Y / TRIANGLE for CYCLE_ONCE.");
+        telemetry.addLine("B / CIRCLE for CYCLE_TWICE.");
         telemetry.update();
 
         while (!isStopRequested() && opModeInInit() && !taskFinishBehaviourSelected) {
             if (gamepad1.x) {
                 taskFinishBehaviour = RobotTaskFinishBehaviour.DO_NOT_CYCLE;
+                cycleCounter = 0;
                 taskFinishBehaviourSelected = true;
             } else if (gamepad1.y) {
                 taskFinishBehaviour = RobotTaskFinishBehaviour.CYCLE;
+                cycleCounter = 1;
                 taskFinishBehaviourSelected = true;
             } else if (gamepad1.b) {
                 taskFinishBehaviour = RobotTaskFinishBehaviour.CYCLE_TWICE_NONONONONO;
+                cycleCounter = 2;
                 taskFinishBehaviourSelected = true;
             }
         }
