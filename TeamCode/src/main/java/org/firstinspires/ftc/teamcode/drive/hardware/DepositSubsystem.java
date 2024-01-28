@@ -30,8 +30,8 @@ public class DepositSubsystem extends SubsystemBase {
 
         elbow.setInverted(true);
 
-        elbow.turnToAngle(240);
-        wrist.turnToAngle(170);
+        elbow.turnToAngle(ELBOW_HOME); // todo: test 240 vs 260
+        wrist.turnToAngle(WRIST_HOME);
         spin.turnToAngle(SPIN_HOME);
         claw.turnToAngle(CLAW_OPEN);
         outtakeBusy = false;
@@ -48,19 +48,19 @@ public class DepositSubsystem extends SubsystemBase {
     public void manualElbowControl(double angle, Telemetry telemetry) {
         int scaling = 8;
         elbow.rotateByAngle(angle  * scaling);
-        telemetry.addData("V4B: ", elbow.getAngle());
+        telemetry.addData("Elbow", elbow.getAngle());
     }
 
     public void manualWristControl(double angle, Telemetry telemetry) {
         int scaling = 10;
         wrist.rotateByAngle(-angle  * scaling);
-        telemetry.addData("Wrist: ", wrist.getAngle());
+        telemetry.addData("Wrist", wrist.getAngle());
     }
 
     public void manualSpinControl(double angle, Telemetry telemetry) {
         int scaling = 5;
         spin.rotateByAngle(-angle  * scaling);
-        telemetry.addData("Spin: ", spin.getAngle());
+        telemetry.addData("Spin", spin.getAngle());
     }
 
     public void mosaicSpin(double direction, Telemetry telemetry) {
