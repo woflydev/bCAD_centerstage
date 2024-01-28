@@ -192,7 +192,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                 case BA_MOVING_TO_CYCLE:
                     if (!drive.isBusy()) {
                         TrajectorySequence cycleTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                                .lineToLinearHeading(STAGE_DOOR_POSES[allianceIndex])
+                                .splineToConstantHeading(STAGE_DOOR_POSES[allianceIndex].vec(), STAGE_DOOR_POSES[allianceIndex].getHeading())
                                 .waitSeconds(0.001)
                                 .splineToLinearHeading(CYCLING_STACK_KNOCK_POSES[allianceIndex], CYCLING_STACK_KNOCK_POSES[allianceIndex].getHeading())
                                 .waitSeconds(0.001)
