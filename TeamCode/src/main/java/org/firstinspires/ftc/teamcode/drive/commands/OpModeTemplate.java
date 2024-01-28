@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.*;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.hardware.DepositSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.drive.hardware.DroneLauncherSubsystem;
+import org.firstinspires.ftc.teamcode.drive.hardware.PlaneLauncherSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.HangSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
@@ -20,7 +20,7 @@ abstract public class OpModeTemplate extends CommandOpMode {
     protected DepositSubsystem deposit;
     protected IntakeSubsystem intake;
     protected HangSubsystem hang;
-    protected DroneLauncherSubsystem shooter;
+    protected PlaneLauncherSubsystem shooter;
     protected LiftSubsystem lift;
 
     protected GamepadEx gamepad1Ex;
@@ -45,7 +45,7 @@ abstract public class OpModeTemplate extends CommandOpMode {
         deposit = new DepositSubsystem(hardwareMap);
         intake = new IntakeSubsystem(hardwareMap, telemetry, gamepad1, gamepad2);
         hang = new HangSubsystem(hardwareMap, gamepad2, telemetry);
-        shooter = new DroneLauncherSubsystem(hardwareMap);
+        shooter = new PlaneLauncherSubsystem(hardwareMap);
         lift = new LiftSubsystem(hardwareMap, telemetry, gamepad2, deposit, lift);
 
         telemetry.addLine("initialization complete");

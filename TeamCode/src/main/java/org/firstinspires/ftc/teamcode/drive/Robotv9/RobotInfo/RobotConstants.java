@@ -38,15 +38,16 @@ public class RobotConstants {
     public static final double ELBOW_PICKUP = 260;
     public static final double ELBOW_HOME = 260;
     public static final double ELBOW_ACTIVE = 110;
+    public static final double PLANE_HOME = 30;
+    public static final double PLANE_ACTIVE = 0;
+    public static final double INTAKE_SPEED = 0.8;
+    public static final double INTAKE_REVERSE_SPEED = 0.8;
     public static final int SPIN_HOME = 27;
     public static final int SPIN_DEPOSIT = SPIN_HOME + 90;
 
     public static final double WRIST_PICKUP = 0.133;
     public static final double WRIST_HOME = 170;
     public static final double WRIST_ACTIVE = 0.63;
-
-    public static final double PLANE_STANDBY = 0.19;
-    public static final double PLANE_ACTIVE = 0;
 
     // -------------------------------------------------------------- JUNCTION PRESETS
 

@@ -40,13 +40,10 @@ public class IntakeSubsystem extends SubsystemBase {
         is = hardwareMap.get(ColorRangeSensor.class, "is"); // note: for rumble
     }
 
-    public void spinAndCloseFlap() {
-        intakeM.set(-0.8);
-        servoFlap.turnToAngle(RobotConstants.FLAP_CLOSE);
-    }
+    public void spin() { intakeM.set(-RobotConstants.INTAKE_SPEED); }
 
     public void reverseSpin() {
-        intakeM.set(0.8);
+        intakeM.set(RobotConstants.INTAKE_REVERSE_SPEED);
     }
 
     public void stop() {

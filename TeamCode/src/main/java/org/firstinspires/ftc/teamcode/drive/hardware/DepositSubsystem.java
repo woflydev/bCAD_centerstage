@@ -20,17 +20,13 @@ public class DepositSubsystem extends SubsystemBase {
     public boolean outtakeBusy;
 
     public DepositSubsystem(HardwareMap hardwareMap) {
-        int MIN_ANGLE = 0;
-        int MAX_ANGLE = 355;
-
-        elbow = new SimpleServo(hardwareMap, SERVO_ELBOW, MIN_ANGLE, MAX_ANGLE, AngleUnit.DEGREES);
+        elbow = new SimpleServo(hardwareMap, SERVO_ELBOW, 0, 355, AngleUnit.DEGREES);
         wrist = new SimpleServo(hardwareMap, SERVO_WRIST, 0, 260, AngleUnit.DEGREES);
         claw = new SimpleServo(hardwareMap, SERVO_CLAW, 0, 180, AngleUnit.DEGREES);
         spin = new SimpleServo(hardwareMap, SERVO_SPIN, 0, 180, AngleUnit.DEGREES);
 
         elbow.setInverted(true);
-
-        elbow.turnToAngle(ELBOW_HOME); // todo: test 240 vs 260
+        elbow.turnToAngle(ELBOW_HOME); // todo: test 240 (og) vs 260
         wrist.turnToAngle(WRIST_HOME);
         spin.turnToAngle(SPIN_HOME);
         claw.turnToAngle(CLAW_OPEN);

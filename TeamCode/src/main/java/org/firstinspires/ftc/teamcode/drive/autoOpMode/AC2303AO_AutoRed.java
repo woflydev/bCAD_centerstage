@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.RobotTa
 import org.opencv.core.Point;
 
 @Config
-@Autonomous(name="NAT_RedAudienceAuto_OUTER", group="Final")
+@Autonomous(name="RedAudienceAuto_OUTER", group="RED")
 public class AC2303AO_AutoRed extends Auto_Fullstack_Base {
     public static double r1x = 25;
     public static double r1y = 90;

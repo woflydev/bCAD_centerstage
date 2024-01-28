@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.*;
 import org.opencv.core.Point;
 
 @Config
-@Autonomous(name="NAT_BlueBackdropAuto_INNER", group="Final")
+@Autonomous(name="BlueBackdropAuto_INNER", group="BLUE")
 public class AC2303BI_AutoBlue extends Auto_Fullstack_Base {
     public static double r1x = 25;
     public static double r1y = 90;

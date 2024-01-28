@@ -63,7 +63,7 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
                 .whenPressed(() -> deposit.manualWristControl(-1, telemetry));
 
         new RightTriggerReader(gamepad2Ex, gamepad1Ex)
-                .whenActive(intake::spinAndCloseFlap)
+                .whenActive(intake::spin)
                 .whenInactive(intake::stop);
         new LeftTriggerReader(gamepad2Ex, gamepad1Ex)
                 .whenActive(intake::reverseSpin)

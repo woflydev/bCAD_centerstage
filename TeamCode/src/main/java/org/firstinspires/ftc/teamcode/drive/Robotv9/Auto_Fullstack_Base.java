@@ -205,7 +205,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                     break;
                 case BA_INTAKE_PIXELS_FROM_STACK:
                     if (!drive.isBusy()) {
-                        intake.spinAndCloseFlap();
+                        intake.spin();
                         drive.followTrajectory(CalcKinematics(3, CAUTION_SPEED));
                         timeout(0.5);
 
