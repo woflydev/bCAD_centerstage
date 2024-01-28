@@ -36,11 +36,12 @@ public class RobotAutoConstants {
             new Pose2d(42, 36, Math.toRadians(180)),
             new Pose2d(42, 28, Math.toRadians(180)),
     };
+
     // how many units to get audience spikemark from backdrop
     public static final double AUDIENCE_OFFSET_AMOUNT = 48;
     public static final double AUDIENCE_HEADING_VARIATION = 0;
+    // note: backdrop, from Loc 1 to Loc 3.
     public static final Pose2d[] RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP = {
-            // note: backdrop, from Loc 1 to Loc 3. is modified with AUDIENCE_OFFSET_AMOUNT in runtime.
             new Pose2d(12, -24.5, Math.toRadians(180)),
             new Pose2d(22, -24.5, Math.toRadians(180)),
             new Pose2d(34, -24.5, Math.toRadians(180))

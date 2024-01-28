@@ -33,15 +33,14 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     public RobotStartingPosition startingPosition;
     public RobotParkingLocation parkingLocation;
     public RobotTaskFinishBehaviour taskFinishBehaviour;
-    private boolean autoAlreadyRun;
-    public boolean taskFinishBehaviourSelected;
+    public boolean autoAlreadyRun;
+    public boolean taskFinishBehaviourSelected = false;
     public int cycleCounter = 0;
     public int allianceIndex;
-    public int startingPositionIndex;
-    public int parkingLocationIndex;
     public int dir;
-    public Pose2d[] workingYellowBackdropAlign;
-    public Pose2d[] workingPurpleSpikemarkAlign;
+    public Pose2d[] wYellowBackdropAlign;
+    public Pose2d[] wPurpleSpikemarkAlign;
+    public Pose2d[] wPurpleAvoidanceCheckpoints;
     public static Pose2d START_POSE = new Pose2d();
     public static Pose2d PARKING_POSE = new Pose2d();
     public Point r1;
@@ -63,21 +62,20 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         this.r1 = r1;
         this.r2 = r2;
         this.r3 = r3;
+
+        allianceIndex = this.alliance == RobotAlliance.RED ? 0 : 1;
     }
 
     public void initialize() {
         autoAlreadyRun = false;
         InitBlock();
         EnsureAttachmentNormalization();
+        DetermineStartFinishPoses();
 
-        workingYellowBackdropAlign = SortYellowBackdropAlign();
-        workingPurpleSpikemarkAlign = SortPurpleSpikemarkAlign();
-        START_POSE = this.alliance == RobotAlliance.RED ?
-                RED_STARTING_POSES[startingPositionIndex] :
-                BLUE_STARTING_POSES[startingPositionIndex];
-        PARKING_POSE = this.alliance == RobotAlliance.RED ?
-                RED_PARKING_POSES[parkingLocationIndex] :
-                BLUE_PARKING_POSES[parkingLocationIndex];
+        taskFinishBehaviourSelected = false;
+        wYellowBackdropAlign = SortPoseBasedOnAlliance(RED_YELLOW_PIXEL_BACKDROP_POSES, BLUE_YELLOW_PIXEL_BACKDROP_POSES);
+        wPurpleAvoidanceCheckpoints = SortPoseBasedOnAlliance(RED_PURPLE_CHECKPOINTS, BLUE_PURPLE_CHECKPOINTS);
+        wPurpleSpikemarkAlign = SortPurpleSpikemarkAlign();
 
         drive = new bCADMecanumDrive(hardwareMap, telemetry);
         drive.setPoseEstimate(START_POSE);
@@ -108,13 +106,13 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                 case BA_PLAY:
                     switch (randomization) {
                         case LOCATION_1:
-                            drive.followTrajectoryAsync(GenerateTraj(workingPurpleSpikemarkAlign[0], false));
+                            drive.followTrajectoryAsync(GenerateTraj(wPurpleSpikemarkAlign[0], false));
                             break;
                         case LOCATION_2:
-                            drive.followTrajectoryAsync(GenerateTraj(workingPurpleSpikemarkAlign[1], false));
+                            drive.followTrajectoryAsync(GenerateTraj(wPurpleSpikemarkAlign[1], false));
                             break;
                         case LOCATION_3:
-                            drive.followTrajectoryAsync(GenerateTraj(workingPurpleSpikemarkAlign[2], false));
+                            drive.followTrajectoryAsync(GenerateTraj(wPurpleSpikemarkAlign[2], false));
                             break;
                     }
                     autoState = RootAutoState.BA_DEPOSIT_PURPLE;
@@ -122,6 +120,34 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                 case BA_DEPOSIT_PURPLE:
                     if (!drive.isBusy()) {
                         drive.followTrajectoryAsync(CalcKinematics(6, 0));
+                        autoState = RootAutoState.BA_MOVING_TO_BACKDROP;
+                    }
+                    break; // note: handoff to yellow
+            }
+        } else {
+            switch (autoState) {
+                case BA_PLAY:
+                    switch (randomization) {
+                        case LOCATION_1:
+                            drive.followTrajectoryAsync(GenerateTraj(wPurpleSpikemarkAlign[0], false));
+                            break;
+                        case LOCATION_2:
+                            drive.followTrajectoryAsync(GenerateTraj(wPurpleSpikemarkAlign[1], false));
+                            break;
+                        case LOCATION_3:
+                            drive.followTrajectoryAsync(GenerateTraj(wPurpleSpikemarkAlign[2], false));
+                            break;
+                    }
+                    autoState = RootAutoState.BA_DEPOSIT_PURPLE;
+                    break;
+                case BA_DEPOSIT_PURPLE:
+                    if (!drive.isBusy()) {
+                        TrajectorySequence purpleAvoidanceTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                                .lineToLinearHeading(wPurpleAvoidanceCheckpoints[0])
+                                .waitSeconds(0.001)
+                                .splineToLinearHeading(wPurpleAvoidanceCheckpoints[1], wPurpleAvoidanceCheckpoints[1].getHeading())
+                                .build();
+                        drive.followTrajectorySequenceAsync(purpleAvoidanceTrajectory);
                         autoState = RootAutoState.BA_MOVING_TO_BACKDROP;
                     }
                     break; // note: handoff to yellow
@@ -135,13 +161,13 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                 case BA_MOVING_TO_BACKDROP:
                     switch (randomization) {
                         case LOCATION_1:
-                            drive.followTrajectoryAsync(GenerateTraj(workingYellowBackdropAlign[0], false));
+                            drive.followTrajectoryAsync(GenerateTraj(wYellowBackdropAlign[0], false));
                             break;
                         case LOCATION_2:
-                            drive.followTrajectoryAsync(GenerateTraj(workingYellowBackdropAlign[1], false));
+                            drive.followTrajectoryAsync(GenerateTraj(wYellowBackdropAlign[1], false));
                             break;
                         case LOCATION_3:
-                            drive.followTrajectoryAsync(GenerateTraj(workingYellowBackdropAlign[2], false));
+                            drive.followTrajectoryAsync(GenerateTraj(wYellowBackdropAlign[2], false));
                             break;
                     }
                     autoTimer.reset();
@@ -352,9 +378,8 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                 .build();
     }
 
-    private Pose2d[] SortYellowBackdropAlign() {
-        return alliance == RobotAlliance.RED ?
-                RED_YELLOW_PIXEL_BACKDROP_POSES : BLUE_YELLOW_PIXEL_BACKDROP_POSES;
+    private Pose2d[] SortPoseBasedOnAlliance(Pose2d[] posesForRed, Pose2d[] posesForBlue) {
+        return alliance == RobotAlliance.RED ? posesForRed : posesForBlue;
     }
 
     private Pose2d[] SortPurpleSpikemarkAlign() {
@@ -372,6 +397,26 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
             returnArray[i] = new Pose2d(pose.getX() - AUDIENCE_OFFSET_AMOUNT, pose.getY(), Math.toRadians(AUDIENCE_HEADING_VARIATION));
         }
         return returnArray;
+    }
+
+    private void DetermineStartFinishPoses() {
+        START_POSE =
+                this.startingPosition == RobotStartingPosition.BACKDROP
+                    ? (this.alliance == RobotAlliance.RED
+                        ? RED_STARTING_POSES[0]
+                        : BLUE_STARTING_POSES[0])
+                    : (this.alliance == RobotAlliance.RED
+                        ? RED_STARTING_POSES[1]
+                        : BLUE_STARTING_POSES[1]);
+
+        PARKING_POSE =
+                this.parkingLocation == RobotParkingLocation.INNER
+                        ? (this.alliance == RobotAlliance.RED
+                            ? RED_PARKING_POSES[0]
+                            : BLUE_PARKING_POSES[0])
+                        : (this.alliance == RobotAlliance.RED
+                            ? RED_PARKING_POSES[1]
+                            : BLUE_PARKING_POSES[1]);
     }
 
     private void EnsureAttachmentNormalization() {
