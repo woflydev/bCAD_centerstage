@@ -77,7 +77,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         wPurpleAvoidanceCheckpoints = SortPoseBasedOnAlliance(RED_PURPLE_CHECKPOINTS, BLUE_PURPLE_CHECKPOINTS);
         wPurpleSpikemarkAlign = SortPurpleSpikemarkAlign();
 
-        drive = new bCADMecanumDrive(hardwareMap, telemetry);
+        drive = new bCADMecanumDrive(hardwareMap);
         drive.setPoseEstimate(START_POSE);
 
         SelectTaskFinishBehaviour();

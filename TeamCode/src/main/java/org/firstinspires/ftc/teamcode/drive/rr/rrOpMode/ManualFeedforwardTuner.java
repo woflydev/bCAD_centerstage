@@ -22,9 +22,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.rr.bCADMecanumDrive;
-import org.firstinspires.ftc.teamcode.drive.vision2.VisualLoc;
 
 import java.util.Objects;
 
@@ -74,9 +72,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, dashboard.getTelemetry());
 
-        drive = new bCADMecanumDrive(hardwareMap, telemetry);
-        VisualLoc localizer = new VisualLoc(hardwareMap, "Webcam 1", new Pose2d(0, 0), telemetry, drive, false);
-        drive.setLocalizer(localizer);
+        drive = new bCADMecanumDrive(hardwareMap);
 
         final VoltageSensor voltageSensor = hardwareMap.voltageSensor.iterator().next();
 

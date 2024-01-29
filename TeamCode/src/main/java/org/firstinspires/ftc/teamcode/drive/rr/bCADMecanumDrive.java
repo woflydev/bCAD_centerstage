@@ -1,18 +1,5 @@
 package org.firstinspires.ftc.teamcode.drive.rr;
 
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.MAX_ANG_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.MAX_ANG_VEL;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.encoderTicksToInches;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.kV;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.*;
-
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -44,7 +31,6 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants;
-import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.rr.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.drive.rr.trajectorysequence.TrajectorySequenceBuilder;
@@ -54,6 +40,19 @@ import org.firstinspires.ftc.teamcode.drive.rr.util.LynxModuleUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.MAX_ANG_ACCEL;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.MAX_ANG_VEL;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.encoderTicksToInches;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.*;
 
 /*
  * Simple mecanum drive hardware implementation for REV hardware.
@@ -85,7 +84,7 @@ public class bCADMecanumDrive extends MecanumDrive {
     private List<Integer> lastEncPositions = new ArrayList<>();
     private List<Integer> lastEncVels = new ArrayList<>();
 
-    public bCADMecanumDrive(HardwareMap hardwareMap, Telemetry t) {
+    public bCADMecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
@@ -137,6 +136,7 @@ public class bCADMecanumDrive extends MecanumDrive {
         List<Integer> lastTrackingEncPositions = new ArrayList<>();
         List<Integer> lastTrackingEncVels = new ArrayList<>();
 
+        // TODO: if desired, use setLocalizer() to change the localization method
         setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(
