@@ -25,11 +25,11 @@ public class DriveConstants {
     public static double kA = 0.005;
     public static double kStatic = 0.01;
 
-    public static double MAX_VEL = 75.02365997; //Old: 45 //64.44667423738913; //Tuned Value // Old Value 88.2631293784093367624276581;
-    public static double MAX_ACCEL = 75.02365997; //88.2631293784093367624276581;
+    public static double MAX_VEL = 75.02365997;
+    public static double MAX_ACCEL = 75.02365997;
 
-    public static double MAX_ANG_VEL = Math.toRadians(270); //Old: 110 //9.600001633182172 //60.713828813559324
-    public static double MAX_ANG_ACCEL = Math.toRadians(270); //Old: 110
+    public static double MAX_ANG_VEL = Math.toRadians(270);
+    public static double MAX_ANG_ACCEL = Math.toRadians(270);
 
     public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR =
             RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
