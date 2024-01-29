@@ -34,9 +34,9 @@ public class HangSubsystem extends SubsystemBase {
 
         double power = Math.abs(gamepad2.touchpad_finger_1_y);
 
-        telemetry.addData("Hang power: ", power);
-        telemetry.addData("Hang target: ", targetPos);
-        telemetry.addData("Hang current: ", Hang.motor.getCurrentPosition());
+        telemetry.addData("Hang power", power);
+        telemetry.addData("Hang target", targetPos);
+        telemetry.addData("Hang current", Hang.motor.getCurrentPosition());
 
         if(gamepad2.touchpad_finger_1) {
             targetPos = targetPos + (gamepad2.touchpad_finger_1_y * scaling);
