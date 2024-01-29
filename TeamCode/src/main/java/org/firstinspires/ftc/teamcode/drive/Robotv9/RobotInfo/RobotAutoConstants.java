@@ -5,12 +5,12 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 public class RobotAutoConstants {
     // -------------------------------------------------------------- AUTO CONFIG
     public static final Pose2d[] RED_STARTING_POSES = {
-            new Pose2d(11, -60, Math.toRadians(90)),
-            new Pose2d(-35, -60, Math.toRadians(90)),
+            new Pose2d(11, -60, Math.toRadians(270)),
+            new Pose2d(-35, -60, Math.toRadians(270)),
     };
     public static final Pose2d[] BLUE_STARTING_POSES = {
-            new Pose2d(11, 60, Math.toRadians(270)),
-            new Pose2d(-35, 60, Math.toRadians(270)),
+            new Pose2d(11, 60, Math.toRadians(90)),
+            new Pose2d(-35, 60, Math.toRadians(90)),
     };
     public static final Pose2d[] RED_PARKING_POSES = {
             // note: inner is first
@@ -42,14 +42,14 @@ public class RobotAutoConstants {
     public static final double AUDIENCE_HEADING_VARIATION = 0;
     // note: backdrop, from Loc 1 to Loc 3.
     public static final Pose2d[] RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP = {
-            new Pose2d(12, -24.5, Math.toRadians(180)),
-            new Pose2d(22, -24.5, Math.toRadians(180)),
-            new Pose2d(34, -24.5, Math.toRadians(180))
+            new Pose2d(12, -24.5, Math.toRadians(0)),
+            new Pose2d(22, -24.5, Math.toRadians(0)),
+            new Pose2d(34, -24.5, Math.toRadians(0))
     };
     public static final Pose2d[] RED_PURPLE_SPIKEMARK_AUDIENCE = {
-            new Pose2d(-38, -38, Math.toRadians(135)),
-            new Pose2d(-36, -35, Math.toRadians(90)),
-            new Pose2d(-34, -38, Math.toRadians(45)),
+            new Pose2d(-38, -38, Math.toRadians(315)),
+            new Pose2d(-36, -35, Math.toRadians(270)),
+            new Pose2d(-34, -38, Math.toRadians(225)),
     };
     public static final Pose2d[] RED_PURPLE_CHECKPOINTS = { // note: to avoid bumping purple when transiting
             new Pose2d(-60, -48, Math.toRadians(90)),
@@ -58,14 +58,14 @@ public class RobotAutoConstants {
 
     // BLUE AUDIENCE VARS
     public static final Pose2d[] BLUE_PURPLE_SPIKEMARK_BACKDROP = {
-            new Pose2d(RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP[2].getX(), -RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP[0].getY(), Math.toRadians(180)),
-            new Pose2d(RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP[1].getX(), -RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP[1].getY(), Math.toRadians(180)),
-            new Pose2d(RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP[0].getX(), -RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP[2].getY(), Math.toRadians(180))
+            new Pose2d(RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP[2].getX(), -RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP[0].getY(), Math.toRadians(0)),
+            new Pose2d(RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP[1].getX(), -RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP[1].getY(), Math.toRadians(0)),
+            new Pose2d(RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP[0].getX(), -RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP[2].getY(), Math.toRadians(0))
     };
     public static final Pose2d[] BLUE_PURPLE_SPIKEMARK_AUDIENCE = {
-            new Pose2d(RED_PURPLE_SPIKEMARK_AUDIENCE[2].getX(), -RED_PURPLE_SPIKEMARK_AUDIENCE[0].getY(), Math.toRadians(315)),
-            new Pose2d(RED_PURPLE_SPIKEMARK_AUDIENCE[1].getX(), -RED_PURPLE_SPIKEMARK_AUDIENCE[1].getY(), Math.toRadians(270)),
-            new Pose2d(RED_PURPLE_SPIKEMARK_AUDIENCE[0].getX(), -RED_PURPLE_SPIKEMARK_AUDIENCE[2].getY(), Math.toRadians(225)),
+            new Pose2d(RED_PURPLE_SPIKEMARK_AUDIENCE[2].getX(), -RED_PURPLE_SPIKEMARK_AUDIENCE[0].getY(), Math.toRadians(135)),
+            new Pose2d(RED_PURPLE_SPIKEMARK_AUDIENCE[1].getX(), -RED_PURPLE_SPIKEMARK_AUDIENCE[1].getY(), Math.toRadians(90)),
+            new Pose2d(RED_PURPLE_SPIKEMARK_AUDIENCE[0].getX(), -RED_PURPLE_SPIKEMARK_AUDIENCE[2].getY(), Math.toRadians(45)),
     };
     public static final Pose2d[] BLUE_PURPLE_CHECKPOINTS = {
             new Pose2d(RED_PURPLE_CHECKPOINTS[0].getX(), -RED_PURPLE_CHECKPOINTS[0].getY(), Math.toRadians(270)),
