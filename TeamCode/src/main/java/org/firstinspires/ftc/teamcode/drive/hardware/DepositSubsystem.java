@@ -36,8 +36,8 @@ public class DepositSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if (outtakeBusy) {
-            double difference = elbow.getAngle() - 60;
-            wrist.turnToAngle(190 - difference);
+            /*double difference = elbow.getAngle() - 60;
+            wrist.turnToAngle(190 - difference);*/
         }
     }
 

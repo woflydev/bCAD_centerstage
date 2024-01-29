@@ -44,7 +44,6 @@ public class LiftSubsystem extends SubsystemBase {
         liftLM.setInverted(true);
         liftLM.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         liftRM.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-
         liftLM.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftRM.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
@@ -70,8 +69,8 @@ public class LiftSubsystem extends SubsystemBase {
         /*
         note: set targetLiftPosition then call UpdateLift()
          */
-        liftRM.setTargetPosition(targetLiftPosition);
-        liftLM.setTargetPosition(targetLiftPosition);
+        liftRM.motor.setTargetPosition(targetLiftPosition);
+        liftLM.motor.setTargetPosition(targetLiftPosition);
         liftLM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftRM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armRuntime.reset();
@@ -85,8 +84,8 @@ public class LiftSubsystem extends SubsystemBase {
         note: automatically cuts power if two conditions are met:
         note: 1) both motors are below a threshold, 2) the target position is below a threshold, or 3) timeout has expired
          */
-        int thresh = 20;
-        if (targetLiftPosition <= thresh + 10) {
+        int thresh = 5;
+        if (targetLiftPosition <= thresh + 5) {
             if ((liftLM.getCurrentPosition() <= thresh && liftRM.getCurrentPosition() <= thresh) || armRuntime.seconds() >= LIFT_RESET_TIMEOUT) {
                 liftRM.setVelocity(0);
                 liftLM.setVelocity(0);
@@ -108,15 +107,15 @@ public class LiftSubsystem extends SubsystemBase {
             liftLM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             liftRM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            liftLM.motor.setPower(1);
-            liftRM.motor.setPower(1);
+            liftLM.motor.setPower(MAX_LIFT_SPEED);
+            liftRM.motor.setPower(MAX_LIFT_SPEED);
         }
     }
 
     public void AutoHome() {
         int target = 0;
-        deposit.elbow.turnToAngle(260);
-        deposit.wrist.turnToAngle(170);
+        deposit.elbow.turnToAngle(ELBOW_HOME);
+        deposit.wrist.turnToAngle(WRIST_HOME);
         deposit.spin.turnToAngle(SPIN_HOME);
         deposit.clawGrab();
         deposit.outtakeBusy = false;
@@ -128,8 +127,8 @@ public class LiftSubsystem extends SubsystemBase {
             liftLM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             liftRM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            liftLM.motor.setPower(1);
-            liftRM.motor.setPower(1);
+            liftLM.motor.setPower(MAX_LIFT_SPEED);
+            liftRM.motor.setPower(MAX_LIFT_SPEED);
         }
     }
 

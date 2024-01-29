@@ -8,48 +8,63 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.hardware.DepositSubsystem;
+import org.firstinspires.ftc.teamcode.drive.hardware.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
 
 public class DepositAndResetCommand extends CommandBase {
     private final DepositSubsystem deposit;
     private final LiftSubsystem lift;
+    private final IntakeSubsystem intake;
     private final ElapsedTime timer = new ElapsedTime();
 
-    public DepositAndResetCommand(DepositSubsystem deposit, LiftSubsystem lift) {
+    private HomeCommand hmc;
+
+    public DepositAndResetCommand(DepositSubsystem deposit, LiftSubsystem lift, IntakeSubsystem intake) {
         this.deposit = deposit;
         this.lift = lift;
+        this.intake = intake;
         addRequirements(deposit, lift);
     }
 
     @Override
     public void initialize() {
         deposit.outtakeBusy = true;
-        deposit.elbow.turnToAngle(RobotConstants.ELBOW_ACTIVE);
     }
 
     @Override
     public void execute() {
         switch (deposit.outtakeState) {
             // note: continued from RaiseAndPrimeCommand
+            case GRABBED_AND_READY:
+                intake.reverseSpin(); // note: this is stopped later in HomeCommand
+                deposit.outtakeState = ASubsystemState.Outtake.PENDING_DEPOSIT;
+                break;
             case PENDING_DEPOSIT:
+                deposit.elbow.turnToAngle(RobotConstants.ELBOW_ACTIVE);
+                deposit.wrist.turnToAngle(RobotConstants.WRIST_ACTIVE);
+
+                timer.reset();
                 deposit.outtakeState = ASubsystemState.Outtake.CLAW_OPENING;
                 break;
             case CLAW_OPENING:
-                deposit.clawDeposit();
-                timer.reset();
-                deposit.outtakeState = ASubsystemState.Outtake.OUTTAKE_RESET;
+                if (timer.milliseconds() > 400) {
+                    deposit.clawDeposit();
+
+                    timer.reset();
+                    deposit.outtakeState = ASubsystemState.Outtake.OUTTAKE_RESET;
+                }
                 break;
             case OUTTAKE_RESET:
-                if (timer.milliseconds() >= 600) {
-                    new HomeCommand(deposit, lift).schedule();
+                if (timer.milliseconds() >= 200) {
+                    intake.closeFlap();
+                    // note: this doesn't run it immediately. waits until this command ends then runs.
+                    new HomeCommand(deposit, lift, intake).schedule();
 
                     timer.reset();
                     deposit.outtakeState = ASubsystemState.Outtake.AWAITING_OUTTAKE_RESET;
                 }
             case AWAITING_OUTTAKE_RESET:
-                if (lift.liftLM.getCurrentPosition() < 10) {
-                    deposit.outtakeState = ASubsystemState.Outtake.IDLE;
-                }
+                break;
         }
     }
 
@@ -57,7 +72,5 @@ public class DepositAndResetCommand extends CommandBase {
     public void end(boolean interrupted) { deposit.outtakeBusy = false; }
 
     @Override
-    public boolean isFinished() {
-        return deposit.outtakeState == ASubsystemState.Outtake.IDLE;
-    }
+    public boolean isFinished() { return deposit.outtakeState == ASubsystemState.Outtake.AWAITING_OUTTAKE_RESET; }
 }

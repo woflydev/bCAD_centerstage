@@ -29,7 +29,8 @@ public class TransferAndStandbyCommand extends CommandBase {
         deposit.outtakeBusy = true;
         timer.reset();
 
-        deposit.wrist.turnToAngle(ELBOW_PICKUP); // note: 260
+        deposit.elbow.turnToAngle(ELBOW_HOME);
+        deposit.wrist.turnToAngle(WRIST_HOME);
         deposit.spin.turnToAngle(SPIN_HOME);
         deposit.clawReset();
 
@@ -44,6 +45,7 @@ public class TransferAndStandbyCommand extends CommandBase {
                 break;
             case ACTIVATED:
                 intake.stop();
+
                 lift.targetLiftPosition = lift.liftOffset;
                 lift.UpdateLift(false, 0);
 
@@ -52,37 +54,49 @@ public class TransferAndStandbyCommand extends CommandBase {
                 deposit.outtakeState = Outtake.FLAP_OPENING;
                 break;
             case FLAP_OPENING:
-                if (timer.milliseconds() >= 500) {
+                if (timer.milliseconds() >= 200 || lift.liftLM.getCurrentPosition() <= 8 + lift.liftOffset) {
                     intake.openFlap();
                     deposit.clawReset();
+
+                    timer.reset();
+                    deposit.outtakeState = Outtake.WRIST_PICKING;
+                }
+                break;
+            case WRIST_PICKING:
+                if (timer.milliseconds() >= 300) {
+                    deposit.wrist.turnToAngle(WRIST_PICKUP);
 
                     timer.reset();
                     deposit.outtakeState = Outtake.ELBOW_PICKING;
                 }
                 break;
             case ELBOW_PICKING:
-                if (timer.milliseconds() >= 500) {
-                    deposit.elbow.turnToAngle(268);
+                if (timer.milliseconds() >= 150) {
+                    deposit.elbow.turnToAngle(ELBOW_PICKUP);
 
                     timer.reset();
                     deposit.outtakeState = Outtake.CLAW_CLOSING;
                 }
                 break;
             case CLAW_CLOSING:
-                if (timer.milliseconds() >= 500) {
+                if (timer.milliseconds() >= 300) {
                     deposit.clawGrab();
-
+                    deposit.outtakeState = Outtake.PENDING_GRABBED_AND_READY;
+                }
+                break;
+            case PENDING_GRABBED_AND_READY:
+                if (timer.milliseconds() >= 200) {
                     timer.reset();
                     deposit.outtakeState = Outtake.GRABBED_AND_READY;
                 }
-                break;
+
         }
     }
 
     @Override
     public void end(boolean interrupted) {
         deposit.outtakeBusy = false;
-        deposit.elbow.turnToAngle(225);
+        deposit.elbow.turnToAngle(ELBOW_GRABBED_STANDBY);
         lift.liftLM.motor.setTargetPosition(0);
         lift.liftRM.motor.setTargetPosition(0);
         lift.liftLM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

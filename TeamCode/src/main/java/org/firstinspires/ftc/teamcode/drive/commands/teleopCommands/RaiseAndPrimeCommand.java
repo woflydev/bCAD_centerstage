@@ -27,7 +27,6 @@ public class RaiseAndPrimeCommand extends CommandBase {
     @Override
     public void initialize() {
         deposit.outtakeBusy = true;
-        deposit.elbow.turnToAngle(RobotConstants.ELBOW_ACTIVE);
     }
 
     @Override
@@ -43,21 +42,30 @@ public class RaiseAndPrimeCommand extends CommandBase {
                 deposit.outtakeState = ASubsystemState.Outtake.PRIMED_FOR_DEPOSIT;
                 break;
             case PRIMED_FOR_DEPOSIT:
-                if (timer.milliseconds() >= 1200) {
-                    intake.closeFlap();
+                if (timer.milliseconds() >= 100) {
+                    deposit.elbow.turnToAngle(RobotConstants.ELBOW_ACTIVE);
+                    deposit.wrist.turnToAngle(RobotConstants.WRIST_ACTIVE);
+
+                    timer.reset();
+                    deposit.outtakeState = ASubsystemState.Outtake.SERVO_SPINNING;
+                }
+                break;
+            case SERVO_SPINNING:
+                if (timer.milliseconds() >= 450) {
                     deposit.spin.turnToAngle(RobotConstants.SPIN_DEPOSIT);
 
                     timer.reset();
                     deposit.outtakeState = ASubsystemState.Outtake.PENDING_DEPOSIT;
                 }
-                break;
             case PENDING_DEPOSIT:
                 break;
         }
     }
 
     @Override
-    public void end(boolean interrupted) { deposit.outtakeBusy = false; }
+    public void end(boolean interrupted) {
+        deposit.outtakeBusy = false;
+    }
 
     @Override
     public boolean isFinished() { return deposit.outtakeState == ASubsystemState.Outtake.PENDING_DEPOSIT; }

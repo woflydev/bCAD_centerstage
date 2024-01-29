@@ -19,14 +19,14 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
         InitBlock();
 
         // note: ------------------------driver 1------------------------------------------------------------
-        new GamepadButton(gamepad1Ex, GamepadKeys.Button.BACK)
+        new GamepadButton(gamepad1Ex, GamepadKeys.Button.START)
                 .whenPressed(() -> imu.resetYaw());
 
         // note: ------------------------driver 2------------------------------------------------------------
-        new GamepadButton(gamepad2Ex, GamepadKeys.Button.START).toggleWhenPressed(
+        /*new GamepadButton(gamepad2Ex, GamepadKeys.Button.BACK).toggleWhenPressed(
                 () -> intake.openFlap(),
                 () -> intake.closeFlap()
-        );
+        );*/
 
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.A).toggleWhenPressed(
                 () -> deposit.clawGrab(),
@@ -39,8 +39,8 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
         );
 
         // note: will not be scheduled unless button becomes INACTIVE -> ACTIVE again
-        new GamepadButton(gamepad2Ex, GamepadKeys.Button.X).whenPressed(new DepositAndResetCommand(deposit, lift));
-        new GamepadButton(gamepad2Ex, GamepadKeys.Button.Y).whenPressed(new HomeCommand(deposit, lift));
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.X).whenPressed(new DepositAndResetCommand(deposit, lift, intake));
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.Y).whenPressed(new HomeCommand(deposit, lift, intake));
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.B).whenPressed(new TransferAndStandbyCommand(deposit, lift, intake));
 
         // note: will not be scheduled unless button becomes INACTIVE -> ACTIVE again
@@ -62,11 +62,12 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(() -> deposit.manualWristControl(-1, telemetry));
 
+        // note: ------------------------driver 1 and 2----------------------------------------------------
         new RightTriggerReader(gamepad2Ex, gamepad1Ex)
-                .whenActive(intake::spin)
+                .whenActive(intake::reverseSpin)
                 .whenInactive(intake::stop);
         new LeftTriggerReader(gamepad2Ex, gamepad1Ex)
-                .whenActive(intake::reverseSpin)
+                .whenActive(intake::spin)
                 .whenInactive(intake::stop);
     }
 
@@ -82,25 +83,26 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
         // note: single driver pixel control
         switch (deposit.outtakeState) {
             case IDLE:
-                if (gamepad1.left_bumper) new TransferAndStandbyCommand(deposit, lift, intake);
+                if (gamepad1.left_bumper) new TransferAndStandbyCommand(deposit, lift, intake).schedule();
                 break;
             case GRABBED_AND_READY: // note: will only be GRABBED_AND_READY after transfer
-                     if (gamepad1.a) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_LOW);
-                else if (gamepad1.b) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_MID);
-                else if (gamepad1.y) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_HIGH);
+                     if (gamepad1.a) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_LOW).schedule();
+                else if (gamepad1.b) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_MID).schedule();
+                else if (gamepad1.y) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_HIGH).schedule();
+                else if (gamepad1.right_bumper) new DepositAndResetCommand(deposit, lift, intake).schedule();
                 break;
             case PENDING_DEPOSIT:
-                if (gamepad1.a || gamepad1.b || gamepad1.y) new DepositAndResetCommand(deposit, lift);
+                if (gamepad1.a || gamepad1.b || gamepad1.y) new DepositAndResetCommand(deposit, lift, intake).schedule();
                 break;
         }
+
+        Delay(80); // note: input debouncing
 
         if (!deposit.outtakeBusy) lift.run(gamepad2Ex.getLeftY()); // note: allows for manual lift operation by driver2
 
         drivebase.Mecanum(gamepad1, imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
         deposit.manualElbowControl(gamepad2Ex.getRightY(), telemetry);
         hang.run(gamepad2);
-
-        Delay(60); // note: input debouncing
     }
 
     public void StatusTelemetry() {

@@ -32,12 +32,17 @@ public class RobotConstants {
 
     public static final double FLAP_CLOSE = 200;
     public static final double FLAP_OPEN = 114;
-    public static final double CLAW_CLOSE = 140;
+    public static final double CLAW_CLOSE = 143; // used to be 140
     public static final double CLAW_OPEN = 80;
     public static final double CLAW_DEPOSIT = 30;
-    public static final double ELBOW_PICKUP = 260;
-    public static final double ELBOW_HOME = 260;
-    public static final double ELBOW_ACTIVE = 110;
+    public static final double ELBOW_HOME = 235;
+    public static final double ELBOW_PICKUP = 275;
+    public static final double ELBOW_GRABBED_STANDBY = 225;
+    public static final double ELBOW_ACTIVE = 130;
+    public static final double WRIST_PICKUP = 260;
+    public static final double WRIST_HOME = 210; // old: 170
+    public static final double WRIST_ACTIVE = 140;
+
     public static final double PLANE_HOME = 30;
     public static final double PLANE_ACTIVE = 0;
     public static final double INTAKE_SPEED = 0.8;
@@ -45,15 +50,11 @@ public class RobotConstants {
     public static final int SPIN_HOME = 27;
     public static final int SPIN_DEPOSIT = SPIN_HOME + 90;
 
-    public static final double WRIST_PICKUP = 0.133;
-    public static final double WRIST_HOME = 170;
-    public static final double WRIST_ACTIVE = 0.63;
-
     // -------------------------------------------------------------- JUNCTION PRESETS
 
-    public static final int JUNCTION_LOW = 600;
-    public static final int JUNCTION_MID = 1200;
-    public static final int JUNCTION_HIGH = 2300;
+    public static final int JUNCTION_LOW = 300;
+    public static final int JUNCTION_MID = 600;
+    public static final int JUNCTION_HIGH = 900;
 
     // -------------------------------------------------------------- VISION
 
