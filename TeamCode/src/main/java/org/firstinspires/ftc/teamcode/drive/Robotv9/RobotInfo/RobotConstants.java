@@ -33,10 +33,10 @@ public class RobotConstants {
     public static final double FLAP_CLOSE = 200;
     public static final double FLAP_OPEN = 114;
     public static final double CLAW_CLOSE = 143; // used to be 140
-    public static final double CLAW_OPEN = 80;
+    public static final double CLAW_OPEN = 115;
     public static final double CLAW_DEPOSIT = 30;
     public static final double ELBOW_HOME = 235;
-    public static final double ELBOW_PICKUP = 275;
+    public static final double ELBOW_PICKUP = 270;
     public static final double ELBOW_GRABBED_STANDBY = 225;
     public static final double ELBOW_ACTIVE = 130;
     public static final double WRIST_PICKUP = 260;

@@ -85,7 +85,7 @@ public class TransferAndStandbyCommand extends CommandBase {
                 }
                 break;
             case PENDING_GRABBED_AND_READY:
-                if (timer.milliseconds() >= 200) {
+                if (timer.milliseconds() >= 300) {
                     timer.reset();
                     deposit.outtakeState = Outtake.GRABBED_AND_READY;
                 }

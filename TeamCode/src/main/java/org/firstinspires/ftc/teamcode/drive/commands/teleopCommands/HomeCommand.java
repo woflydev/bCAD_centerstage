@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.hardware.DepositSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
@@ -48,6 +49,7 @@ public class HomeCommand extends CommandBase {
 
         Delay(60);
         intake.closeFlap();
+        deposit.spin.turnToAngle(SPIN_HOME);
         deposit.outtakeBusy = false;
         deposit.outtakeState = ASubsystemState.Outtake.IDLE;
     }
