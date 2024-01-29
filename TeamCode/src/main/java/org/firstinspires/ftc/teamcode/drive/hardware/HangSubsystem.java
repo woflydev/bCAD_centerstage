@@ -21,7 +21,7 @@ public class HangSubsystem extends SubsystemBase {
         this.gamepad2 = gamepad2;
         this.telemetry = telemetry;
         // Assign variables here with parameters
-        Hang = new MotorEx(hardwareMap, "Hang");
+        Hang = new MotorEx(hardwareMap, "hang");
         Hang.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         HangPusher = hardwareMap.crservo.get("HangPusher");

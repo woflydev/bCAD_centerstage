@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 @Config
 public class DriveConstants {
     public static final double RR_LATERAL_MULTI = 4.1;
-    public static final double RR_HEADING_PID_kP = 4;
-    public static final double RR_TRANSLATIONAL_PID_kP = 15;
+    public static final double RR_HEADING_PID_kP = 6;
+    public static final double RR_TRANSLATIONAL_PID_kP = 5;
 
     public static final double TICKS_PER_REV = 751.8;
     public static final double MAX_RPM = 223;
