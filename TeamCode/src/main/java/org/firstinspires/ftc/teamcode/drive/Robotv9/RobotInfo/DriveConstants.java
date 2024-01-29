@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 @Config
 public class DriveConstants {
-    public static final double RR_LATERAL_MULTI = 4.1;
+    public static final double RR_LATERAL_MULTI = 1;
     public static final double RR_HEADING_PID_kP = 6;
     public static final double RR_TRANSLATIONAL_PID_kP = 5;
 
@@ -22,8 +22,8 @@ public class DriveConstants {
     public static double TRACK_WIDTH = 9.32555;
 
     public static double kV = 0.015429759176254825;
-    public static double kA = 0.005;
-    public static double kStatic = 0.01;
+    public static double kA = 0.003; //old 0.005
+    public static double kStatic = 0.05;
 
     public static double MAX_VEL = 75.02365997;
     public static double MAX_ACCEL = 75.02365997;

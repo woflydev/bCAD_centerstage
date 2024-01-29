@@ -37,7 +37,7 @@ public class IntakeSubsystem extends SubsystemBase {
         servoFlap.turnToAngle(RobotConstants.FLAP_CLOSE);
         driversAlerted = false;
 
-        is = hardwareMap.get(ColorRangeSensor.class, "is"); // note: for rumble
+        //is = hardwareMap.get(ColorRangeSensor.class, "is"); // note: for rumble
     }
 
     public void spin() { intakeM.set(-RobotConstants.INTAKE_SPEED); }
@@ -56,7 +56,7 @@ public class IntakeSubsystem extends SubsystemBase {
     // note: rumble not being tested
     @Override
     public void periodic() {
-        telemetry.addData("Color Sensor Distance", is.getDistance(DistanceUnit.MM));
+        /*telemetry.addData("Color Sensor Distance", is.getDistance(DistanceUnit.MM));
         int threshold = 30;
 
         if (is.getDistance(DistanceUnit.MM) < threshold && !driversAlerted) {
@@ -65,7 +65,7 @@ public class IntakeSubsystem extends SubsystemBase {
             driversAlerted = true;
         } else if (is.getDistance(DistanceUnit.MM) > threshold) {
             driversAlerted = false;
-        }
+        }*/
     }
 
     /*public void manualCoverControl(double angle, Telemetry telemetry) {

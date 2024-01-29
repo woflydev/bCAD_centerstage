@@ -51,9 +51,9 @@ public class DriveSubsystem extends SubsystemBase {
             speedModifier = 1;
         }
 
-        double y = -gamepad1.right_stick_y; // y stick reversed
-        double x = gamepad1.right_stick_x;
-        double rx = gamepad1.left_stick_x;
+        double y = gamepad1.left_stick_y; // y stick reversed
+        double x = -gamepad1.left_stick_x * 1.1;
+        double rx = -gamepad1.right_stick_x;
 
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
         double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
