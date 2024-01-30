@@ -44,7 +44,7 @@ public class TransferAndStandbyCommand extends CommandBase {
             case GRABBED_AND_READY:
                 break;
             case ACTIVATED:
-                intake.stop();
+                intake.spin();
 
                 lift.targetLiftPosition = lift.liftOffset;
                 lift.UpdateLift(false, 0);
@@ -79,13 +79,14 @@ public class TransferAndStandbyCommand extends CommandBase {
                 }
                 break;
             case CLAW_CLOSING:
-                if (timer.milliseconds() >= 300) {
+                if (timer.milliseconds() >= 200) {
                     deposit.clawGrab();
                     deposit.outtakeState = Outtake.PENDING_GRABBED_AND_READY;
                 }
                 break;
             case PENDING_GRABBED_AND_READY:
-                if (timer.milliseconds() >= 300) {
+                if (timer.milliseconds() >= 400) {
+                    intake.stop();
                     timer.reset();
                     deposit.outtakeState = Outtake.GRABBED_AND_READY;
                 }
