@@ -19,22 +19,18 @@ public class DepositSubsystem extends SubsystemBase {
     public ServoEx claw;
     public SimpleServo elbow;
     public ServoEx spin;
-    public Servo spinNew;
     public boolean outtakeBusy;
 
     public DepositSubsystem(HardwareMap hardwareMap) {
         elbow = new SimpleServo(hardwareMap, SERVO_ELBOW, 0, 355, AngleUnit.DEGREES);
         wrist = new SimpleServo(hardwareMap, SERVO_WRIST, 0, 260, AngleUnit.DEGREES);
         claw = new SimpleServo(hardwareMap, SERVO_CLAW, 0, 180, AngleUnit.DEGREES);
-        //spin = new SimpleServo(hardwareMap, SERVO_SPIN, 0, 180, AngleUnit.DEGREES);
-
-        spinNew = hardwareMap.get(Servo.class, SERVO_SPIN);
+        spin = new SimpleServo(hardwareMap, SERVO_SPIN, 0, 160, AngleUnit.DEGREES);
 
         elbow.setInverted(true);
         elbow.turnToAngle(ELBOW_HOME); // todo: test 240 (og) vs 260
         wrist.turnToAngle(WRIST_HOME);
-        //spin.turnToAngle(SPIN_HOME);
-        spinNew.setPosition(SPIN_HOME);
+        spin.turnToAngle(SPIN_HOME);
         claw.turnToAngle(CLAW_OPEN);
         outtakeBusy = false;
     }
@@ -61,14 +57,11 @@ public class DepositSubsystem extends SubsystemBase {
 
     public void mosaicSpin(double direction, Telemetry telemetry) {
         if (direction == 1) {
-            //spin.turnToAngle(SPIN_DEPOSIT - 60); // SPIN_DEPOSIT - 60
-            spinNew.setPosition(SPIN_DEPOSIT - 0.3);
+            spin.turnToAngle(SPIN_DEPOSIT - 60); // SPIN_DEPOSIT - 60
         } else if (direction == -1){
-            //spin.turnToAngle(SPIN_DEPOSIT + 60); // plus 60
-            spinNew.setPosition(SPIN_DEPOSIT + 0.3);
+            spin.turnToAngle(SPIN_DEPOSIT + 60); // plus 60
         } else {
-            //spin.turnToAngle(SPIN_DEPOSIT);
-            spinNew.setPosition(SPIN_DEPOSIT);
+            spin.turnToAngle(SPIN_DEPOSIT);
         }
     }
 

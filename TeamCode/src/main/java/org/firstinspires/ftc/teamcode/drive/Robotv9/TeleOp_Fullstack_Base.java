@@ -21,6 +21,9 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
         // note: ------------------------driver 1------------------------------------------------------------
         new GamepadButton(gamepad1Ex, GamepadKeys.Button.START)
                 .whenPressed(() -> imu.resetYaw());
+        new GamepadButton(gamepad1Ex, GamepadKeys.Button.X)
+                .whenPressed(intake::reverseSpin)
+                .whenReleased(intake::stop);
 
         // note: ------------------------driver 2------------------------------------------------------------
         /*new GamepadButton(gamepad2Ex, GamepadKeys.Button.BACK).toggleWhenPressed(
@@ -63,7 +66,7 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
                 .whenPressed(() -> deposit.manualWristControl(-1, telemetry));
 
         // note: ------------------------driver 1 and 2----------------------------------------------------
-        new RightTriggerReader(gamepad2Ex, gamepad1Ex)
+        new RightTriggerReader(gamepad2Ex, gamepad2Ex)
                 .whenActive(intake::reverseSpin)
                 .whenInactive(intake::stop);
         new LeftTriggerReader(gamepad2Ex, gamepad1Ex)
@@ -93,6 +96,10 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
                 break;
             case PENDING_DEPOSIT:
                 if (gamepad1.a || gamepad1.b || gamepad1.y) new DepositAndResetCommand(deposit, lift, intake).schedule();
+                     if (gamepad1.left_stick_button)  deposit.mosaicSpin(1, telemetry);
+                else if (gamepad1.right_stick_button) deposit.mosaicSpin(-1, telemetry);
+                else                                  deposit.mosaicSpin(0, telemetry);
+
                 break;
         }
 

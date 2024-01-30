@@ -36,7 +36,6 @@ public class DepositAndResetCommand extends CommandBase {
         switch (deposit.outtakeState) {
             // note: continued from RaiseAndPrimeCommand
             case GRABBED_AND_READY:
-                intake.reverseSpin(); // note: this is stopped later in HomeCommand
                 deposit.outtakeState = ASubsystemState.Outtake.PENDING_DEPOSIT;
                 break;
             case PENDING_DEPOSIT:
@@ -48,6 +47,7 @@ public class DepositAndResetCommand extends CommandBase {
                 break;
             case CLAW_OPENING:
                 if (timer.milliseconds() > 400) {
+                    deposit.wrist.turnToAngle(RobotConstants.WRIST_ACTIVE - 20);
                     deposit.clawDeposit();
 
                     timer.reset();

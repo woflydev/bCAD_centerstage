@@ -6,9 +6,10 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 @Config
 public class DriveConstants {
+    public static final double RR_HEADING_PID_kP = 9;
+    public static final double RR_TRANSLATIONAL_PID_kP = 7;
+
     public static final double RR_LATERAL_MULTI = 1;
-    public static final double RR_HEADING_PID_kP = 6;
-    public static final double RR_TRANSLATIONAL_PID_kP = 5;
 
     public static final double TICKS_PER_REV = 751.8;
     public static final double MAX_RPM = 223;
@@ -19,14 +20,14 @@ public class DriveConstants {
 
     public static double WHEEL_RADIUS = 1.8898; // in
     public static double GEAR_RATIO = 2;
-    public static double TRACK_WIDTH = 9.32555;
+    public static double TRACK_WIDTH = 11; // old: 9.32555
 
     public static double kV = 0.015429759176254825;
     public static double kA = 0.003; //old 0.005
     public static double kStatic = 0.05;
 
-    public static double MAX_VEL = 75.02365997;
-    public static double MAX_ACCEL = 75.02365997;
+    public static double MAX_VEL = 65.02365997; // old 70
+    public static double MAX_ACCEL = 55.02365997; // old 75
 
     public static double MAX_ANG_VEL = Math.toRadians(270);
     public static double MAX_ANG_ACCEL = Math.toRadians(270);
