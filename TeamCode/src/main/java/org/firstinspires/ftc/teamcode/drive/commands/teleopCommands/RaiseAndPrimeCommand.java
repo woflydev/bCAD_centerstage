@@ -52,7 +52,8 @@ public class RaiseAndPrimeCommand extends CommandBase {
                 break;
             case SERVO_SPINNING:
                 if (timer.milliseconds() >= 450) {
-                    deposit.spin.turnToAngle(RobotConstants.SPIN_DEPOSIT);
+                    //deposit.spin.turnToAngle(RobotConstants.SPIN_DEPOSIT);
+                    deposit.spinNew.setPosition(RobotConstants.SPIN_DEPOSIT);
 
                     timer.reset();
                     deposit.outtakeState = ASubsystemState.Outtake.PENDING_DEPOSIT;

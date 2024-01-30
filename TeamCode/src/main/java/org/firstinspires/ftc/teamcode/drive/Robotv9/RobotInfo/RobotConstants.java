@@ -47,8 +47,8 @@ public class RobotConstants {
     public static final double PLANE_ACTIVE = 0;
     public static final double INTAKE_SPEED = 0.8;
     public static final double INTAKE_REVERSE_SPEED = 0.8;
-    public static final int SPIN_HOME = 27;
-    public static final int SPIN_DEPOSIT = SPIN_HOME + 90;
+    public static final double SPIN_HOME = 0.5;
+    public static final double SPIN_DEPOSIT = SPIN_HOME + 0.3;
 
     // -------------------------------------------------------------- JUNCTION PRESETS
 

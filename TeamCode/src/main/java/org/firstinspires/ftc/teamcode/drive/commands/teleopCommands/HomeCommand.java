@@ -29,7 +29,8 @@ public class HomeCommand extends CommandBase {
 
         deposit.elbow.turnToAngle(ELBOW_HOME);
         deposit.wrist.turnToAngle(WRIST_HOME);
-        deposit.spin.turnToAngle(SPIN_HOME);
+        //deposit.spin.turnToAngle(SPIN_HOME);
+        deposit.spinNew.setPosition(SPIN_HOME);
         deposit.clawReset();
     }
 
@@ -49,7 +50,8 @@ public class HomeCommand extends CommandBase {
 
         Delay(60);
         intake.closeFlap();
-        deposit.spin.turnToAngle(SPIN_HOME);
+        //deposit.spin.turnToAngle(SPIN_HOME);
+        deposit.spinNew.setPosition(SPIN_HOME);
         deposit.outtakeBusy = false;
         deposit.outtakeState = ASubsystemState.Outtake.IDLE;
     }
