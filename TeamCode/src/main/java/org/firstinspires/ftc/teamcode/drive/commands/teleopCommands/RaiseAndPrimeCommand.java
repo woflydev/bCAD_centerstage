@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.drive.commands.teleopCommands;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState.Outtake;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.hardware.DepositSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.IntakeSubsystem;
@@ -38,16 +38,17 @@ public class RaiseAndPrimeCommand extends CommandBase {
                 lift.targetLiftPosition = targetHeight;
                 lift.UpdateLift(false, 0);
 
+                deposit.elbow.turnToAngle(RobotConstants.ELBOW_ACTIVE);
+
                 timer.reset();
-                deposit.outtakeState = ASubsystemState.Outtake.PRIMED_FOR_DEPOSIT;
+                deposit.outtakeState = Outtake.PRIMED_FOR_DEPOSIT;
                 break;
             case PRIMED_FOR_DEPOSIT:
-                if (timer.milliseconds() >= 100) {
-                    deposit.elbow.turnToAngle(RobotConstants.ELBOW_ACTIVE);
+                if (timer.milliseconds() >= 150) {
                     deposit.wrist.turnToAngle(RobotConstants.WRIST_ACTIVE);
 
                     timer.reset();
-                    deposit.outtakeState = ASubsystemState.Outtake.SERVO_SPINNING;
+                    deposit.outtakeState = Outtake.SERVO_SPINNING;
                 }
                 break;
             case SERVO_SPINNING:
@@ -55,7 +56,7 @@ public class RaiseAndPrimeCommand extends CommandBase {
                     deposit.spin.turnToAngle(RobotConstants.SPIN_DEPOSIT);
 
                     timer.reset();
-                    deposit.outtakeState = ASubsystemState.Outtake.PENDING_DEPOSIT;
+                    deposit.outtakeState = Outtake.PENDING_DEPOSIT;
                 }
             case PENDING_DEPOSIT:
                 break;
@@ -68,5 +69,5 @@ public class RaiseAndPrimeCommand extends CommandBase {
     }
 
     @Override
-    public boolean isFinished() { return deposit.outtakeState == ASubsystemState.Outtake.PENDING_DEPOSIT; }
+    public boolean isFinished() { return deposit.outtakeState == Outtake.PENDING_DEPOSIT; }
 }
