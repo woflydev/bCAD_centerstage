@@ -88,10 +88,12 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         VisionPropDetection();
     }
 
+    @Override
     public void run() {
         if (!autoAlreadyRun) {
             autoAlreadyRun = true;
 
+            super.run();
             while (!isStopRequested() && opModeIsActive()) {
                 StatusTelemetry();
                 HandlePurple();
@@ -123,7 +125,6 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                     break;
                 case BA_DEPOSIT_PURPLE:
                     if (!drive.isBusy()) {
-                        new TransferAndStandbyCommand(deposit, lift, intake).schedule();
                         new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_LOW).schedule();
                         drive.followTrajectoryAsync(CalcKinematics(6, 0));
                         autoState = RootAutoState.BA_MOVING_TO_BACKDROP;
@@ -439,11 +440,10 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     }
 
     private void EnsureAttachmentNormalization() {
-        deposit.elbow.turnToAngle(180);
+        deposit.elbow.turnToAngle(RobotConstants.ELBOW_GRABBED_STANDBY);
         timeout(2);
-        deposit.claw.turnToAngle(110);
-        timeout(2);
-            deposit.elbow.turnToAngle(270);
+        deposit.claw.turnToAngle(RobotConstants.CLAW_CLOSE);
+        deposit.outtakeState = Outtake.GRABBED_AND_READY;
     }
 
     public void timeout(double time) {
