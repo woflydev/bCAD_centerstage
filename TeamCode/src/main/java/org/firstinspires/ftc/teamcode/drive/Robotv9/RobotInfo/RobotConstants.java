@@ -25,23 +25,23 @@ public class RobotConstants {
     public static final String SERVO_HANG_R = "hangR";
     public static final String SERVO_HANG_L = "hangL";
 
-    public static final double MAX_LIFT_SPEED = 0.6;
+    public static final double MAX_LIFT_SPEED = 0.8;
     public static final int LIFT_RESET_TIMEOUT = 4; // note: how many seconds the lift should be active for before brought down automatically
     public static final int MAX_OUTTAKE_HEIGHT = 3200;
     public static final int MIN_OUTTAKE_HEIGHT = 0;
 
     public static final double FLAP_CLOSE = 200;
     public static final double FLAP_OPEN = 114;
-    public static final double CLAW_CLOSE = 143;
+    public static final double CLAW_CLOSE = 146;
     public static final double CLAW_OPEN = 98;
     public static final double CLAW_DEPOSIT = 60;
     public static final double ELBOW_HOME = 235;
-    public static final double ELBOW_PICKUP = 270;
+    public static final double ELBOW_PICKUP = 273;
     public static final double ELBOW_GRABBED_STANDBY = 225;
     public static final double ELBOW_ACTIVE = 130;
     public static final double WRIST_PICKUP = 260;
     public static final double WRIST_HOME = 210; // old: 170
-    public static final double WRIST_ACTIVE = 134;
+    public static final double WRIST_ACTIVE = 145;
 
     public static final double PLANE_HOME = 30;
     public static final double PLANE_ACTIVE = 0;

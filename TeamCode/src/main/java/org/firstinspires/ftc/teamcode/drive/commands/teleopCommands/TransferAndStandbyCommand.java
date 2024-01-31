@@ -78,7 +78,7 @@ public class TransferAndStandbyCommand extends CommandBase {
                 }
                 break;
             case CLAW_CLOSING:
-                if (timer.milliseconds() >= 250) {
+                if (timer.milliseconds() >= 350) {
                     deposit.clawGrab();
                     deposit.outtakeState = Outtake.PENDING_GRABBED_AND_READY;
                 }

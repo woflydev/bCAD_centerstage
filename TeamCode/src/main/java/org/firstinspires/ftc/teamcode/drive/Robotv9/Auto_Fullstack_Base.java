@@ -11,10 +11,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.*;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState.Outtake;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.commands.OpModeTemplate;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.AutoScoreCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.DepositAndResetCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.RaiseAndPrimeCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.TransferAndStandbyCommand;
 import org.firstinspires.ftc.teamcode.drive.rr.bCADMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.rr.trajectorysequence.TrajectorySequence;
@@ -119,6 +123,8 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                     break;
                 case BA_DEPOSIT_PURPLE:
                     if (!drive.isBusy()) {
+                        new TransferAndStandbyCommand(deposit, lift, intake).schedule();
+                        new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_LOW).schedule();
                         drive.followTrajectoryAsync(CalcKinematics(6, 0));
                         autoState = RootAutoState.BA_MOVING_TO_BACKDROP;
                     }
@@ -176,7 +182,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                 case BA_DEPOSIT_YELLOW:
                     if (!drive.isBusy()) {
                         ExecuteRotation(180, false); // note: alignment should be blocking
-                        Score();
+                        new DepositAndResetCommand(deposit, lift, intake).schedule();
 
                         autoTimer.reset();
                         autoState = (cycleCounter > 0) ? RootAutoState.BA_MOVING_TO_CYCLE : RootAutoState.BA_MOVING_TO_PARKING;
@@ -218,24 +224,35 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                         drive.followTrajectorySequenceAsync(toBackdropTrajectory);
 
                         autoTimer.reset();
+                        autoState = RootAutoState.BA_TRANSFERRING_WHITE_PIXELS;
+                    }
+                    break;
+                case BA_TRANSFERRING_WHITE_PIXELS:
+                    if (autoTimer.seconds() >= 2) {
+                        new TransferAndStandbyCommand(deposit, lift, intake).schedule();
+
+                        autoTimer.reset();
                         autoState = RootAutoState.BA_MOVING_BACK_FROM_CYCLE;
                     }
                     break;
                 case BA_MOVING_BACK_FROM_CYCLE:
-                    if (autoTimer.seconds() >= 2) {
+                    if (autoTimer.seconds() >= 2 || deposit.outtakeState == Outtake.GRABBED_AND_READY) {
                         intake.reverseSpin();
-                        new TransferAndStandbyCommand(deposit, lift, intake).schedule();
+                        new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_LOW).schedule();
+
+                        autoTimer.reset();
                         autoState = RootAutoState.BA_DEPOSIT_WHITE;
                     }
                     break;
                 case BA_DEPOSIT_WHITE:
-                    if (!drive.isBusy()) {
+                    if (!drive.isBusy() && deposit.outtakeState == Outtake.PENDING_DEPOSIT) {
                         intake.stop();
                         ExecuteRotation(180, false);
-                        Score();
+                        new DepositAndResetCommand(deposit, lift, intake).schedule();
 
                         // note: depending on the number of cycles to do, moves to parking / initiates another cycle.
                         cycleCounter--;
+                        autoTimer.reset();
                         autoState = (cycleCounter > 0) ? RootAutoState.BA_MOVING_TO_CYCLE : RootAutoState.BA_MOVING_TO_PARKING;
                     }
             }
@@ -252,6 +269,8 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
 
                     drive.followTrajectory(parking);
                     ExecuteRotation(alliance == RobotAlliance.RED ? 90 : 270, true); // note: ensure field centric heading on finish
+
+                    autoTimer.reset();
                     autoState = RootAutoState.BA_PARKED;
                 }
                 break;
@@ -424,10 +443,10 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         timeout(2);
         deposit.claw.turnToAngle(110);
         timeout(2);
-        deposit.elbow.turnToAngle(270);
+            deposit.elbow.turnToAngle(270);
     }
 
-    private void Score() { new AutoScoreCommand(deposit, lift).schedule(); }
+    private void Score() { new AutoScoreCommand(deposit, lift, intake).schedule(); }
 
     public void timeout(double time) {
         ElapsedTime wait = new ElapsedTime();

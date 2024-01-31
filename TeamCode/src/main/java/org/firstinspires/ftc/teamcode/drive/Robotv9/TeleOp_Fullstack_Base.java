@@ -96,9 +96,13 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
                 break;
             case PENDING_DEPOSIT:
                 if (gamepad1.a || gamepad1.b || gamepad1.y) new DepositAndResetCommand(deposit, lift, intake).schedule();
-                     if (gamepad1.left_stick_button)  deposit.mosaicSpin(1, telemetry);
-                else if (gamepad1.right_stick_button) deposit.mosaicSpin(-1, telemetry);
-                else                                  deposit.mosaicSpin(0, telemetry);
+
+                if (gamepad1.left_stick_button)
+                    deposit.mosaicSpin(1, telemetry);
+                else if (gamepad1.right_stick_button)
+                    deposit.mosaicSpin(-1, telemetry);
+                else
+                    deposit.mosaicSpin(0, telemetry);
 
                 break;
         }
