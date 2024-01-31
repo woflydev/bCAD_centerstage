@@ -20,7 +20,7 @@ public class DepositAndResetAutoCommand extends CommandBase {
     private final IntakeSubsystem intake;
     private final ElapsedTime timer = new ElapsedTime();
 
-    private int stateDuration = 300;
+    private final int stateDuration = 300;
 
     public DepositAndResetAutoCommand(DepositSubsystem deposit, LiftSubsystem lift, IntakeSubsystem intake) {
         this.deposit = deposit;
@@ -36,22 +36,26 @@ public class DepositAndResetAutoCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (timer.milliseconds() >= 0) {
+        if (withinState(0)) {
             deposit.elbow.turnToAngle(RobotConstants.ELBOW_ACTIVE);
             deposit.wrist.turnToAngle(RobotConstants.WRIST_ACTIVE);
-        } else if (timer.milliseconds() >= stateDuration) {
+        } else if (withinState(1)) {
             deposit.wrist.turnToAngle(RobotConstants.WRIST_ACTIVE - 10);
             deposit.clawDeposit();
-        } else if (timer.milliseconds() >= stateDuration * 2) {
+        } else if (withinState(2)) {
             intake.closeFlap();
             deposit.elbow.turnToAngle(ELBOW_HOME);
             deposit.wrist.turnToAngle(WRIST_HOME);
             deposit.clawReset();
-        } else if (timer.milliseconds() >= stateDuration * 3) {
+        } else if (withinState(3)) {
             lift.targetLiftPosition = 0;
             lift.UpdateLift(false, 0);
 
         }
+    }
+
+    private boolean withinState(double stateNumber) {
+        return timer.milliseconds() >= (stateDuration * stateNumber) && timer.milliseconds() <= stateDuration * (stateNumber + 1);
     }
 
     @Override
