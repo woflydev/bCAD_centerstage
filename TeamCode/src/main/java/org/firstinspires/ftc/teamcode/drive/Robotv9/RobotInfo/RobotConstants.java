@@ -32,7 +32,7 @@ public class RobotConstants {
 
     public static final double FLAP_CLOSE = 200;
     public static final double FLAP_OPEN = 114;
-    public static final double CLAW_CLOSE = 146;
+    public static final double CLAW_CLOSE = 148;
     public static final double CLAW_OPEN = 98;
     public static final double CLAW_DEPOSIT = 60;
     public static final double ELBOW_HOME = 235;
@@ -52,6 +52,7 @@ public class RobotConstants {
 
     // -------------------------------------------------------------- JUNCTION PRESETS
 
+    public static final int JUNCTION_AUTO_YELLOW = 200;
     public static final int JUNCTION_LOW = 300;
     public static final int JUNCTION_MID = 600;
     public static final int JUNCTION_HIGH = 900;

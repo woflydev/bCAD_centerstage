@@ -1,28 +1,52 @@
 package org.firstinspires.ftc.teamcode.drive.Robotv9;
 
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.AUDIENCE_HEADING_VARIATION;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.AUDIENCE_OFFSET_AMOUNT;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BLUE_PARKING_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BLUE_PURPLE_CHECKPOINTS;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BLUE_PURPLE_SPIKEMARK_AUDIENCE;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BLUE_PURPLE_SPIKEMARK_BACKDROP;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BLUE_STARTING_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BLUE_YELLOW_PIXEL_BACKDROP_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.RED_PARKING_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.RED_PURPLE_CHECKPOINTS;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.RED_PURPLE_SPIKEMARK_AUDIENCE;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.RED_STARTING_POSES;
 import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.*;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants.*;
 
 import android.annotation.SuppressLint;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.ConditionalCommand;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.RunCommand;
+import com.arcrobotics.ftclib.command.SelectCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.*;
-import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.RobotAlliance;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.RobotParkingLocation;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.RobotStartingPosition;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.RobotTaskFinishBehaviour;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState.Outtake;
-import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants;
-import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.commands.OpModeTemplate;
-import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.AutoScoreCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.DepositPurpleAtSpikemark;
+import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToBackdropWhite;
+import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToBackdropYellow;
+import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToParking;
+import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToSpikemark;
+import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToSpikemarkAvoidance;
+import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToStacks;
 import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.DepositAndResetCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.RaiseAndPrimeCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.TransferAndStandbyCommand;
 import org.firstinspires.ftc.teamcode.drive.rr.bCADMecanumDrive;
-import org.firstinspires.ftc.teamcode.drive.rr.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.drive.vision2.VisionPropPipeline;
 import org.opencv.core.Point;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -30,8 +54,9 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
+import java.util.HashMap;
+
 public class Auto_Fullstack_Base extends OpModeTemplate {
-    private RootAutoState autoState = RootAutoState.BA_PLAY;
     private bCADMecanumDrive drive;
     public VisionPropPipeline.Randomization randomization;
     public RobotAlliance alliance;
@@ -40,7 +65,6 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     public RobotTaskFinishBehaviour taskFinishBehaviour;
     public boolean autoAlreadyRun;
     public boolean taskFinishBehaviourSelected = false;
-    public int cycleCounter = 0;
     public int allianceIndex;
     public int dir;
     public Pose2d[] wYellowBackdropAlign;
@@ -87,221 +111,82 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
 
         SelectTaskFinishBehaviour();
         VisionPropDetection();
+
+        BuildAutoSequence().schedule();
     }
 
     @Override
     public void run() {
-        super.run();
-        HandlePurple();
-        HandleYellow();
-        HandleCycle();
-        HandleFinish();
-        StatusTelemetry();
-
-        drive.update();
-        super.run();
-
         if (!autoAlreadyRun) {
-            autoAlreadyRun = true;
-
-            /*while (!isStopRequested() && opModeIsActive()) {
-
-            }*/
-        }
-    }
-
-    private void HandlePurple() {
-        if (startingPosition == RobotStartingPosition.BACKDROP) {
-            switch (autoState) {
-                case BA_PLAY:
-                    switch (randomization) {
-                        case LOCATION_1:
-                            drive.followTrajectoryAsync(GenerateTraj(wPurpleSpikemarkAlign[0], false));
-                            break;
-                        case LOCATION_2:
-                            drive.followTrajectoryAsync(GenerateTraj(wPurpleSpikemarkAlign[1], false));
-                            break;
-                        case LOCATION_3:
-                            drive.followTrajectoryAsync(GenerateTraj(wPurpleSpikemarkAlign[2], false));
-                            break;
-                    }
-                    autoState = RootAutoState.BA_DEPOSIT_PURPLE;
-                    break;
-                case BA_DEPOSIT_PURPLE:
-                    if (!drive.isBusy()) {
-                        drive.followTrajectory(CalcKinematics(6, 0));
-
-                        deposit.outtakeState = Outtake.GRABBED_AND_READY;
-                        new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_LOW, false).schedule();
-                        super.run();
-
-                        autoState = RootAutoState.BA_MOVING_TO_BACKDROP;
-                    }
-                    break; // note: handoff to yellow
-            }
-            super.run();
-        } else {
-            switch (autoState) {
-                case BA_PLAY:
-                    switch (randomization) {
-                        case LOCATION_1:
-                            drive.followTrajectoryAsync(GenerateTraj(wPurpleSpikemarkAlign[0], false));
-                            break;
-                        case LOCATION_2:
-                            drive.followTrajectoryAsync(GenerateTraj(wPurpleSpikemarkAlign[1], false));
-                            break;
-                        case LOCATION_3:
-                            drive.followTrajectoryAsync(GenerateTraj(wPurpleSpikemarkAlign[2], false));
-                            break;
-                    }
-                    autoState = RootAutoState.BA_DEPOSIT_PURPLE;
-                    break;
-                case BA_DEPOSIT_PURPLE:
-                    if (!drive.isBusy()) {
-                        TrajectorySequence purpleAvoidanceTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                                .lineToLinearHeading(wPurpleAvoidanceCheckpoints[0])
-                                .waitSeconds(0.001)
-                                .splineToLinearHeading(wPurpleAvoidanceCheckpoints[1], wPurpleAvoidanceCheckpoints[1].getHeading())
-                                .build();
-                        drive.followTrajectorySequenceAsync(purpleAvoidanceTrajectory);
-                        autoState = RootAutoState.BA_MOVING_TO_BACKDROP;
-                    }
-                    break; // note: handoff to yellow
-            }
-            super.run();
-        }
-    }
-
-    private void HandleYellow() {
-        if (startingPosition == RobotStartingPosition.BACKDROP) {
-            switch (autoState) {
-                case BA_MOVING_TO_BACKDROP:
-                    if (!drive.isBusy()) {
-                        switch (randomization) {
-                            case LOCATION_1:
-                                drive.followTrajectoryAsync(GenerateTraj(wYellowBackdropAlign[0], false));
-                                break;
-                            case LOCATION_2:
-                                drive.followTrajectoryAsync(GenerateTraj(wYellowBackdropAlign[1], false));
-                                break;
-                            case LOCATION_3:
-                                drive.followTrajectoryAsync(GenerateTraj(wYellowBackdropAlign[2], false));
-                                break;
-                        }
-
-                        autoTimer.reset();
-                        autoState = RootAutoState.BA_DEPOSIT_YELLOW;
-                    }
-                    break;
-                case BA_DEPOSIT_YELLOW:
-                    if (!drive.isBusy()) {
-                        deposit.outtakeState = Outtake.PENDING_DEPOSIT;
-                        new DepositAndResetCommand(deposit, lift, intake).schedule();
-                        super.run();
-
-                        autoTimer.reset();
-                        autoState = (cycleCounter > 0) ? RootAutoState.BA_MOVING_TO_CYCLE : RootAutoState.BA_MOVING_TO_PARKING;
-                    }
-                    break;
-            }
-            super.run();
-        }
-    }
-
-    private void HandleCycle() {
-        if (startingPosition == RobotStartingPosition.BACKDROP) {
-            switch (autoState) {
-                case BA_MOVING_TO_CYCLE:
-                    if (!drive.isBusy()) {
-                        TrajectorySequence cycleTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                                .splineToConstantHeading(STAGE_DOOR_POSES[allianceIndex].vec(), STAGE_DOOR_POSES[allianceIndex].getHeading())
-                                .waitSeconds(0.001)
-                                .splineToLinearHeading(CYCLING_STACK_KNOCK_POSES[allianceIndex], CYCLING_STACK_KNOCK_POSES[allianceIndex].getHeading())
-                                .waitSeconds(0.001)
-                                .lineToLinearHeading(CYCLING_STACK_INNER_POSES[allianceIndex])
-                                .build();
-                        drive.followTrajectorySequence(cycleTrajectory); // note: blocking
-                        ExecuteRotation(180, true);
-                        autoState = RootAutoState.BA_INTAKE_PIXELS_FROM_STACK;
-                    }
-                    break;
-                case BA_INTAKE_PIXELS_FROM_STACK:
-                    if (!drive.isBusy()) {
-                        intake.spin();
-                        drive.followTrajectory(CalcKinematics(3, CAUTION_SPEED));
-                        timeout(0.5);
-
-                        TrajectorySequence toBackdropTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                                .lineToConstantHeading(CYCLE_RETURN_POSES[allianceIndex].vec())
-                                .waitSeconds(0.001)
-                                .lineToConstantHeading(BACKDROP_CENTER_POSES[allianceIndex].vec())
-                                .build();
-
-                        drive.followTrajectorySequenceAsync(toBackdropTrajectory);
-
-                        autoTimer.reset();
-                        autoState = RootAutoState.BA_TRANSFERRING_WHITE_PIXELS;
-                    }
-                    break;
-                case BA_TRANSFERRING_WHITE_PIXELS:
-                    if (autoTimer.seconds() >= 2) {
-                        new TransferAndStandbyCommand(deposit, lift, intake).schedule();
-
-                        autoTimer.reset();
-                        autoState = RootAutoState.BA_MOVING_BACK_FROM_CYCLE;
-                    }
-                    break;
-                case BA_MOVING_BACK_FROM_CYCLE:
-                    if (autoTimer.seconds() >= 2) {
-                        intake.reverseSpin();
-                        deposit.outtakeState = Outtake.GRABBED_AND_READY;
-                        new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_LOW, true).schedule();
-                        super.run();
-
-                        autoTimer.reset();
-                        autoState = RootAutoState.BA_DEPOSIT_WHITE;
-                    }
-                    break;
-                case BA_DEPOSIT_WHITE:
-                    if (!drive.isBusy() && deposit.outtakeState == Outtake.PENDING_DEPOSIT) {
-                        intake.stop();
-                        ExecuteRotation(180, false);
-                        new DepositAndResetCommand(deposit, lift, intake).schedule();
-                        super.run();
-
-                        // note: depending on the number of cycles to do, moves to parking / initiates another cycle.
-                        cycleCounter--;
-                        autoTimer.reset();
-                        autoState = (cycleCounter > 0) ? RootAutoState.BA_MOVING_TO_CYCLE : RootAutoState.BA_MOVING_TO_PARKING;
-                    }
+            while (opModeIsActive() && !isStopRequested()) {
+                super.run();
+                StatusTelemetry();
             }
         }
     }
 
-    private void HandleFinish() {
-        switch (autoState) {
-            case BA_MOVING_TO_PARKING:
-                if (!drive.isBusy()) {
-                    Trajectory parking = drive
-                            .trajectoryBuilder(drive.getPoseEstimate())
-                            .splineToLinearHeading(PARKING_POSE, PARKING_POSE.getHeading()).build();
+    private SequentialCommandGroup BuildAutoSequence() {
+        return new SequentialCommandGroup(
+                new MoveToSpikemark(drive, randomization, wPurpleSpikemarkAlign),
+                new ConditionalCommand(
+                        new DepositPurpleAtSpikemark(drive),
+                        new MoveToSpikemarkAvoidance(drive, wPurpleAvoidanceCheckpoints),
+                        () -> startingPosition == RobotStartingPosition.BACKDROP
+                ),
 
-                    drive.followTrajectory(parking);
-                    ExecuteRotation(alliance == RobotAlliance.RED ? 90 : 270, true); // note: ensure field centric heading on finish
+                new ConditionalCommand(
+                        new MoveToBackdropYellow(drive, randomization, wYellowBackdropAlign)
+                                .alongWith(new RaiseAndPrimeCommand(deposit, lift, intake, JUNCTION_AUTO_YELLOW, false)),
+                        new MoveToBackdropYellow(drive, randomization, wYellowBackdropAlign)
+                                .andThen(new RaiseAndPrimeCommand(deposit, lift, intake, JUNCTION_AUTO_YELLOW, false)),
+                        () -> startingPosition == RobotStartingPosition.BACKDROP
+                ),
 
-                    autoTimer.reset();
-                    autoState = RootAutoState.BA_PARKED;
-                }
-                break;
-            case BA_PARKED:
-                // todo: other custom logic if parked
-                break;
-        }
-        super.run();
+                new WaitCommand(100)
+                        .andThen(new DepositAndResetCommand(deposit, lift, intake)),
+
+                new SelectCommand(
+                        new HashMap<Object, Command>() {{
+                            put(RobotTaskFinishBehaviour.DO_NOT_CYCLE, BuildFinishSequence(0));
+                            put(RobotTaskFinishBehaviour.CYCLE, BuildFinishSequence(1));
+                            put(RobotTaskFinishBehaviour.CYCLE_TWICE, BuildFinishSequence(2));
+                            put(RobotTaskFinishBehaviour.CYCLE_THRICE, BuildFinishSequence(3));
+                            put(RobotTaskFinishBehaviour.CYCLE_FOURICE, BuildFinishSequence(4));
+                        }},
+                        this::getTFB
+                ),
+
+                new InstantCommand(this::requestOpModeStop)
+        );
     }
+
+    private SequentialCommandGroup BuildFinishSequence(int cycleCount) {
+        SequentialCommandGroup sequence = new SequentialCommandGroup();
+        for (int i = 0; i < cycleCount; i++) {
+            sequence.addCommands(
+                    new MoveToStacks(drive, alliance),
+
+                    new RunCommand(intake::spin),
+                    new WaitCommand(1000),
+                    new RunCommand(intake::stop),
+
+                    new MoveToBackdropWhite(drive, alliance)
+                            .alongWith(new TransferAndStandbyCommand(deposit, lift, intake)),
+
+                    new RaiseAndPrimeCommand(deposit, lift, intake, JUNCTION_LOW, true),
+                    new WaitCommand(200),
+                    new DepositAndResetCommand(deposit, lift, intake)
+            );
+        }
+        sequence.addCommands(new MoveToParking(drive, alliance, PARKING_POSE));
+        return sequence;
+    }
+
+    // note: ------------------------------UTIL AND SYSTEM-------------------------------------------------------
 
     private void StatusTelemetry() {
         telemetry.addData("Autonomous Clock", autoTimer.seconds());
+        telemetry.addData("Currently Running", 1);
         telemetry.addData("Robot X", drive.getPoseEstimate().getX());
         telemetry.addData("Robot Y", drive.getPoseEstimate().getY());
         telemetry.addData("Robot Heading", Math.toDegrees(drive.getPoseEstimate().getHeading()));
@@ -331,15 +216,12 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         while (!isStopRequested() && opModeInInit() && !taskFinishBehaviourSelected) {
             if (gamepad1.x) {
                 taskFinishBehaviour = RobotTaskFinishBehaviour.DO_NOT_CYCLE;
-                cycleCounter = 0;
                 taskFinishBehaviourSelected = true;
             } else if (gamepad1.y) {
                 taskFinishBehaviour = RobotTaskFinishBehaviour.CYCLE;
-                cycleCounter = 1;
                 taskFinishBehaviourSelected = true;
             } else if (gamepad1.b) {
-                taskFinishBehaviour = RobotTaskFinishBehaviour.CYCLE_TWICE_NONONONONO;
-                cycleCounter = 2;
+                taskFinishBehaviour = RobotTaskFinishBehaviour.CYCLE_TWICE;
                 taskFinishBehaviourSelected = true;
             }
         }
@@ -361,7 +243,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                 "cameraMonitorViewId",
                 "id",
                 hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, RobotConstants.FRONT_CAMERA), cameraMonitorViewId);
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, FRONT_CAMERA), cameraMonitorViewId);
         webcam.setPipeline(pipeline);
         webcam.setMillisecondsPermissionTimeout(2500);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -385,36 +267,6 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
             telemetry.update();
         }
         webcam.closeCameraDevice();
-    }
-
-    public void ExecuteRotation(double heading, boolean async) {
-        double diff = heading - Math.toDegrees(drive.getPoseEstimate().getHeading());
-        double amt = diff > 180 ? Math.toRadians(-(360 - diff)) : Math.toRadians(diff);
-        if (async) {
-            drive.turnAsync(amt);
-        } else {
-            drive.turn(amt);
-        }
-    }
-
-    private Trajectory GenerateTraj(Pose2d target, boolean constantHeading) {
-        return constantHeading ?
-                drive.trajectoryBuilder(drive.getPoseEstimate())
-                        .lineToConstantHeading(target.vec())
-                        .build()
-                :
-                drive.trajectoryBuilder(drive.getPoseEstimate())
-                        .lineToLinearHeading(target)
-                        .build();
-    }
-
-    public Trajectory CalcKinematics(double inches, double speed) {
-        double finalSpeed = speed == 0 ? DriveConstants.MAX_VEL : speed;
-        return drive.trajectoryBuilder(drive.getPoseEstimate())
-                .forward(inches,
-                        bCADMecanumDrive.getVelocityConstraint(finalSpeed, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        bCADMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .build();
     }
 
     private Pose2d[] SortPoseBasedOnAlliance(Pose2d[] posesForRed, Pose2d[] posesForBlue) {
@@ -459,15 +311,19 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     }
 
     private void EnsureAttachmentNormalization() {
-        deposit.elbow.turnToAngle(RobotConstants.ELBOW_GRABBED_STANDBY);
-        deposit.wrist.turnToAngle(RobotConstants.WRIST_HOME);
-        deposit.spin.turnToAngle(RobotConstants.SPIN_HOME);
+        deposit.claw.turnToAngle(CLAW_CLOSE);
         timeout(2);
-        deposit.claw.turnToAngle(RobotConstants.CLAW_CLOSE);
+        deposit.elbow.turnToAngle(ELBOW_GRABBED_STANDBY);
+        deposit.wrist.turnToAngle(WRIST_HOME);
+        deposit.spin.turnToAngle(SPIN_HOME);
         deposit.outtakeState = Outtake.GRABBED_AND_READY;
     }
 
-    public void timeout(double time) {
+    private RobotTaskFinishBehaviour getTFB() {
+        return taskFinishBehaviour;
+    }
+
+    private void timeout(double time) {
         ElapsedTime wait = new ElapsedTime();
         wait.reset();
         while (wait.seconds() < time) { short x; }

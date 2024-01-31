@@ -40,7 +40,9 @@ public class AAutoState {
     public enum RobotTaskFinishBehaviour {
         DO_NOT_CYCLE,
         CYCLE,
-        CYCLE_TWICE_NONONONONO,
+        CYCLE_TWICE,
+        CYCLE_THRICE,
+        CYCLE_FOURICE,
     }
 
     public enum RobotLocMode {
