@@ -180,7 +180,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                     autoState = RootAutoState.BA_DEPOSIT_YELLOW;
                     break;
                 case BA_DEPOSIT_YELLOW:
-                    if (!drive.isBusy()) {
+                    if (!drive.isBusy() && deposit.outtakeState == Outtake.PENDING_DEPOSIT) {
                         ExecuteRotation(180, false); // note: alignment should be blocking
                         new DepositAndResetCommand(deposit, lift, intake).schedule();
 
@@ -445,8 +445,6 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         timeout(2);
             deposit.elbow.turnToAngle(270);
     }
-
-    private void Score() { new AutoScoreCommand(deposit, lift, intake).schedule(); }
 
     public void timeout(double time) {
         ElapsedTime wait = new ElapsedTime();
