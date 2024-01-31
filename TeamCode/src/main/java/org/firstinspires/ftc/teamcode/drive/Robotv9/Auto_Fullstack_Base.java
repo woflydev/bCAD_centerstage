@@ -21,6 +21,7 @@ import android.annotation.SuppressLint;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
@@ -36,6 +37,7 @@ import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.RobotSt
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.RobotTaskFinishBehaviour;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState.Outtake;
 import org.firstinspires.ftc.teamcode.drive.commands.OpModeTemplate;
+import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.DepositAndResetAutoCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.DepositPurpleAtSpikemark;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToBackdropWhite;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToBackdropYellow;
@@ -120,6 +122,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         if (!autoAlreadyRun) {
             while (opModeIsActive() && !isStopRequested()) {
                 super.run();
+                CommandScheduler.getInstance().run();
                 StatusTelemetry();
             }
         }
@@ -143,7 +146,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                 ),
 
                 new WaitCommand(100)
-                        .andThen(new DepositAndResetCommand(deposit, lift, intake)),
+                        .andThen(new DepositAndResetAutoCommand(deposit, lift, intake)),
 
                 new SelectCommand(
                         new HashMap<Object, Command>() {{

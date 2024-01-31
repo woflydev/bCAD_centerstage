@@ -74,6 +74,8 @@ public class RaiseAndPrimeCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         deposit.outtakeBusy = false;
+
+        deposit.outtakeState = Outtake.PENDING_DEPOSIT;
     }
 
     @Override

@@ -47,7 +47,7 @@ public class DepositAndResetCommand extends CommandBase {
                 break;
             case CLAW_OPENING:
                 if (timer.milliseconds() > 400) {
-                    deposit.wrist.turnToAngle(RobotConstants.WRIST_ACTIVE - 20);
+                    deposit.wrist.turnToAngle(RobotConstants.WRIST_ACTIVE - 10);
                     deposit.clawDeposit();
 
                     timer.reset();
