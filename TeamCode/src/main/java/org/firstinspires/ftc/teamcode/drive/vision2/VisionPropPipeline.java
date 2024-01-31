@@ -89,20 +89,20 @@ public class VisionPropPipeline extends OpenCvPipeline {
 
         double min = Math.min(leftAverage, Math.min(centerAverage, rightAverage));
 
-        if (min == leftAverage) {
-            randomization = Randomization.LOCATION_1;
+        if (min == rightAverage) {
+            randomization = Randomization.LOCATION_3;
         }
         else if (min == centerAverage) {
             randomization = Randomization.LOCATION_2;
         }
-        else if (min == rightAverage) {
-            randomization = Randomization.LOCATION_3;
+        else {
+            randomization = Randomization.LOCATION_1;
         }
 
-        Imgproc.putText(input, "" + randomization, new Point(0, 50), Imgproc.FONT_HERSHEY_PLAIN, 2.0, GREEN);
+        Imgproc.putText(matToShow, "" + randomization, new Point(0, 50), Imgproc.FONT_HERSHEY_PLAIN, 2.0, GREEN);
 
-        //return matToShow;
-        return input;
+        return matToShow;
+        //return input;
     }
 
     public Randomization getRandomization() {

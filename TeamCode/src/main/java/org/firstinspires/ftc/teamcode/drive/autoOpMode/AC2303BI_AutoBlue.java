@@ -10,12 +10,12 @@ import org.opencv.core.Point;
 @Config
 @Autonomous(name="BlueBackdropAuto_INNER", group="BLUE")
 public class AC2303BI_AutoBlue extends Auto_Fullstack_Base {
-    public static double r1x = 25;
-    public static double r1y = 90;
-    public static double r2x = 150;
-    public static double r2y = 60;
+    public static double r1x = 0;
+    public static double r1y = 140; //old 90
+    public static double r2x = 120;
+    public static double r2y = 120;
     public static double r3x = 260;
-    public static double r3y = 90;
+    public static double r3y = 140;
 
     public AC2303BI_AutoBlue() {
         super(

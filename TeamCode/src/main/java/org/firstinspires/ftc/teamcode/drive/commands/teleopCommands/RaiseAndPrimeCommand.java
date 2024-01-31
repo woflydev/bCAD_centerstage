@@ -15,12 +15,18 @@ public class RaiseAndPrimeCommand extends CommandBase {
     private final IntakeSubsystem intake;
     private final ElapsedTime timer = new ElapsedTime();
     private int targetHeight;
+    private boolean spin;
 
-    public RaiseAndPrimeCommand(DepositSubsystem deposit, LiftSubsystem lift, IntakeSubsystem intake, int target) {
+    public RaiseAndPrimeCommand(DepositSubsystem deposit,
+                                LiftSubsystem lift,
+                                IntakeSubsystem intake,
+                                int target,
+                                boolean spin) {
         this.deposit = deposit;
         this.lift = lift;
         this.intake = intake;
         this.targetHeight = target;
+        this.spin = spin;
         addRequirements(deposit, lift);
     }
 
@@ -52,11 +58,13 @@ public class RaiseAndPrimeCommand extends CommandBase {
                 }
                 break;
             case SERVO_SPINNING:
-                if (timer.milliseconds() >= 450) {
-                    deposit.spin.turnToAngle(RobotConstants.SPIN_DEPOSIT);
+                if (spin) {
+                    if (timer.milliseconds() >= 450) {
+                        deposit.spin.turnToAngle(RobotConstants.SPIN_DEPOSIT);
 
-                    timer.reset();
-                    deposit.outtakeState = Outtake.PENDING_DEPOSIT;
+                        timer.reset();
+                        deposit.outtakeState = Outtake.PENDING_DEPOSIT;
+                    }
                 }
             case PENDING_DEPOSIT:
                 break;

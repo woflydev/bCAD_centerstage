@@ -5,11 +5,11 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 public class RobotAutoConstants {
     // -------------------------------------------------------------- AUTO CONFIG
     public static final Pose2d[] RED_STARTING_POSES = {
-            new Pose2d(11, -60, Math.toRadians(270)),
+            new Pose2d(8, -62.5, Math.toRadians(270)),
             new Pose2d(-35, -60, Math.toRadians(270)),
     };
     public static final Pose2d[] BLUE_STARTING_POSES = {
-            new Pose2d(11, 60, Math.toRadians(90)),
+            new Pose2d(8, 62.5, Math.toRadians(90)),
             new Pose2d(-35, 60, Math.toRadians(90)),
     };
     public static final Pose2d[] RED_PARKING_POSES = {
@@ -27,14 +27,14 @@ public class RobotAutoConstants {
     };
     public static final Pose2d[] RED_YELLOW_PIXEL_BACKDROP_POSES = {
             // note: starts with LOC_1
-            new Pose2d(42, -28, Math.toRadians(180)),
-            new Pose2d(42, -36, Math.toRadians(180)),
-            new Pose2d(42, -42, Math.toRadians(180)),
+            new Pose2d(48, -26, Math.toRadians(180)),
+            new Pose2d(48, -36, Math.toRadians(180)),
+            new Pose2d(48, -44, Math.toRadians(180)),
     };
     public static final Pose2d[] BLUE_YELLOW_PIXEL_BACKDROP_POSES = {
-            new Pose2d(42, 42, Math.toRadians(180)),
-            new Pose2d(42, 36, Math.toRadians(180)),
-            new Pose2d(42, 28, Math.toRadians(180)),
+            new Pose2d(48, 44, Math.toRadians(180)),
+            new Pose2d(48, 36, Math.toRadians(180)),
+            new Pose2d(48, 26, Math.toRadians(180)),
     };
 
     // how many units to get audience spikemark from backdrop
@@ -42,9 +42,9 @@ public class RobotAutoConstants {
     public static final double AUDIENCE_HEADING_VARIATION = 0;
     // note: backdrop, from Loc 1 to Loc 3.
     public static final Pose2d[] RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP = {
-            new Pose2d(12, -24.5, Math.toRadians(0)),
-            new Pose2d(22, -24.5, Math.toRadians(0)),
-            new Pose2d(34, -24.5, Math.toRadians(0))
+            new Pose2d(12, -30, Math.toRadians(0)),
+            new Pose2d(22, -28, Math.toRadians(0)),
+            new Pose2d(34, -28, Math.toRadians(0))
     };
     public static final Pose2d[] RED_PURPLE_SPIKEMARK_AUDIENCE = {
             new Pose2d(-38, -38, Math.toRadians(315)),

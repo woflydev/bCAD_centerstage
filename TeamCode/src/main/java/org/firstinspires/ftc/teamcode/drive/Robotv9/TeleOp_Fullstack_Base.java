@@ -89,9 +89,9 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
                 if (gamepad1.left_bumper) new TransferAndStandbyCommand(deposit, lift, intake).schedule();
                 break;
             case GRABBED_AND_READY: // note: will only be GRABBED_AND_READY after transfer
-                     if (gamepad1.a) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_LOW).schedule();
-                else if (gamepad1.b) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_MID).schedule();
-                else if (gamepad1.y) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_HIGH).schedule();
+                     if (gamepad1.a) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_LOW, true).schedule();
+                else if (gamepad1.b) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_MID, true).schedule();
+                else if (gamepad1.y) new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_HIGH, true).schedule();
                 else if (gamepad1.right_bumper) new DepositAndResetCommand(deposit, lift, intake).schedule();
                 break;
             case PENDING_DEPOSIT:
