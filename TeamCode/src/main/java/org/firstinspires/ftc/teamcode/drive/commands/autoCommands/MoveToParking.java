@@ -34,7 +34,7 @@ public class MoveToParking extends CommandBase {
     public void initialize() {
         Trajectory parking = drive
                 .trajectoryBuilder(drive.getPoseEstimate())
-                .splineToLinearHeading(PARKING_POSE, PARKING_POSE.getHeading()).build();
+                .lineToLinearHeading(PARKING_POSE).build();
 
         drive.followTrajectory(parking);
         ExecuteRotation(alliance == AAutoState.RobotAlliance.RED ? 90 : 270, true); // note: ensure field centric heading on finish

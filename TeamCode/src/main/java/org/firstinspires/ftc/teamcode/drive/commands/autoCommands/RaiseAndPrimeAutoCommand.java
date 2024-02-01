@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.drive.commands.autoCommands;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.hardware.DepositSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
@@ -11,7 +12,7 @@ public class RaiseAndPrimeAutoCommand extends CommandBase {
     private final DepositSubsystem deposit;
     private final LiftSubsystem lift;
     private final boolean spin;
-    private final int stateDuration = 200;
+    private final int stateDuration = 300;
     private final ElapsedTime timer = new ElapsedTime();
     private int targetHeight;
     private boolean finishTriggered = false;
@@ -30,6 +31,7 @@ public class RaiseAndPrimeAutoCommand extends CommandBase {
     @Override
     public void initialize() {
         deposit.outtakeBusy = true;
+        timer.reset();
     }
 
     @Override
@@ -39,10 +41,9 @@ public class RaiseAndPrimeAutoCommand extends CommandBase {
         if (withinState(0)) {
             lift.targetLiftPosition = targetHeight;
             lift.UpdateLift(false, 0);
-            deposit.elbow.turnToAngle(RobotConstants.ELBOW_ACTIVE);
+            deposit.elbow.turnToAngle(RobotConstants.ELBOW_AUTO_ACTIVE);
+            deposit.wrist.turnToAngle(RobotConstants.WRIST_AUTO_ACTIVE);
         } else if (withinState(1)) {
-            deposit.wrist.turnToAngle(RobotConstants.WRIST_ACTIVE);
-        } else if (withinState(3)) {
             if (spin) deposit.spin.turnToAngle(RobotConstants.SPIN_DEPOSIT);
             else finishTriggered = true;
         }
@@ -62,5 +63,5 @@ public class RaiseAndPrimeAutoCommand extends CommandBase {
     }
 
     @Override
-    public boolean isFinished() { return (timer.milliseconds() >= stateDuration * 4) || interrupted(); }
+    public boolean isFinished() { return (timer.milliseconds() >= stateDuration * 2) && interrupted(); }
 }

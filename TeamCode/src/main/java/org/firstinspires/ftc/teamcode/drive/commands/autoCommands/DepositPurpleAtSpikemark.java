@@ -27,7 +27,7 @@ public class DepositPurpleAtSpikemark extends CommandBase {
 
     @Override
     public void initialize() {
-        drive.followTrajectory(CalcKinematics(6, 0));
+        drive.followTrajectory(CalcKinematics(4, 0));
     }
 
     @Override

@@ -36,15 +36,18 @@ import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.RobotPa
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.RobotStartingPosition;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.RobotTaskFinishBehaviour;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState.Outtake;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.commands.OpModeTemplate;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.DepositAndResetAutoCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.DepositPurpleAtSpikemark;
+import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.HomeAutoCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToBackdropWhite;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToBackdropYellow;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToParking;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToSpikemark;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToSpikemarkAvoidance;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToStacks;
+import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.RaiseAndPrimeAutoCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.DepositAndResetCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.RaiseAndPrimeCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.TransferAndStandbyCommand;
@@ -123,7 +126,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
             while (opModeIsActive() && !isStopRequested()) {
                 super.run();
                 CommandScheduler.getInstance().run();
-                StatusTelemetry();
+                //StatusTelemetry();
             }
         }
     }
@@ -139,22 +142,37 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
 
                 new ConditionalCommand(
                         new MoveToBackdropYellow(drive, randomization, wYellowBackdropAlign)
-                                .alongWith(new RaiseAndPrimeCommand(deposit, lift, intake, JUNCTION_AUTO_YELLOW, false)),
+                                .alongWith(new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_YELLOW, false)),
                         new MoveToBackdropYellow(drive, randomization, wYellowBackdropAlign)
-                                .andThen(new RaiseAndPrimeCommand(deposit, lift, intake, JUNCTION_AUTO_YELLOW, false)),
+                                .andThen(new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_YELLOW, false)),
                         () -> startingPosition == RobotStartingPosition.BACKDROP
                 ),
 
-                new WaitCommand(100)
-                        .andThen(new DepositAndResetAutoCommand(deposit, lift, intake)),
+                new WaitCommand(100),
+                new DepositAndResetAutoCommand(deposit, lift, intake),
 
                 new SelectCommand(
                         new HashMap<Object, Command>() {{
-                            put(RobotTaskFinishBehaviour.DO_NOT_CYCLE, BuildFinishSequence(0));
-                            put(RobotTaskFinishBehaviour.CYCLE, BuildFinishSequence(1));
-                            put(RobotTaskFinishBehaviour.CYCLE_TWICE, BuildFinishSequence(2));
-                            put(RobotTaskFinishBehaviour.CYCLE_THRICE, BuildFinishSequence(3));
-                            put(RobotTaskFinishBehaviour.CYCLE_FOURICE, BuildFinishSequence(4));
+                            put(RobotTaskFinishBehaviour.DO_NOT_CYCLE,
+                                    BuildFinishSequence(0)
+                                            .alongWith(new HomeAutoCommand(deposit, lift, intake))
+                            );
+                            put(RobotTaskFinishBehaviour.CYCLE,
+                                    BuildFinishSequence(1)
+                                            .alongWith(new HomeAutoCommand(deposit, lift, intake))
+                            );
+                            put(RobotTaskFinishBehaviour.CYCLE_TWICE,
+                                    BuildFinishSequence(2)
+                                            .alongWith(new HomeAutoCommand(deposit, lift, intake))
+                            );
+                            put(RobotTaskFinishBehaviour.CYCLE_THRICE,
+                                    BuildFinishSequence(3)
+                                            .alongWith(new HomeAutoCommand(deposit, lift, intake))
+                            );
+                            put(RobotTaskFinishBehaviour.CYCLE_FOURICE,
+                                    BuildFinishSequence(4)
+                                            .alongWith(new HomeAutoCommand(deposit, lift, intake))
+                            );
                         }},
                         this::getTFB
                 ),

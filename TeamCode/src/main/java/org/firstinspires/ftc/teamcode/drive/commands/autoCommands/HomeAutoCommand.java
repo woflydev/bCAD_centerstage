@@ -9,20 +9,19 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
-import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.HomeCommand;
 import org.firstinspires.ftc.teamcode.drive.hardware.DepositSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
 
-public class DepositAndResetAutoCommand extends CommandBase {
+public class HomeAutoCommand extends CommandBase {
     private final DepositSubsystem deposit;
     private final LiftSubsystem lift;
     private final IntakeSubsystem intake;
     private final ElapsedTime timer = new ElapsedTime();
 
-    private final int stateDuration = 300;
+    private final int stateDuration = 200;
 
-    public DepositAndResetAutoCommand(DepositSubsystem deposit, LiftSubsystem lift, IntakeSubsystem intake) {
+    public HomeAutoCommand(DepositSubsystem deposit, LiftSubsystem lift, IntakeSubsystem intake) {
         this.deposit = deposit;
         this.lift = lift;
         this.intake = intake;
@@ -38,21 +37,31 @@ public class DepositAndResetAutoCommand extends CommandBase {
     @Override
     public void execute() {
         if (withinState(0)) {
-            deposit.elbow.turnToAngle(RobotConstants.ELBOW_AUTO_ACTIVE);
-            deposit.wrist.turnToAngle(RobotConstants.WRIST_AUTO_ACTIVE);
+            intake.closeFlap();
+            deposit.elbow.turnToAngle(ELBOW_HOME);
+            deposit.wrist.turnToAngle(WRIST_HOME);
+            deposit.clawReset();
         } else if (withinState(1)) {
-            deposit.wrist.turnToAngle(RobotConstants.WRIST_AUTO_ACTIVE - 10);
-            deposit.clawDeposit();
+            lift.targetLiftPosition = 0;
+            lift.UpdateLift(false, 0);
         }
     }
 
     @Override
     public void end(boolean interrupted) {
         deposit.outtakeBusy = false;
+        intake.stop();
+
+        Delay(60);
+        intake.closeFlap();
+        deposit.spin.turnToAngle(SPIN_HOME);
+        deposit.outtakeState = ASubsystemState.Outtake.IDLE;
     }
 
     @Override
     public boolean isFinished() { return (timer.milliseconds() >= stateDuration * 2); }
+
+    private void Delay(double time) { try { Thread.sleep((long)time); } catch (Exception e) { System.out.println("Exception!"); } }
 
     private boolean withinState(double stateNumber) {
         return timer.milliseconds() >= (stateDuration * stateNumber) && timer.milliseconds() <= stateDuration * (stateNumber + 1);
