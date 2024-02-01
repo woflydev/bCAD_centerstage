@@ -102,6 +102,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     public void initialize() {
         autoAlreadyRun = false;
         InitBlock();
+        SelectTaskFinishBehaviour();
         EnsureAttachmentNormalization();
         DetermineStartFinishPoses();
 
@@ -114,7 +115,6 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         drive = new bCADMecanumDrive(hardwareMap);
         drive.setPoseEstimate(START_POSE);
 
-        SelectTaskFinishBehaviour();
         VisionPropDetection();
 
         BuildAutoSequence().schedule();
@@ -123,6 +123,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     @Override
     public void run() {
         if (!autoAlreadyRun) {
+            autoTimer.reset();
             while (opModeIsActive() && !isStopRequested()) {
                 super.run();
                 CommandScheduler.getInstance().run();
@@ -203,7 +204,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
 
     private void StatusTelemetry() {
         telemetry.addData("Autonomous Clock", autoTimer.seconds());
-        telemetry.addData("Currently Running", 1);
+        telemetry.addData("Command Sequence", BuildAutoSequence().getName());
         telemetry.addData("Robot X", drive.getPoseEstimate().getX());
         telemetry.addData("Robot Y", drive.getPoseEstimate().getY());
         telemetry.addData("Robot Heading", Math.toDegrees(drive.getPoseEstimate().getHeading()));
@@ -345,6 +346,6 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     private void timeout(double time) {
         ElapsedTime wait = new ElapsedTime();
         wait.reset();
-        while (wait.seconds() < time) { short x; }
+        while (wait.seconds() <= time) { short x; }
     }
 }
