@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.drive.commands.autoCommands;
 import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BACKDROP_CYCLE_DROPOFF_POSES;
 import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.CYCLE_RETURN_POSES;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -17,18 +19,27 @@ public class MoveToBackdropWhite extends CommandBase {
     private final ElapsedTime timer = new ElapsedTime();
 
     private final int allianceIndex;
+    private final Pose2d[] wCyclingCheckpoints;
 
-    public MoveToBackdropWhite(bCADMecanumDrive drive, RobotAlliance alliance) {
+    public MoveToBackdropWhite(bCADMecanumDrive drive,
+                               RobotAlliance alliance,
+                               Pose2d[] wCyclingCheckpoints) {
         this.drive = drive;
         this.allianceIndex = alliance == RobotAlliance.RED ? 0 : 1;
+        this.wCyclingCheckpoints = wCyclingCheckpoints;
         addRequirements();
     }
 
     @Override
     public void initialize() {
-        TrajectorySequence toBackdropTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+        /*TrajectorySequence toBackdropTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .lineToLinearHeading(CYCLE_RETURN_POSES[allianceIndex])
                 .lineToLinearHeading(BACKDROP_CYCLE_DROPOFF_POSES[allianceIndex])
+                .build();*/
+
+        TrajectorySequence toBackdropTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .splineTo(wCyclingCheckpoints[0].vec(), wCyclingCheckpoints[0].getHeading())
+                .splineTo(BACKDROP_CYCLE_DROPOFF_POSES[allianceIndex].vec(), BACKDROP_CYCLE_DROPOFF_POSES[allianceIndex].getHeading())
                 .build();
 
         drive.followTrajectorySequenceAsync(toBackdropTrajectory);

@@ -41,10 +41,11 @@ public class PickupFromStacks extends CommandBase {
     @Override
     public void execute() {
         if (withinState(0)) {
-            ExecuteRotation(alliance == AAutoState.RobotAlliance.RED ? 150 : 210, false);
-        } else if (withinState(1)) {
             intake.stop();
             intake.spin();
+        } else if (withinState(1)) {
+            drive.followTrajectory(CalcKinematics(4, 0));
+            drive.followTrajectory(CalcKinematics(-4, 0));
         }
     }
 
@@ -68,15 +69,5 @@ public class PickupFromStacks extends CommandBase {
                         bCADMecanumDrive.getVelocityConstraint(finalSpeed, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         bCADMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
-    }
-
-    public void ExecuteRotation(double heading, boolean async) {
-        double diff = heading - Math.toDegrees(drive.getPoseEstimate().getHeading());
-        double amt = diff > 180 ? Math.toRadians(-(360 - diff)) : Math.toRadians(diff);
-        if (async) {
-            drive.turnAsync(amt);
-        } else {
-            drive.turn(amt);
-        }
     }
 }

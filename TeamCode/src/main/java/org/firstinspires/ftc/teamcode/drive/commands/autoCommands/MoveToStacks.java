@@ -1,11 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.commands.autoCommands;
 
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.CYCLING_STACK_INNER_POSES;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.CYCLING_STACK_KNOCK_POSES;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.STAGE_DOOR_POSES;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -18,11 +13,14 @@ public class MoveToStacks extends CommandBase {
     private final ElapsedTime timer = new ElapsedTime();
 
     private final int allianceIndex;
+    private final Pose2d[] wCyclingCheckpoints;
 
     public MoveToStacks(bCADMecanumDrive drive,
-                        RobotAlliance alliance) {
+                        RobotAlliance alliance,
+                        Pose2d[] wCyclingCheckpoints) {
         this.drive = drive;
         this.allianceIndex = alliance == RobotAlliance.RED ? 0 : 1;
+        this.wCyclingCheckpoints = wCyclingCheckpoints;
 
         addRequirements();
     }
@@ -34,10 +32,16 @@ public class MoveToStacks extends CommandBase {
                 .splineToLinearHeading(CYCLING_STACK_KNOCK_POSES[allianceIndex], CYCLING_STACK_KNOCK_POSES[allianceIndex].getHeading())
                 .lineToLinearHeading(CYCLING_STACK_INNER_POSES[allianceIndex])
                 .build();*/
-        TrajectorySequence cycleTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+        /*TrajectorySequence cycleTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .lineToLinearHeading(STAGE_DOOR_POSES[allianceIndex])
                 .splineTo(CYCLING_STACK_INNER_POSES[allianceIndex].vec(), CYCLING_STACK_INNER_POSES[allianceIndex].getHeading())
+                .build();*/
+
+        TrajectorySequence cycleTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .splineTo(wCyclingCheckpoints[0].vec(), wCyclingCheckpoints[0].getHeading())
+                .splineTo(wCyclingCheckpoints[1].vec(), wCyclingCheckpoints[1].getHeading())
                 .build();
+
         drive.followTrajectorySequence(cycleTrajectory); // note: blocking
     }
 

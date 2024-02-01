@@ -26,6 +26,7 @@ import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -47,6 +48,7 @@ import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToStacks;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.PickupFromStacks;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.RaiseAndPrimeAutoCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.TransferAndStandbyAutoCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.RaiseAndPrimeCommand;
 import org.firstinspires.ftc.teamcode.drive.rr.bCADMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.vision2.VisionPropPipeline;
 import org.opencv.core.Point;
@@ -71,6 +73,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     public Pose2d[] wYellowBackdropAlign;
     public Pose2d[] wPurpleSpikemarkAlign;
     public Pose2d[] wPurpleAvoidanceCheckpoints;
+    public Pose2d[] wCycleCheckpoints;
     public static Pose2d START_POSE = new Pose2d();
     public static Pose2d PARKING_POSE = new Pose2d();
     public Point r1;
@@ -105,6 +108,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         taskFinishBehaviourSelected = false;
         wYellowBackdropAlign = SortPoseBasedOnAlliance(RED_YELLOW_PIXEL_BACKDROP_POSES, BLUE_YELLOW_PIXEL_BACKDROP_POSES);
         wPurpleAvoidanceCheckpoints = SortPoseBasedOnAlliance(RED_PURPLE_CHECKPOINTS, BLUE_PURPLE_CHECKPOINTS);
+        wCycleCheckpoints = SortPoseBasedOnAlliance(RED_CYCLE_CHECKPOINTS, BLUE_CYCLE_CHECKPOINTS);
         wPurpleSpikemarkAlign = SortPurpleSpikemarkAlign();
 
         drive = new bCADMecanumDrive(hardwareMap);
@@ -122,7 +126,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
             while (opModeIsActive() && !isStopRequested()) {
                 super.run();
                 CommandScheduler.getInstance().run();
-                //StatusTelemetry();
+                StatusTelemetry();
             }
         }
     }
@@ -138,9 +142,9 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
 
                 new ConditionalCommand(
                         new MoveToBackdropYellow(drive, randomization, wYellowBackdropAlign)
-                                .alongWith(new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_YELLOW, false)),
+                                .alongWith(new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_YELLOW, false, false)),
                         new MoveToBackdropYellow(drive, randomization, wYellowBackdropAlign)
-                                .andThen(new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_YELLOW, false)),
+                                .andThen(new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_YELLOW, false, false)),
                         () -> startingPosition == RobotStartingPosition.BACKDROP
                 ),
 
@@ -175,12 +179,18 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         SequentialCommandGroup sequence = new SequentialCommandGroup();
         for (int i = 0; i < cycleCount; i++) {
             sequence.addCommands(
-                    new MoveToStacks(drive, alliance),
+                    new MoveToStacks(drive, alliance, RED_CYCLE_CHECKPOINTS),
                     new PickupFromStacks(drive, deposit, lift, intake, alliance),
 
-                    new MoveToBackdropWhite(drive, alliance)
-                            .alongWith(new TransferAndStandbyAutoCommand(deposit, lift, intake)),
-                    new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_WHITE, true),
+                    new MoveToBackdropWhite(drive, alliance, wCycleCheckpoints)
+                            .alongWith(
+                                    new TransferAndStandbyAutoCommand(deposit, lift, intake)
+                                    .andThen(
+                                            new WaitUntilCommand(this::getRobotPastTruss),
+                                            new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_WHITE, true, true)
+                                    )
+                            ),
+
                     new DepositAutoCommand(drive, deposit, lift, intake, telemetry),
                     new HomeAutoCommand(deposit, lift, intake)
             );
@@ -329,6 +339,8 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     private RobotTaskFinishBehaviour getTFB() {
         return taskFinishBehaviour;
     }
+
+    private boolean getRobotPastTruss() { return drive.getPoseEstimate().getX() >= 6; }
 
     private void timeout(double time) {
         ElapsedTime wait = new ElapsedTime();

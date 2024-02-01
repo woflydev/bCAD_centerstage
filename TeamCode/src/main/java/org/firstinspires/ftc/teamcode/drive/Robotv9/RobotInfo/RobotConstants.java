@@ -41,10 +41,12 @@ public class RobotConstants {
     public static final double ELBOW_GRABBED_STANDBY = 225;
     public static final double ELBOW_ACTIVE = 130;
     public static final double ELBOW_AUTO_ACTIVE = 10;
+    public static final double ELBOW_CYCLE_ACTIVE = ELBOW_AUTO_ACTIVE - 10;
     public static final double WRIST_PICKUP = 260;
     public static final double WRIST_HOME = 210; // old: 170
     public static final double WRIST_ACTIVE = 145;
     public static final double WRIST_AUTO_ACTIVE = 230;
+    public static final double WRIST_CYCLE_ACTIVE = WRIST_AUTO_ACTIVE + 10;
 
     public static final double PLANE_HOME = 30;
     public static final double PLANE_ACTIVE = 0;
@@ -56,7 +58,7 @@ public class RobotConstants {
     // -------------------------------------------------------------- JUNCTION PRESETS
 
     public static final int JUNCTION_AUTO_YELLOW = 495;
-    public static final int JUNCTION_AUTO_WHITE = 495;
+    public static final int JUNCTION_AUTO_WHITE = 637;
     public static final int JUNCTION_LOW = 300;
     public static final int JUNCTION_MID = 600;
     public static final int JUNCTION_HIGH = 900;

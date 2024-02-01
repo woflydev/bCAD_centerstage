@@ -12,6 +12,7 @@ public class RaiseAndPrimeAutoCommand extends CommandBase {
     private final DepositSubsystem deposit;
     private final LiftSubsystem lift;
     private final boolean spin;
+    private final boolean cycleValues;
     private final int stateDuration = 300;
     private final ElapsedTime timer = new ElapsedTime();
     private int targetHeight;
@@ -20,11 +21,13 @@ public class RaiseAndPrimeAutoCommand extends CommandBase {
     public RaiseAndPrimeAutoCommand(DepositSubsystem deposit,
                                     LiftSubsystem lift,
                                     int target,
-                                    boolean spin) {
+                                    boolean spin,
+                                    boolean cycleValues) {
         this.deposit = deposit;
         this.lift = lift;
         this.targetHeight = target;
         this.spin = spin;
+        this.cycleValues = cycleValues;
         addRequirements(deposit, lift);
     }
 
@@ -42,8 +45,8 @@ public class RaiseAndPrimeAutoCommand extends CommandBase {
         if (withinState(0)) {
             lift.targetLiftPosition = targetHeight;
             lift.UpdateLift(false, 0);
-            deposit.elbow.turnToAngle(RobotConstants.ELBOW_AUTO_ACTIVE);
-            deposit.wrist.turnToAngle(RobotConstants.WRIST_AUTO_ACTIVE);
+            deposit.elbow.turnToAngle(cycleValues ? RobotConstants.ELBOW_CYCLE_ACTIVE : RobotConstants.ELBOW_AUTO_ACTIVE);
+            deposit.wrist.turnToAngle(cycleValues ? RobotConstants.WRIST_CYCLE_ACTIVE : RobotConstants.WRIST_AUTO_ACTIVE);
         } else if (withinState(1)) {
             if (spin) {
                 deposit.spin.turnToAngle(RobotConstants.SPIN_DEPOSIT);
