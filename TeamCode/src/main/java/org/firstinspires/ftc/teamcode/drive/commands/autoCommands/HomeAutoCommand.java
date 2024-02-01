@@ -38,9 +38,9 @@ public class HomeAutoCommand extends CommandBase {
     public void execute() {
         if (withinState(0)) {
             intake.closeFlap();
+            deposit.clawGrab(); // note: just so it doesn't clip the flap
             deposit.elbow.turnToAngle(ELBOW_HOME);
             deposit.wrist.turnToAngle(WRIST_HOME);
-            deposit.clawReset();
         } else if (withinState(1)) {
             lift.targetLiftPosition = 0;
             lift.UpdateLift(false, 0);

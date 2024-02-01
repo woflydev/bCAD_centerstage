@@ -1,31 +1,34 @@
 package org.firstinspires.ftc.teamcode.drive.commands.autoCommands;
 
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants.ELBOW_HOME;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants.SPIN_HOME;
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants.WRIST_HOME;
-
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
-import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.HomeCommand;
 import org.firstinspires.ftc.teamcode.drive.hardware.DepositSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
+import org.firstinspires.ftc.teamcode.drive.rr.bCADMecanumDrive;
 
-public class DepositAndResetAutoCommand extends CommandBase {
+public class DepositAutoCommand extends CommandBase {
     private final DepositSubsystem deposit;
+    private final bCADMecanumDrive drive;
     private final LiftSubsystem lift;
     private final IntakeSubsystem intake;
     private final ElapsedTime timer = new ElapsedTime();
 
-    private final int stateDuration = 300;
+    private final Telemetry t;
 
-    public DepositAndResetAutoCommand(DepositSubsystem deposit, LiftSubsystem lift, IntakeSubsystem intake) {
+    private final int stateDuration = 250;
+
+    public DepositAutoCommand(bCADMecanumDrive drive, DepositSubsystem deposit, LiftSubsystem lift, IntakeSubsystem intake, Telemetry t) {
+        this.drive = drive;
         this.deposit = deposit;
         this.lift = lift;
         this.intake = intake;
+        this.t = t;
         addRequirements(deposit, lift);
     }
 
@@ -41,8 +44,10 @@ public class DepositAndResetAutoCommand extends CommandBase {
             deposit.elbow.turnToAngle(RobotConstants.ELBOW_AUTO_ACTIVE);
             deposit.wrist.turnToAngle(RobotConstants.WRIST_AUTO_ACTIVE);
         } else if (withinState(1)) {
-            deposit.wrist.turnToAngle(RobotConstants.WRIST_AUTO_ACTIVE - 10);
+            deposit.wrist.turnToAngle(RobotConstants.WRIST_AUTO_ACTIVE);
             deposit.clawDeposit();
+        } else if (withinState(2)) {
+            drive.followTrajectory(CalcKinematics(4, 0));
         }
     }
 
@@ -52,9 +57,18 @@ public class DepositAndResetAutoCommand extends CommandBase {
     }
 
     @Override
-    public boolean isFinished() { return (timer.milliseconds() >= stateDuration * 2); }
+    public boolean isFinished() { return (timer.milliseconds() >= stateDuration * 6) && !drive.isBusy(); }
 
     private boolean withinState(double stateNumber) {
         return timer.milliseconds() >= (stateDuration * stateNumber) && timer.milliseconds() <= stateDuration * (stateNumber + 1);
+    }
+
+    public Trajectory CalcKinematics(double inches, double speed) {
+        double finalSpeed = speed == 0 ? DriveConstants.MAX_VEL : speed;
+        return drive.trajectoryBuilder(drive.getPoseEstimate())
+                .forward(inches,
+                        bCADMecanumDrive.getVelocityConstraint(finalSpeed, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        bCADMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .build();
     }
 }

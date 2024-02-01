@@ -21,20 +21,16 @@ public class RobotAutoConstants {
             new Pose2d(47, 15, Math.toRadians(270)),
             new Pose2d(46, 60, Math.toRadians(270)),
     };
-    public static final Pose2d[] BACKDROP_CENTER_POSES = {
-            new Pose2d(43, -35.00, Math.toRadians(180)),
-            new Pose2d(43, 35.00, Math.toRadians(180)),
-    };
     public static final Pose2d[] RED_YELLOW_PIXEL_BACKDROP_POSES = {
             // note: starts with LOC_1
-            new Pose2d(48, -26, Math.toRadians(180)),
-            new Pose2d(48, -36, Math.toRadians(180)),
-            new Pose2d(48, -44, Math.toRadians(180)),
+            new Pose2d(42, -26, Math.toRadians(180)),
+            new Pose2d(42, -35, Math.toRadians(180)),
+            new Pose2d(42, -44, Math.toRadians(180)),
     };
     public static final Pose2d[] BLUE_YELLOW_PIXEL_BACKDROP_POSES = {
-            new Pose2d(48, 44, Math.toRadians(180)),
-            new Pose2d(48, 36, Math.toRadians(180)),
-            new Pose2d(48, 26, Math.toRadians(180)),
+            new Pose2d(42, 44, Math.toRadians(180)),
+            new Pose2d(42, 35, Math.toRadians(180)),
+            new Pose2d(42, 26, Math.toRadians(180)),
     };
 
     // how many units to get audience spikemark from backdrop
@@ -73,14 +69,18 @@ public class RobotAutoConstants {
     };
 
     // CYCLING VARS
+    public static final Pose2d[] BACKDROP_CYCLE_DROPOFF_POSES = {
+            new Pose2d(42, -32, Math.toRadians(180)),
+            new Pose2d(42, 32, Math.toRadians(180)),
+    };
     public static final Pose2d[] CYCLING_STACK_KNOCK_POSES = {
             new Pose2d(-55, -2, Math.toRadians(180)),
             new Pose2d(-55, 2, Math.toRadians(180))
     };
     public static final Pose2d[] CYCLING_STACK_INNER_POSES = {
             // note: again, red is first
-            new Pose2d(-57.5, -12, Math.toRadians(180.00)),
-            new Pose2d(-57.5, 12, Math.toRadians(180.00)),
+            new Pose2d(-60, -14, Math.toRadians(200)),
+            new Pose2d(-60, 14, Math.toRadians(160)),
     };
     public static final Pose2d[] STAGE_DOOR_POSES = {
             new Pose2d(16, -4, Math.toRadians(180.0)), // note: old values - (28, 8)

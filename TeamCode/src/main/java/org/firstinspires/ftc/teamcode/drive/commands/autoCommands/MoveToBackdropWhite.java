@@ -1,18 +1,16 @@
 package org.firstinspires.ftc.teamcode.drive.commands.autoCommands;
 
-import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BACKDROP_CENTER_POSES;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BACKDROP_CYCLE_DROPOFF_POSES;
 import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.CYCLE_RETURN_POSES;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.RobotAlliance;
 import org.firstinspires.ftc.teamcode.drive.rr.bCADMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.rr.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.drive.vision2.VisionPropPipeline;
+
+import java.lang.reflect.Executable;
 
 public class MoveToBackdropWhite extends CommandBase {
     private final bCADMecanumDrive drive;
@@ -29,9 +27,8 @@ public class MoveToBackdropWhite extends CommandBase {
     @Override
     public void initialize() {
         TrajectorySequence toBackdropTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                .lineToConstantHeading(CYCLE_RETURN_POSES[allianceIndex].vec())
-                .waitSeconds(0.001)
-                .lineToConstantHeading(BACKDROP_CENTER_POSES[allianceIndex].vec())
+                .lineToLinearHeading(CYCLE_RETURN_POSES[allianceIndex])
+                .lineToLinearHeading(BACKDROP_CYCLE_DROPOFF_POSES[allianceIndex])
                 .build();
 
         drive.followTrajectorySequenceAsync(toBackdropTrajectory);

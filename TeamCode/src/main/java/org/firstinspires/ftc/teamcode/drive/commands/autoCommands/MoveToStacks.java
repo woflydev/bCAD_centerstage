@@ -29,12 +29,14 @@ public class MoveToStacks extends CommandBase {
 
     @Override
     public void initialize() {
-        TrajectorySequence cycleTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+        /*TrajectorySequence cycleTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .splineToConstantHeading(STAGE_DOOR_POSES[allianceIndex].vec(), STAGE_DOOR_POSES[allianceIndex].getHeading())
-                .waitSeconds(0.001)
                 .splineToLinearHeading(CYCLING_STACK_KNOCK_POSES[allianceIndex], CYCLING_STACK_KNOCK_POSES[allianceIndex].getHeading())
-                .waitSeconds(0.001)
                 .lineToLinearHeading(CYCLING_STACK_INNER_POSES[allianceIndex])
+                .build();*/
+        TrajectorySequence cycleTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .lineToLinearHeading(STAGE_DOOR_POSES[allianceIndex])
+                .splineTo(CYCLING_STACK_INNER_POSES[allianceIndex].vec(), CYCLING_STACK_INNER_POSES[allianceIndex].getHeading())
                 .build();
         drive.followTrajectorySequence(cycleTrajectory); // note: blocking
     }

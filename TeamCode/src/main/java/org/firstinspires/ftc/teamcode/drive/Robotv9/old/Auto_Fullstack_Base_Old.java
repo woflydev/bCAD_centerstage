@@ -231,7 +231,7 @@ public class Auto_Fullstack_Base_Old extends OpModeTemplate {
                         TrajectorySequence toBackdropTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                                 .lineToConstantHeading(CYCLE_RETURN_POSES[allianceIndex].vec())
                                 .waitSeconds(0.001)
-                                .lineToConstantHeading(BACKDROP_CENTER_POSES[allianceIndex].vec())
+                                .lineToConstantHeading(BACKDROP_CYCLE_DROPOFF_POSES[allianceIndex].vec())
                                 .build();
 
                         drive.followTrajectorySequenceAsync(toBackdropTrajectory);

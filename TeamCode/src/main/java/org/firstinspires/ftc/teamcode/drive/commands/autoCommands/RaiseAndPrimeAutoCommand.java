@@ -15,7 +15,7 @@ public class RaiseAndPrimeAutoCommand extends CommandBase {
     private final int stateDuration = 300;
     private final ElapsedTime timer = new ElapsedTime();
     private int targetHeight;
-    private boolean finishTriggered = false;
+    private boolean finishTriggered;
 
     public RaiseAndPrimeAutoCommand(DepositSubsystem deposit,
                                     LiftSubsystem lift,
@@ -30,6 +30,7 @@ public class RaiseAndPrimeAutoCommand extends CommandBase {
 
     @Override
     public void initialize() {
+        finishTriggered = false;
         deposit.outtakeBusy = true;
         timer.reset();
     }
@@ -44,8 +45,10 @@ public class RaiseAndPrimeAutoCommand extends CommandBase {
             deposit.elbow.turnToAngle(RobotConstants.ELBOW_AUTO_ACTIVE);
             deposit.wrist.turnToAngle(RobotConstants.WRIST_AUTO_ACTIVE);
         } else if (withinState(1)) {
-            if (spin) deposit.spin.turnToAngle(RobotConstants.SPIN_DEPOSIT);
-            else finishTriggered = true;
+            if (spin) {
+                deposit.spin.turnToAngle(RobotConstants.SPIN_DEPOSIT);
+            }
+            finishTriggered = true;
         }
     }
 

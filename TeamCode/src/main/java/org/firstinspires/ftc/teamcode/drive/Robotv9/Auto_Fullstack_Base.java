@@ -24,10 +24,8 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -36,9 +34,8 @@ import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.RobotPa
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.RobotStartingPosition;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.RobotTaskFinishBehaviour;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState.Outtake;
-import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.commands.OpModeTemplate;
-import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.DepositAndResetAutoCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.DepositAutoCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.DepositPurpleAtSpikemark;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.HomeAutoCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToBackdropWhite;
@@ -47,10 +44,9 @@ import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToParking;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToSpikemark;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToSpikemarkAvoidance;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToStacks;
+import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.PickupFromStacks;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.RaiseAndPrimeAutoCommand;
-import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.DepositAndResetCommand;
-import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.RaiseAndPrimeCommand;
-import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.TransferAndStandbyCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.TransferAndStandbyAutoCommand;
 import org.firstinspires.ftc.teamcode.drive.rr.bCADMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.vision2.VisionPropPipeline;
 import org.opencv.core.Point;
@@ -148,30 +144,24 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                         () -> startingPosition == RobotStartingPosition.BACKDROP
                 ),
 
-                new WaitCommand(100),
-                new DepositAndResetAutoCommand(deposit, lift, intake),
-
+                new DepositAutoCommand(drive, deposit, lift, intake, telemetry),
+                new HomeAutoCommand(deposit, lift, intake),
                 new SelectCommand(
                         new HashMap<Object, Command>() {{
                             put(RobotTaskFinishBehaviour.DO_NOT_CYCLE,
                                     BuildFinishSequence(0)
-                                            .alongWith(new HomeAutoCommand(deposit, lift, intake))
                             );
                             put(RobotTaskFinishBehaviour.CYCLE,
                                     BuildFinishSequence(1)
-                                            .alongWith(new HomeAutoCommand(deposit, lift, intake))
                             );
                             put(RobotTaskFinishBehaviour.CYCLE_TWICE,
                                     BuildFinishSequence(2)
-                                            .alongWith(new HomeAutoCommand(deposit, lift, intake))
                             );
                             put(RobotTaskFinishBehaviour.CYCLE_THRICE,
                                     BuildFinishSequence(3)
-                                            .alongWith(new HomeAutoCommand(deposit, lift, intake))
                             );
                             put(RobotTaskFinishBehaviour.CYCLE_FOURICE,
                                     BuildFinishSequence(4)
-                                            .alongWith(new HomeAutoCommand(deposit, lift, intake))
                             );
                         }},
                         this::getTFB
@@ -186,17 +176,13 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         for (int i = 0; i < cycleCount; i++) {
             sequence.addCommands(
                     new MoveToStacks(drive, alliance),
-
-                    new RunCommand(intake::spin),
-                    new WaitCommand(1000),
-                    new RunCommand(intake::stop),
+                    new PickupFromStacks(drive, deposit, lift, intake, alliance),
 
                     new MoveToBackdropWhite(drive, alliance)
-                            .alongWith(new TransferAndStandbyCommand(deposit, lift, intake)),
-
-                    new RaiseAndPrimeCommand(deposit, lift, intake, JUNCTION_LOW, true),
-                    new WaitCommand(200),
-                    new DepositAndResetCommand(deposit, lift, intake)
+                            .alongWith(new TransferAndStandbyAutoCommand(deposit, lift, intake)),
+                    new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_WHITE, true),
+                    new DepositAutoCommand(drive, deposit, lift, intake, telemetry),
+                    new HomeAutoCommand(deposit, lift, intake)
             );
         }
         sequence.addCommands(new MoveToParking(drive, alliance, PARKING_POSE));
@@ -332,8 +318,8 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     }
 
     private void EnsureAttachmentNormalization() {
-        deposit.claw.turnToAngle(CLAW_CLOSE);
-        timeout(2);
+        timeout(3);
+        deposit.claw.turnToAngle(CLAW_AUTO_CLOSE);
         deposit.elbow.turnToAngle(ELBOW_GRABBED_STANDBY);
         deposit.wrist.turnToAngle(WRIST_HOME);
         deposit.spin.turnToAngle(SPIN_HOME);
