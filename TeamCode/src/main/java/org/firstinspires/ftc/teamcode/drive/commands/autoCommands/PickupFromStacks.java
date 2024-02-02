@@ -40,12 +40,10 @@ public class PickupFromStacks extends CommandBase {
 
     @Override
     public void execute() {
-        if (withinState(0)) {
-            intake.stop();
+        if (withinState(0, 1)) {
             intake.spin();
-        } else if (withinState(1)) {
+        } else if (withinState(2, 2)) {
             drive.followTrajectory(CalcKinematics(4, 0));
-            drive.followTrajectory(CalcKinematics(-4, 0));
         }
     }
 
@@ -56,10 +54,10 @@ public class PickupFromStacks extends CommandBase {
     }
 
     @Override
-    public boolean isFinished() { return (timer.milliseconds() >= stateDuration * 2) && !drive.isBusy(); }
+    public boolean isFinished() { return withinState(4, 99) && !drive.isBusy(); }
 
-    private boolean withinState(double stateNumber) {
-        return timer.milliseconds() >= (stateDuration * stateNumber) && timer.milliseconds() <= stateDuration * (stateNumber + 1);
+    private boolean withinState(double stateNumber, double endTimeFactor) {
+        return timer.milliseconds() >= (stateDuration * stateNumber) && timer.milliseconds() <= stateDuration * (stateNumber + endTimeFactor);
     }
 
     public Trajectory CalcKinematics(double inches, double speed) {

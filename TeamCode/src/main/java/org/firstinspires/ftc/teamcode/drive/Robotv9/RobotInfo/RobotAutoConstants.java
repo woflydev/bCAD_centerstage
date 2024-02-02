@@ -71,8 +71,8 @@ public class RobotAutoConstants {
     // CYCLING VARS
     public static final Pose2d[] BACKDROP_CYCLE_DROPOFF_POSES = {
             // note: red first
-            new Pose2d(30, -35, Math.toRadians(180)),
-            new Pose2d(30, 35, Math.toRadians(180)),
+            new Pose2d(35, -35, Math.toRadians(180)),
+            new Pose2d(35, 35, Math.toRadians(180)),
     };
     public static final Pose2d[] CYCLING_STACK_KNOCK_POSES = {
             new Pose2d(-55, -2, Math.toRadians(180)),
@@ -92,12 +92,12 @@ public class RobotAutoConstants {
             new Pose2d(30, 5, Math.toRadians(180.0)),
     };
     public static final Pose2d[] RED_CYCLE_CHECKPOINTS = {
-            new Pose2d(-7, -38, Math.toRadians(181.94)),
-            new Pose2d(-60, -27, Math.toRadians(230.00))
+            new Pose2d(-7, -36, Math.toRadians(181.94)),
+            new Pose2d(-62, -28, Math.toRadians(110))
     };
     public static final Pose2d[] BLUE_CYCLE_CHECKPOINTS = {
             new Pose2d(RED_CYCLE_CHECKPOINTS[0].getX(), -RED_CYCLE_CHECKPOINTS[0].getY(), Math.toRadians(178.06)),
-            new Pose2d(RED_CYCLE_CHECKPOINTS[1].getX(), -RED_CYCLE_CHECKPOINTS[1].getY(), Math.toRadians(130.00))
+            new Pose2d(RED_CYCLE_CHECKPOINTS[1].getX(), -RED_CYCLE_CHECKPOINTS[1].getY(), Math.toRadians(250))
     };
 
     public static final double CAUTION_SPEED = 14;

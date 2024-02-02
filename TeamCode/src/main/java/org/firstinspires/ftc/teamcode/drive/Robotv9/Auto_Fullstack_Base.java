@@ -337,9 +337,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         deposit.outtakeState = Outtake.GRABBED_AND_READY;
     }
 
-    private RobotTaskFinishBehaviour getTFB() {
-        return taskFinishBehaviour;
-    }
+    private RobotTaskFinishBehaviour getTFB() { return taskFinishBehaviour; }
 
     private boolean getRobotPastTruss() { return drive.getPoseEstimate().getX() >= 6; }
 
