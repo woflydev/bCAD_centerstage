@@ -46,8 +46,6 @@ public class DepositAutoCommand extends CommandBase {
         } else if (withinState(1)) {
             deposit.wrist.turnToAngle(RobotConstants.WRIST_AUTO_ACTIVE);
             deposit.clawDeposit();
-        } else if (withinState(2)) {
-            drive.followTrajectory(CalcKinematics(4, 0));
         }
     }
 
@@ -57,7 +55,7 @@ public class DepositAutoCommand extends CommandBase {
     }
 
     @Override
-    public boolean isFinished() { return (timer.milliseconds() >= stateDuration * 6) && !drive.isBusy(); }
+    public boolean isFinished() { return (timer.milliseconds() >= stateDuration * 3) && !drive.isBusy(); }
 
     private boolean withinState(double stateNumber) {
         return timer.milliseconds() >= (stateDuration * stateNumber) && timer.milliseconds() <= stateDuration * (stateNumber + 1);
