@@ -70,7 +70,7 @@ public class Auto_Fullstack_Base_Old extends OpModeTemplate {
 
     public void initialize() {
         autoAlreadyRun = false;
-        InitBlock(true, new Pose2d(0, 0, 0));
+        InitBlock();
         EnsureAttachmentNormalization();
         DetermineStartFinishPoses();
 
