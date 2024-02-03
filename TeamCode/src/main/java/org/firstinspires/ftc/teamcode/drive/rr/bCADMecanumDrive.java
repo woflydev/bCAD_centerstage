@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
 import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
@@ -32,6 +33,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants;
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.drive.rr.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.drive.rr.trajectorysequence.TrajectorySequenceBuilder;
@@ -54,6 +56,8 @@ import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConsta
 import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.kStatic;
 import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.kV;
 import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.DriveConstants.*;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BONK_X_TOLERANCE;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BONK_Y_TOLERANCE;
 
 /*
  * Simple mecanum drive hardware implementation for REV hardware.
@@ -82,9 +86,29 @@ public class bCADMecanumDrive extends MecanumDrive {
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
+    public Vector2d diffPosition = new Vector2d();
+    public double diffRotationVelocity = 0;
+    public boolean bonked;
+
+    public void CheckForBonk() {
+        // note: once bonked is triggered, it will not be reset automatically.
+        if (!bonked) {
+            diffPosition = getLastError().vec().minus(getPoseEstimate().vec());
+            diffRotationVelocity = getExternalHeadingVelocity() != null ? getExternalHeadingVelocity() : 0;
+
+            if (isBusy() && (diffPosition.getX() > BONK_X_TOLERANCE || diffPosition.getY() > BONK_Y_TOLERANCE)) {
+                breakFollowing();
+                bonked = true;
+            } else if (diffRotationVelocity > 0) {
+                bonked = !isBusy() && diffRotationVelocity >= RobotAutoConstants.BONK_ROT_TOLERANCE;
+            }
+        }
+
+    }
+
     public bCADMecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
-
+        this.bonked = false;
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 

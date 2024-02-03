@@ -42,15 +42,15 @@ public class MoveToStacks extends CommandBase {
                 .splineTo(wCyclingCheckpoints[1].vec(), wCyclingCheckpoints[1].getHeading())
                 .build();
 
-        drive.followTrajectorySequence(cycleTrajectory); // note: blocking
+        drive.followTrajectorySequenceAsync(cycleTrajectory); // note: blocking
     }
 
     @Override
-    public void execute() { }
+    public void execute() { drive.update(); }
 
     @Override
     public void end(boolean interrupted) {
-        // uses blocking drive
+
     }
 
     @Override

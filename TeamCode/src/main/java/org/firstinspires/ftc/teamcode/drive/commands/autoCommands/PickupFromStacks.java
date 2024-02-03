@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.commands.autoCommands;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.drive.hardware.DepositSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.drive.rr.bCADMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.rr.trajectorysequence.TrajectorySequence;
 
 public class PickupFromStacks extends CommandBase {
     private final DepositSubsystem deposit;
@@ -25,12 +27,20 @@ public class PickupFromStacks extends CommandBase {
 
     private boolean finish = false;
 
-    public PickupFromStacks(bCADMecanumDrive drive, DepositSubsystem deposit, LiftSubsystem lift, IntakeSubsystem intake, AAutoState.RobotAlliance alliance) {
+    private Pose2d[] wCyclingCheckpoints;
+
+    public PickupFromStacks(bCADMecanumDrive drive,
+                            DepositSubsystem deposit,
+                            LiftSubsystem lift,
+                            IntakeSubsystem intake,
+                            AAutoState.RobotAlliance alliance) {
         this.drive = drive;
         this.deposit = deposit;
         this.lift = lift;
         this.intake = intake;
         this.alliance = alliance;
+        this.wCyclingCheckpoints = alliance == AAutoState.RobotAlliance.RED ? RobotAutoConstants.RED_CYCLE_CHECKPOINTS : RobotAutoConstants.BLUE_CYCLE_CHECKPOINTS;
+
         addRequirements(deposit, lift);
     }
 
@@ -41,18 +51,33 @@ public class PickupFromStacks extends CommandBase {
         intake.spin();
         timer.reset();
 
-        drive.followTrajectoryAsync(CalcKinematics(4, 0));
+        drive.followTrajectorySequenceAsync(CalcKinematics(4, 0));
     }
 
     @Override
     public void execute() {
         drive.update();
+        drive.CheckForBonk();
+
         // todo: add colour sensor input when calvin fixes it
         if (intake.intakeM.motorEx.getPower() >= RobotConstants.INTAKE_SPEED - 0.05
             && intake.intakeM.getCorrectedVelocity() <= RobotAutoConstants.MIN_ALLOWABLE_INTAKE_VEL) {
             intake.cautiousReverseSpin();
         } else {
             intake.spin();
+        }
+
+        if (drive.bonked) {
+            intake.cautiousReverseSpin();
+
+            TrajectorySequence realign = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                    .lineToLinearHeading(wCyclingCheckpoints[1])
+                    .build();
+
+            drive.followTrajectorySequenceAsync(realign);
+            intake.spin();
+
+            drive.bonked = false;
         }
     }
 
@@ -69,9 +94,9 @@ public class PickupFromStacks extends CommandBase {
         return timer.milliseconds() >= (stateDuration * stateNumber) && timer.milliseconds() <= stateDuration * (stateNumber + endTimeFactor);
     }
 
-    private Trajectory CalcKinematics(double inches, double speed) {
+    private TrajectorySequence CalcKinematics(double inches, double speed) {
         double finalSpeed = speed == 0 ? DriveConstants.MAX_VEL : speed;
-        return drive.trajectoryBuilder(drive.getPoseEstimate())
+        return drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .forward(inches,
                         bCADMecanumDrive.getVelocityConstraint(finalSpeed, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         bCADMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))

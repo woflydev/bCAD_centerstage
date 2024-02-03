@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.commands;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.drive.hardware.PlaneLauncherSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.HangSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
+import org.firstinspires.ftc.teamcode.drive.rr.bCADMecanumDrive;
 
 abstract public class OpModeTemplate extends CommandOpMode {
     protected RootAutoState autoState = RootAutoState.BA_PLAY;
@@ -22,6 +24,8 @@ abstract public class OpModeTemplate extends CommandOpMode {
     protected HangSubsystem hang;
     protected PlaneLauncherSubsystem shooter;
     protected LiftSubsystem lift;
+
+    protected bCADMecanumDrive drive;
 
     protected GamepadEx gamepad1Ex;
     protected GamepadEx gamepad2Ex;

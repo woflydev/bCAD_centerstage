@@ -1,13 +1,18 @@
 package org.firstinspires.ftc.teamcode.drive.hardware;
 
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BONK_X_TOLERANCE;
+import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants.BONK_Y_TOLERANCE;
 import static org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants.*;
 
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotAutoConstants;
+import org.firstinspires.ftc.teamcode.drive.rr.bCADMecanumDrive;
 
 public class DriveSubsystem extends SubsystemBase {
     public DcMotorEx frontLM;
@@ -16,13 +21,13 @@ public class DriveSubsystem extends SubsystemBase {
     public DcMotorEx backRM;
     public double speedModifier = 0.7;
 
-    int wheelDiameter = 98;                  // Wheel diameter in millimetres
-    double ticksPerRotation = 751.8;         // Also called encoder resolution
-    double gearRatio = 2.5;                  // Gear ratio from input to output.
+    private final int wheelDiameter = 98;                  // Wheel diameter in millimetres
+    private final double ticksPerRotation = 751.8;         // Also called encoder resolution
+    private final double gearRatio = 2.5;                  // Gear ratio from input to output.
 
-    double wheelCircumference = 2 * Math.PI * (wheelDiameter / 2);
-    double distancePerRotation = (wheelCircumference / 10) * gearRatio;        // in cm
-    double distancePerTick = distancePerRotation / ticksPerRotation;           // distance per tick in cm
+    private final double wheelCircumference = 2 * Math.PI * (wheelDiameter / 2);
+    private final double distancePerRotation = (wheelCircumference / 10) * gearRatio;        // in cm
+    private final double distancePerTick = distancePerRotation / ticksPerRotation;           // distance per tick in cm
 
     public DriveSubsystem(HardwareMap hardwareMap) {
         frontLM = hardwareMap.get(DcMotorEx.class, FRONT_LEFT);
@@ -72,7 +77,11 @@ public class DriveSubsystem extends SubsystemBase {
         backRM.setPower(backRightPower / speedModifier);
     }
 
-    public void resetEncoders(boolean runWithoutEncodersOnReset) {
+    public boolean withinUncertainty(double currentPos, double wantedPos, double range) {
+        return (currentPos < wantedPos + range) && currentPos > wantedPos - range;
+    }
+
+    public void ResetEncoders(boolean runWithoutEncodersOnReset) {
         frontLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -89,9 +98,5 @@ public class DriveSubsystem extends SubsystemBase {
             backLM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             backRM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
-    }
-
-    public boolean withinUncertainty(double currentPos, double wantedPos, double range) {
-        return (currentPos < wantedPos + range) && currentPos > wantedPos - range;
     }
 }

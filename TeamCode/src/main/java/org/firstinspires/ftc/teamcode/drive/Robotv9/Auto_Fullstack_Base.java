@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
@@ -58,6 +59,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 import java.util.HashMap;
+import java.util.Vector;
 
 public class Auto_Fullstack_Base extends OpModeTemplate {
     private bCADMecanumDrive drive;
@@ -70,6 +72,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     public boolean taskFinishBehaviourSelected = false;
     public int allianceIndex;
     public int dir;
+    public Vector2d diff = new Vector2d();
     public Pose2d[] wYellowBackdropAlign;
     public Pose2d[] wPurpleSpikemarkAlign;
     public Pose2d[] wPurpleAvoidanceCheckpoints;
@@ -126,7 +129,6 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
             autoTimer.reset();
             while (opModeIsActive() && !isStopRequested()) {
                 super.run();
-                CommandScheduler.getInstance().run();
                 StatusTelemetry();
             }
         }
@@ -265,6 +267,13 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         telemetry.addLine("INITIALIZATION COMPLETE! TASK FINISH BEHAVIOUR SELECTED!");
         telemetry.addData("Selected Behaviour", taskFinishBehaviour);
         telemetry.update();
+    }
+
+    private void CheckForBonk() {
+        diff = drive.getLastError().vec().minus(drive.getPoseEstimate().vec());
+        if (drive.isBusy() && (diff.getX() > BONK_X_TOLERANCE || diff.getY() > BONK_Y_TOLERANCE)) {
+            drive.breakFollowing();
+        }
     }
 
     private void VisionPropDetection() {

@@ -5,7 +5,9 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 public class RobotAutoConstants {
     // note: -------------------------------------------------------------- NUMBER CONFIG
 
-
+    public static final double BONK_X_TOLERANCE = 6;
+    public static final double BONK_Y_TOLERANCE = 6;
+    public static final double BONK_ROT_TOLERANCE = 10;
     public static final int MIN_ALLOWABLE_INTAKE_VEL = 800;
 
 

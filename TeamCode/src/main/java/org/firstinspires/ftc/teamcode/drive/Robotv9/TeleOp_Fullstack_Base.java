@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.Robotv9;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
@@ -16,7 +17,7 @@ import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.TransferAndS
 public class TeleOp_Fullstack_Base extends OpModeTemplate {
     @Override
     public void initialize() {
-        InitBlock();
+        InitBlock(false, new Pose2d(0, 0, 0));
 
         // note: ------------------------driver 1------------------------------------------------------------
         new GamepadButton(gamepad1Ex, GamepadKeys.Button.START)
