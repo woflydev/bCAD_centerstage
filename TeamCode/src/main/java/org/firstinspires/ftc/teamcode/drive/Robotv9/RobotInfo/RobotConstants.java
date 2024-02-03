@@ -47,13 +47,14 @@ public class RobotConstants {
     public static final double WRIST_ACTIVE = 145;
     public static final double WRIST_AUTO_ACTIVE = 230;
     public static final double WRIST_CYCLE_ACTIVE = WRIST_AUTO_ACTIVE + 10;
-
-    public static final double PLANE_HOME = 30;
-    public static final double PLANE_ACTIVE = 0;
-    public static final double INTAKE_SPEED = 0.8;
-    public static final double INTAKE_REVERSE_SPEED = 0.8;
     public static final int SPIN_HOME = 25;
     public static final int SPIN_DEPOSIT = SPIN_HOME + 90;
+    public static final double PLANE_HOME = 30;
+    public static final double PLANE_ACTIVE = 0;
+
+    public static final double INTAKE_SPEED = 0.8;
+    public static final double INTAKE_OUT_CAUTIOUS_SPEED = 0.5;
+    public static final double INTAKE_OUT_SPEED = 0.8;
 
     // -------------------------------------------------------------- JUNCTION PRESETS
 

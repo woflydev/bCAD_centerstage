@@ -4,18 +4,18 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.RobotConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
     Telemetry telemetry;
-    public final Motor intakeM;
+    public final MotorEx intakeM;
     public ServoEx servoFlap;
 
     // note: below vars are for rumble
@@ -29,7 +29,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
 
-        intakeM = new Motor(hardwareMap, RobotConstants.INTAKE_MOTOR);
+        intakeM = new MotorEx(hardwareMap, RobotConstants.INTAKE_MOTOR);
         intakeM.setRunMode(Motor.RunMode.RawPower);
         intakeM.setInverted(false);
         servoFlap = new SimpleServo(hardwareMap, RobotConstants.SERVO_FLAP, 0, 260, AngleUnit.DEGREES);
@@ -41,14 +41,9 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void spin() { intakeM.set(-RobotConstants.INTAKE_SPEED); }
-
-    public void reverseSpin() {
-        intakeM.set(RobotConstants.INTAKE_REVERSE_SPEED);
-    }
-
-    public void stop() {
-        intakeM.set(0);
-    }
+    public void reverseSpin() { intakeM.set(RobotConstants.INTAKE_OUT_SPEED); }
+    public void stop() { intakeM.set(0); }
+    public void cautiousReverseSpin() { intakeM.set(RobotConstants.INTAKE_OUT_CAUTIOUS_SPEED); }
 
     public void openFlap() { servoFlap.turnToAngle(RobotConstants.FLAP_OPEN); }
     public void closeFlap() { servoFlap.turnToAngle(RobotConstants.FLAP_CLOSE); }

@@ -3,7 +3,13 @@ package org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 public class RobotAutoConstants {
-    // -------------------------------------------------------------- AUTO CONFIG
+    // note: -------------------------------------------------------------- NUMBER CONFIG
+
+
+    public static final int MIN_ALLOWABLE_INTAKE_VEL = 800;
+
+
+    // note: -------------------------------------------------------------- POSE CONFIG
     public static final Pose2d[] RED_STARTING_POSES = {
             new Pose2d(8, -62.5, Math.toRadians(270)),
             new Pose2d(-35, -60, Math.toRadians(270)),
@@ -101,13 +107,4 @@ public class RobotAutoConstants {
     };
 
     public static final double CAUTION_SPEED = 14;
-    public static final double DEPOSIT_YELLOW_TO_BACKDROP_TRANSIT_RED = 1.55;
-    public static final double DEPOSIT_YELLOW_TO_BACKDROP_TRANSIT_BLUE = 1.45;
-
-    public static final double CYCLE_STACK_APPROACH_AMOUNT = 0.05;
-    public static final double CYCLE_STACK_REVERSE_AMOUNT = CYCLE_STACK_APPROACH_AMOUNT - 0.22;
-    public static final double CYCLE_BACKDROP_APPROACH_AMOUNT = 0.45;
-
-    public static final double AUDIENCE_PURPLE_APPROACH_SPEED = 20;
-    public static final double AUDIENCE_YELLOW_BACKDROP_APPROACH_AMOUNT = 0.485;
 }

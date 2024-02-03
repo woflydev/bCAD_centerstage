@@ -215,15 +215,19 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
 
     private void StatusTelemetry() {
         telemetry.addData("Autonomous Clock", autoTimer.seconds());
-        telemetry.addData("Command Sequence", BuildAutoSequence().getName());
-        telemetry.addData("Robot X", drive.getPoseEstimate().getX());
-        telemetry.addData("Robot Y", drive.getPoseEstimate().getY());
         telemetry.addData("Robot Heading", Math.toDegrees(drive.getPoseEstimate().getHeading()));
         telemetry.addData("Target Location",
                 randomization == VisionPropPipeline.Randomization.LOCATION_1 ? "LEFT (LOC_1)" :
                 randomization == VisionPropPipeline.Randomization.LOCATION_2 ? "MIDDLE (LOC_2)" :
                 randomization == VisionPropPipeline.Randomization.LOCATION_3 ? "RIGHT (LOC_3)" : "NONE"
         );
+
+        telemetry.addLine("---------");
+        telemetry.addData("Robot X", drive.getPoseEstimate().getX());
+        telemetry.addData("Robot Y", drive.getPoseEstimate().getY());
+        telemetry.addData("Robot Heading", Math.toDegrees(drive.getPoseEstimate().getHeading()));
+        telemetry.addData("Intake TPS", intake.intakeM.getCorrectedVelocity());
+
         telemetry.addLine("---------");
         telemetry.addData("Alliance", alliance);
         telemetry.addData("Starting Position", startingPosition);
