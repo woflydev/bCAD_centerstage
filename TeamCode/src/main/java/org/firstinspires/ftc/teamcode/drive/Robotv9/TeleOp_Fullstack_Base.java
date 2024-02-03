@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.TransferAndS
 public class TeleOp_Fullstack_Base extends OpModeTemplate {
     @Override
     public void initialize() {
-        InitBlock(false, new Pose2d(0, 0, 0));
+        InitBlock();
 
         // note: ------------------------driver 1------------------------------------------------------------
         new GamepadButton(gamepad1Ex, GamepadKeys.Button.START)
