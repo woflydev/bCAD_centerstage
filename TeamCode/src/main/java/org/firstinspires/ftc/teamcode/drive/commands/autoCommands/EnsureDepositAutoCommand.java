@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.drive.hardware.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.drive.hardware.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.drive.rr.bCADMecanumDrive;
 
-public class DepositAutoCommand extends CommandBase {
+public class EnsureDepositAutoCommand extends CommandBase {
     private final DepositSubsystem deposit;
     private final bCADMecanumDrive drive;
     private final LiftSubsystem lift;
@@ -23,7 +23,7 @@ public class DepositAutoCommand extends CommandBase {
 
     private final int stateDuration = 250;
 
-    public DepositAutoCommand(bCADMecanumDrive drive, DepositSubsystem deposit, LiftSubsystem lift, IntakeSubsystem intake, Telemetry t) {
+    public EnsureDepositAutoCommand(bCADMecanumDrive drive, DepositSubsystem deposit, LiftSubsystem lift, IntakeSubsystem intake, Telemetry t) {
         this.drive = drive;
         this.deposit = deposit;
         this.lift = lift;

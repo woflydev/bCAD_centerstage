@@ -26,6 +26,7 @@ import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -36,7 +37,7 @@ import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.RobotSt
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.AAutoState.RobotTaskFinishBehaviour;
 import org.firstinspires.ftc.teamcode.drive.Robotv9.RobotInfo.ASubsystemState.Outtake;
 import org.firstinspires.ftc.teamcode.drive.commands.OpModeTemplate;
-import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.DepositAutoCommand;
+import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.EnsureDepositAutoCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.DepositPurpleAtSpikemark;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.HomeAutoCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToBackdropWhite;
@@ -48,7 +49,6 @@ import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.MoveToStacks;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.PickupFromStacks;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.RaiseAndPrimeAutoCommand;
 import org.firstinspires.ftc.teamcode.drive.commands.autoCommands.TransferAndStandbyAutoCommand;
-import org.firstinspires.ftc.teamcode.drive.commands.teleopCommands.RaiseAndPrimeCommand;
 import org.firstinspires.ftc.teamcode.drive.rr.bCADMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.vision2.VisionPropPipeline;
 import org.opencv.core.Point;
@@ -149,55 +149,66 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                         () -> startingPosition == RobotStartingPosition.BACKDROP
                 ),
 
-                new DepositAutoCommand(drive, deposit, lift, intake, telemetry),
-                new HomeAutoCommand(deposit, lift, intake),
+                new InstantCommand(() -> deposit.clawDeposit()),
                 new SelectCommand(
                         new HashMap<Object, Command>() {{
                             put(RobotTaskFinishBehaviour.DO_NOT_CYCLE,
-                                    BuildFinishSequence(0)
+                                    new WaitCommand(0)
                             );
                             put(RobotTaskFinishBehaviour.CYCLE,
-                                    BuildFinishSequence(1)
+                                    BuildCycleSequence(1)
                             );
                             put(RobotTaskFinishBehaviour.CYCLE_TWICE,
-                                    BuildFinishSequence(2)
+                                    BuildCycleSequence(2)
                             );
                             put(RobotTaskFinishBehaviour.CYCLE_THRICE,
-                                    BuildFinishSequence(3)
+                                    BuildCycleSequence(3)
                             );
                             put(RobotTaskFinishBehaviour.CYCLE_FOURICE,
-                                    BuildFinishSequence(4)
+                                    BuildCycleSequence(4)
                             );
                         }},
                         this::getTFB
                 ),
 
+                BuildParkingSequence(),
                 new InstantCommand(this::requestOpModeStop)
         );
     }
 
-    private SequentialCommandGroup BuildFinishSequence(int cycleCount) {
+    private SequentialCommandGroup BuildCycleSequence(int cycleCount) {
         SequentialCommandGroup sequence = new SequentialCommandGroup();
         for (int i = 0; i < cycleCount; i++) {
             sequence.addCommands(
-                    new MoveToStacks(drive, alliance, RED_CYCLE_CHECKPOINTS),
-                    new PickupFromStacks(drive, deposit, lift, intake, alliance),
+                new MoveToStacks(drive, alliance, wCycleCheckpoints)
+                        .alongWith(
+                                new EnsureDepositAutoCommand(drive, deposit, lift, intake, telemetry)
+                                        .andThen(new HomeAutoCommand(deposit, lift, intake))
+                        ),
 
-                    new MoveToBackdropWhite(drive, alliance, wCycleCheckpoints)
-                            .alongWith(
-                                    new TransferAndStandbyAutoCommand(deposit, lift, intake)
-                                    .andThen(
-                                            new WaitUntilCommand(this::getRobotPastTruss),
-                                            new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_WHITE, true, true)
-                                    )
-                            ),
-
-                    new DepositAutoCommand(drive, deposit, lift, intake, telemetry),
-                    new HomeAutoCommand(deposit, lift, intake)
+                new PickupFromStacks(drive, deposit, lift, intake, alliance),
+                new MoveToBackdropWhite(drive, alliance, wCycleCheckpoints)
+                        .alongWith(
+                                new TransferAndStandbyAutoCommand(deposit, lift, intake)
+                                        .andThen(
+                                                new WaitUntilCommand(this::getRobotPastTruss),
+                                                new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_WHITE, true, true)
+                                        )
+                        ),
+                new InstantCommand(() -> deposit.clawDeposit())
             );
         }
-        sequence.addCommands(new MoveToParking(drive, alliance, PARKING_POSE));
         return sequence;
+    }
+
+    private SequentialCommandGroup BuildParkingSequence() {
+        return new SequentialCommandGroup(
+                new MoveToParking(drive, alliance, PARKING_POSE)
+                        .alongWith(
+                                new EnsureDepositAutoCommand(drive, deposit, lift, intake, telemetry)
+                                        .andThen(new HomeAutoCommand(deposit, lift, intake))
+                        )
+        );
     }
 
     // note: ------------------------------UTIL AND SYSTEM-------------------------------------------------------

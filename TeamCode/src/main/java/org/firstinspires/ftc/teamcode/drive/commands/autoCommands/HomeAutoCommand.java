@@ -51,8 +51,6 @@ public class HomeAutoCommand extends CommandBase {
     public void end(boolean interrupted) {
         deposit.outtakeBusy = false;
         intake.stop();
-
-        Delay(60);
         intake.closeFlap();
         deposit.spin.turnToAngle(SPIN_HOME);
         deposit.outtakeState = ASubsystemState.Outtake.IDLE;
