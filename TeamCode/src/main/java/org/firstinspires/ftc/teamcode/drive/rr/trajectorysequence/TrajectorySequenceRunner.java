@@ -60,25 +60,11 @@ public class TrajectorySequenceRunner {
     private final FtcDashboard dashboard;
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
 
-    private VoltageSensor voltageSensor;
-
-    private List<Integer> lastDriveEncPositions, lastDriveEncVels, lastTrackingEncPositions, lastTrackingEncVels;
-
-    public TrajectorySequenceRunner(
-            TrajectoryFollower follower, PIDCoefficients headingPIDCoefficients, VoltageSensor voltageSensor,
-            List<Integer> lastDriveEncPositions, List<Integer> lastDriveEncVels, List<Integer> lastTrackingEncPositions, List<Integer> lastTrackingEncVels
-    ) {
+    public TrajectorySequenceRunner(TrajectoryFollower follower, PIDCoefficients headingPIDCoefficients) {
         this.follower = follower;
 
         turnController = new PIDFController(headingPIDCoefficients);
         turnController.setInputBounds(0, 2 * Math.PI);
-
-        this.voltageSensor = voltageSensor;
-
-        this.lastDriveEncPositions = lastDriveEncPositions;
-        this.lastDriveEncVels = lastDriveEncVels;
-        this.lastTrackingEncPositions = lastTrackingEncPositions;
-        this.lastTrackingEncVels = lastTrackingEncVels;
 
         clock = NanoClock.system();
 
@@ -201,22 +187,6 @@ public class TrajectorySequenceRunner {
             poseHistory.removeFirst();
         }
 
-        final double NOMINAL_VOLTAGE = 12.0;
-        double voltage = voltageSensor.getVoltage();
-        if (driveSignal != null && !DriveConstants.RUN_USING_ENCODER) {
-            driveSignal = new DriveSignal(
-                    driveSignal.getVel().times(NOMINAL_VOLTAGE / voltage),
-                    driveSignal.getAccel().times(NOMINAL_VOLTAGE / voltage)
-            );
-        }
-
-        if (targetPose != null) {
-            LogFiles.record(
-                    targetPose, poseEstimate, voltage,
-                    lastDriveEncPositions, lastDriveEncVels, lastTrackingEncPositions, lastTrackingEncVels
-            );
-        }
-
         packet.put("x", poseEstimate.getX());
         packet.put("y", poseEstimate.getY());
         packet.put("heading (deg)", Math.toDegrees(poseEstimate.getHeading()));
@@ -302,5 +272,10 @@ public class TrajectorySequenceRunner {
 
     public boolean isBusy() {
         return currentTrajectorySequence != null;
+    }
+
+    public void breakFollowing() {
+        currentTrajectorySequence = null;
+        remainingMarkers.clear();
     }
 }
