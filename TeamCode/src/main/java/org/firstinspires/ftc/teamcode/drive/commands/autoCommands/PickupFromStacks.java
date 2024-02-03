@@ -41,7 +41,7 @@ public class PickupFromStacks extends CommandBase {
         intake.spin();
         timer.reset();
 
-        drive.followTrajectory(CalcKinematics(4, 0));
+        drive.followTrajectoryAsync(CalcKinematics(4, 0));
     }
 
     @Override
