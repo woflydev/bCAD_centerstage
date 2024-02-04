@@ -267,13 +267,6 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         telemetry.update();
     }
 
-    private void CheckForBonk() {
-        diff = drive.getLastError().vec().minus(drive.getPoseEstimate().vec());
-        if (drive.isBusy() && (diff.getX() > BONK_X_TOLERANCE || diff.getY() > BONK_Y_TOLERANCE)) {
-            drive.breakFollowing();
-        }
-    }
-
     private void VisionPropDetection() {
         OpenCvWebcam webcam;
         VisionPropPipeline pipeline = new VisionPropPipeline( alliance, r1, r2, r3 );

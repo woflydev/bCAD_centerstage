@@ -96,7 +96,6 @@ public class bCADMecanumDrive extends MecanumDrive {
                 bonked = !isBusy() && diffRotationVelocity >= RobotAutoConstants.BONK_ROT_TOLERANCE;
             }
         }
-
     }
 
     public bCADMecanumDrive(HardwareMap hardwareMap) {

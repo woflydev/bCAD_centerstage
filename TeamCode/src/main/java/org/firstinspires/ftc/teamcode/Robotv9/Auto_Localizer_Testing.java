@@ -133,6 +133,8 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
         drive = new bCADMecanumDrive(hardwareMap);
         drive.setPoseEstimate(START_POSE);
 
+        randomization = VisionPropPipeline.Randomization.LOCATION_2;
+
         BuildAutoSequence().schedule();
     }
 
@@ -143,6 +145,7 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
             while (opModeIsActive() && !isStopRequested()) {
                 super.run();
                 StatusTelemetry();
+                drive.CheckForBonk();
             }
         }
     }
@@ -166,6 +169,7 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
 
     private void StatusTelemetry() {
         telemetry.addData("Autonomous Clock", autoTimer.seconds());
+        telemetry.addData("Bonk Or Not", drive.bonked);
         telemetry.addData("Robot Heading", Math.toDegrees(drive.getPoseEstimate().getHeading()));
         telemetry.addData("Target Location",
                 randomization == VisionPropPipeline.Randomization.LOCATION_1 ? "LEFT (LOC_1)" :
