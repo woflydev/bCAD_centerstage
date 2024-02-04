@@ -105,10 +105,10 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
                                   RobotParkingLocation parkLoc,
                                   RobotTaskFinishBehaviour taskFinBehaviour,
                                   Point r1, Point r2, Point r3) {
-        this.alliance = alliance;
-        this.startingPosition = startPos;
-        this.parkingLocation = parkLoc;
-        this.taskFinishBehaviour = taskFinBehaviour;
+        this.alliance = RobotAlliance.RED;
+        this.startingPosition = RobotStartingPosition.BACKDROP;
+        this.parkingLocation = RobotParkingLocation.INNER;
+        this.taskFinishBehaviour = RobotTaskFinishBehaviour.DO_NOT_CYCLE;
         this.dir = alliance == RobotAlliance.RED ? 1 : -1;
         this.r1 = r1;
         this.r2 = r2;
