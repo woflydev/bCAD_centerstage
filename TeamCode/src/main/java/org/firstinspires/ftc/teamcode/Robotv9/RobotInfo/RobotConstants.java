@@ -58,7 +58,7 @@ public class RobotConstants {
 
     // -------------------------------------------------------------- JUNCTION PRESETS
 
-    public static final int JUNCTION_AUTO_YELLOW = 525;
+    public static final int JUNCTION_AUTO_YELLOW = 550;
     public static final int JUNCTION_AUTO_WHITE = 850;
     public static final int JUNCTION_LOW = 300;
     public static final int JUNCTION_MID = 600;

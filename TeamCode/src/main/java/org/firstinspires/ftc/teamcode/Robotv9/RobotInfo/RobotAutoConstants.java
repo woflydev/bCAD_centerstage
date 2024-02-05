@@ -32,7 +32,7 @@ public class RobotAutoConstants {
     public static final Pose2d[] RED_YELLOW_PIXEL_BACKDROP_POSES = {
             // note: starts with LOC_1
             new Pose2d(42, -26, Math.toRadians(180)),
-            new Pose2d(42, -35, Math.toRadians(180)),
+            new Pose2d(42, -34.5, Math.toRadians(180)),
             new Pose2d(42, -44, Math.toRadians(180)),
     };
     public static final Pose2d[] BLUE_YELLOW_PIXEL_BACKDROP_POSES = {
