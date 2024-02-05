@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.RobotAutoConstants;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.RobotConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -32,6 +34,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeM = new MotorEx(hardwareMap, RobotConstants.INTAKE_MOTOR);
         intakeM.setRunMode(Motor.RunMode.RawPower);
         intakeM.setInverted(false);
+        intakeM.motorEx.setCurrentAlert(RobotAutoConstants.MAX_ALLOWABLE_CURRENT_DRAW, CurrentUnit.AMPS);
         servoFlap = new SimpleServo(hardwareMap, RobotConstants.SERVO_FLAP, 0, 260, AngleUnit.DEGREES);
 
         servoFlap.turnToAngle(RobotConstants.FLAP_CLOSE);

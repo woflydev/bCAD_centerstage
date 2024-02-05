@@ -32,6 +32,7 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.AAutoState.RobotAlliance;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.AAutoState.RobotParkingLocation;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.AAutoState.RobotStartingPosition;
@@ -227,6 +228,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         telemetry.addData("Robot Y", drive.getPoseEstimate().getY());
         telemetry.addData("Robot Heading", Math.toDegrees(drive.getPoseEstimate().getHeading()));
         telemetry.addData("Intake TPS", intake.intakeM.getCorrectedVelocity());
+        telemetry.addData("Intake Current Draw", intake.intakeM.motorEx.getCurrentAlert(CurrentUnit.AMPS));
 
         telemetry.addLine("---------");
         telemetry.addData("Alliance", alliance);

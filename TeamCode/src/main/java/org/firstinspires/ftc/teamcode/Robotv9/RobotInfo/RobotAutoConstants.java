@@ -8,7 +8,7 @@ public class RobotAutoConstants {
     public static final double BONK_X_TOLERANCE = 10;
     public static final double BONK_Y_TOLERANCE = 10;
     public static final double BONK_ROT_TOLERANCE = 10;
-    public static final int MIN_ALLOWABLE_INTAKE_VEL = 800;
+    public static final int MAX_ALLOWABLE_CURRENT_DRAW = 7;
 
 
     // note: -------------------------------------------------------------- POSE CONFIG

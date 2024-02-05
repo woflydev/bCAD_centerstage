@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.AAutoState;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.DriveConstants;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.RobotAutoConstants;
@@ -50,7 +51,7 @@ public class PickupFromStacks extends CommandBase {
         intake.spin();
         timer.reset();
 
-        drive.followTrajectorySequenceAsync(CalcKinematics(6, 0));
+        drive.followTrajectorySequenceAsync(CalcKinematics(5, 0));
     }
 
     @Override
@@ -59,12 +60,12 @@ public class PickupFromStacks extends CommandBase {
         drive.CheckForBonk();
 
         // todo: add colour sensor input when calvin fixes it
-        /*if (intake.intakeM.motorEx.getPower() >= RobotConstants.INTAKE_SPEED - 0.05
-            && intake.intakeM.getCorrectedVelocity() <= RobotAutoConstants.MIN_ALLOWABLE_INTAKE_VEL) {
+        if (intake.intakeM.motorEx.getPower() >= RobotConstants.INTAKE_SPEED - 0.05
+            && intake.intakeM.motorEx.isOverCurrent()) {
             intake.cautiousReverseSpin();
         } else {
             intake.spin();
-        }*/
+        }
 
         /*if (drive.bonked) {
             intake.cautiousReverseSpin();
