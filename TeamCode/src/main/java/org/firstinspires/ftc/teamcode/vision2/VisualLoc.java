@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.vision2;
 
-import static org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.DriveConstants.*;
 import static java.lang.Thread.sleep;
 
 import android.annotation.SuppressLint;
@@ -9,10 +8,7 @@ import android.util.Size;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.kinematics.Kinematics;
-import com.acmerobotics.roadrunner.kinematics.MecanumKinematics;
 import com.acmerobotics.roadrunner.localization.Localizer;
-import com.acmerobotics.roadrunner.util.Angle;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -24,7 +20,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.rr.bCADMecanumDrive;
-import org.firstinspires.ftc.teamcode.rr.unused.bCADMecanumDriveOld;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
