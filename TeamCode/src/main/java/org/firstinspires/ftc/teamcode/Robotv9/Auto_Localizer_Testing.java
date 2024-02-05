@@ -104,10 +104,10 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
                                   RobotParkingLocation parkLoc,
                                   RobotTaskFinishBehaviour taskFinBehaviour,
                                   Point r1, Point r2, Point r3) {
-        this.alliance = RobotAlliance.RED;
-        this.startingPosition = RobotStartingPosition.BACKDROP;
-        this.parkingLocation = RobotParkingLocation.INNER;
-        this.taskFinishBehaviour = RobotTaskFinishBehaviour.DO_NOT_CYCLE;
+        this.alliance = alliance;
+        this.startingPosition = startPos;
+        this.parkingLocation = parkLoc;
+        this.taskFinishBehaviour = taskFinBehaviour;
         this.dir = alliance == RobotAlliance.RED ? 1 : -1;
         this.r1 = r1;
         this.r2 = r2;
@@ -128,7 +128,7 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
         wCycleCheckpoints = SortPoseBasedOnAlliance(RED_CYCLE_CHECKPOINTS, BLUE_CYCLE_CHECKPOINTS);
         wPurpleSpikemarkAlign = SortPurpleSpikemarkAlign();
 
-        visualLoc = new VisualLoc(hardwareMap, drive, START_POSE, FRONT_CAMERA, telemetry);
+        //visualLoc = new VisualLoc(hardwareMap, drive, START_POSE, FRONT_CAMERA, telemetry);
         drive = new bCADMecanumDrive(hardwareMap);
         drive.setPoseEstimate(START_POSE);
 
