@@ -149,6 +149,8 @@ public class bCADMecanumDrive extends MecanumDrive {
             setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
         }
 
+        setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
+
         // TODO: reverse any motors using DcMotor.setDirection()
         rightFront.setDirection(DcMotorEx.Direction.FORWARD);
         rightRear.setDirection(DcMotorEx.Direction.FORWARD);
