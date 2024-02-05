@@ -126,10 +126,10 @@ public class bCADMecanumDrive extends MecanumDrive {
                 DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
         imu.initialize(parameters);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "frontL");
-        leftRear = hardwareMap.get(DcMotorEx.class, "backL");
-        rightRear = hardwareMap.get(DcMotorEx.class, "backR");
-        rightFront = hardwareMap.get(DcMotorEx.class, "frontR");
+        leftFront = hardwareMap.get(DcMotorEx.class, RobotConstants.FRONT_LEFT);
+        leftRear = hardwareMap.get(DcMotorEx.class, RobotConstants.BACK_LEFT);
+        rightRear = hardwareMap.get(DcMotorEx.class, RobotConstants.BACK_RIGHT);
+        rightFront = hardwareMap.get(DcMotorEx.class, RobotConstants.FRONT_RIGHT);
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
