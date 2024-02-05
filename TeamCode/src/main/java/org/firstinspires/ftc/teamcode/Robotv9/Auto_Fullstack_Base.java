@@ -227,7 +227,6 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         telemetry.addData("Robot X", drive.getPoseEstimate().getX());
         telemetry.addData("Robot Y", drive.getPoseEstimate().getY());
         telemetry.addData("Robot Heading", Math.toDegrees(drive.getPoseEstimate().getHeading()));
-        telemetry.addData("Intake TPS", intake.intakeM.getCorrectedVelocity());
         telemetry.addData("Intake Current Draw", intake.intakeM.motorEx.getCurrentAlert(CurrentUnit.AMPS));
 
         telemetry.addLine("---------");

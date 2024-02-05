@@ -167,9 +167,13 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
     // note: ------------------------------UTIL AND SYSTEM-------------------------------------------------------
 
     private void StatusTelemetry() {
-        telemetry.addData("Autonomous Clock", autoTimer.seconds());
         telemetry.addData("Bonk Or Not", drive.bonked);
         telemetry.addData("Pose Error", drive.getLastError());
+        telemetry.addData("Visual Localizer Pose", visualLoc.WhereTheHellAmI());
+        telemetry.addData("Intake Current Draw", intake.intakeM.motorEx.getCurrent(CurrentUnit.AMPS));
+
+        telemetry.addLine("---------");
+        telemetry.addData("Autonomous Clock", autoTimer.seconds());
         telemetry.addData("Robot Heading", Math.toDegrees(drive.getPoseEstimate().getHeading()));
         telemetry.addData("Target Location",
                 randomization == VisionPropPipeline.Randomization.LOCATION_1 ? "LEFT (LOC_1)" :
@@ -181,9 +185,6 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
         telemetry.addData("Robot X", drive.getPoseEstimate().getX());
         telemetry.addData("Robot Y", drive.getPoseEstimate().getY());
         telemetry.addData("Robot Heading", Math.toDegrees(drive.getPoseEstimate().getHeading()));
-        telemetry.addData("Visual Localizer Pose", visualLoc.WhereTheHellAmI());
-        telemetry.addData("Intake TPS", intake.intakeM.getCorrectedVelocity());
-        telemetry.addData("Intake Current Draw", intake.intakeM.motorEx.getCurrent(CurrentUnit.AMPS));
         telemetry.update();
     }
 
