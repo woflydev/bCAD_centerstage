@@ -28,6 +28,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.RobotAutoConstants;
+import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.rr.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.rr.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.rr.trajectorysequence.TrajectorySequenceRunner;
@@ -140,10 +141,10 @@ public class bCADMecanumDrive extends MecanumDrive {
         // For example, if +Y in this diagram faces downwards, you would use AxisDirection.NEG_Y.
         // BNO055IMUUtil.remapZAxis(imu, AxisDirection.NEG_Y);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
-        leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
-        rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
-        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        leftFront = hardwareMap.get(DcMotorEx.class, RobotConstants.FRONT_LEFT);
+        leftRear = hardwareMap.get(DcMotorEx.class, RobotConstants.BACK_LEFT);
+        rightRear = hardwareMap.get(DcMotorEx.class, RobotConstants.BACK_RIGHT);
+        rightFront = hardwareMap.get(DcMotorEx.class, RobotConstants.FRONT_RIGHT);
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -167,6 +168,7 @@ public class bCADMecanumDrive extends MecanumDrive {
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
+        setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }

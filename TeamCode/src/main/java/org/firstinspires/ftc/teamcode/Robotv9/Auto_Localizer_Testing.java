@@ -73,7 +73,6 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
 import java.util.HashMap;
 
-@Autonomous(name="VisualLoc Testing", group="!TESTING")
 public class Auto_Localizer_Testing extends OpModeTemplate {
     private bCADMecanumDrive drive;
     public VisionPropPipeline.Randomization randomization;
