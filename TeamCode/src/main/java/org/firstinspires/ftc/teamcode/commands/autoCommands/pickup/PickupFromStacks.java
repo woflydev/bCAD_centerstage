@@ -50,7 +50,7 @@ public class PickupFromStacks extends CommandBase {
         intake.spin();
         timer.reset();
 
-        drive.followTrajectorySequenceAsync(CalcKinematics(4, 0));
+        drive.followTrajectorySequenceAsync(CalcKinematics(6, 0));
     }
 
     @Override
@@ -59,14 +59,14 @@ public class PickupFromStacks extends CommandBase {
         drive.CheckForBonk();
 
         // todo: add colour sensor input when calvin fixes it
-        if (intake.intakeM.motorEx.getPower() >= RobotConstants.INTAKE_SPEED - 0.05
+        /*if (intake.intakeM.motorEx.getPower() >= RobotConstants.INTAKE_SPEED - 0.05
             && intake.intakeM.getCorrectedVelocity() <= RobotAutoConstants.MIN_ALLOWABLE_INTAKE_VEL) {
             intake.cautiousReverseSpin();
         } else {
             intake.spin();
-        }
+        }*/
 
-        if (drive.bonked) {
+        /*if (drive.bonked) {
             intake.cautiousReverseSpin();
 
             TrajectorySequence realign = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
@@ -77,7 +77,7 @@ public class PickupFromStacks extends CommandBase {
             intake.spin();
 
             drive.bonked = false;
-        }
+        }*/
     }
 
     @Override

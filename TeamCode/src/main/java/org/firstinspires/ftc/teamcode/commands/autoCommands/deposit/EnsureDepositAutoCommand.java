@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.rr.bCADMecanumDrive;
 
 public class EnsureDepositAutoCommand extends CommandBase {
     private final DepositSubsystem deposit;
-    private final bCADMecanumDrive drive;
     private final LiftSubsystem lift;
     private final IntakeSubsystem intake;
     private final ElapsedTime timer = new ElapsedTime();
@@ -23,8 +22,7 @@ public class EnsureDepositAutoCommand extends CommandBase {
 
     private final int stateDuration = 250;
 
-    public EnsureDepositAutoCommand(bCADMecanumDrive drive, DepositSubsystem deposit, LiftSubsystem lift, IntakeSubsystem intake, Telemetry t) {
-        this.drive = drive;
+    public EnsureDepositAutoCommand(DepositSubsystem deposit, LiftSubsystem lift, IntakeSubsystem intake, Telemetry t) {
         this.deposit = deposit;
         this.lift = lift;
         this.intake = intake;
@@ -36,16 +34,17 @@ public class EnsureDepositAutoCommand extends CommandBase {
     public void initialize() {
         deposit.outtakeBusy = true;
         timer.reset();
+
+        deposit.elbow.turnToAngle(RobotConstants.ELBOW_AUTO_ACTIVE);
+        deposit.wrist.turnToAngle(RobotConstants.WRIST_AUTO_ACTIVE);
+        deposit.wrist.turnToAngle(RobotConstants.WRIST_AUTO_ACTIVE);
+        deposit.clawDeposit();
     }
 
     @Override
     public void execute() {
         if (withinState(0)) {
-            deposit.elbow.turnToAngle(RobotConstants.ELBOW_AUTO_ACTIVE);
-            deposit.wrist.turnToAngle(RobotConstants.WRIST_AUTO_ACTIVE);
-        } else if (withinState(1)) {
-            deposit.wrist.turnToAngle(RobotConstants.WRIST_AUTO_ACTIVE);
-            deposit.clawDeposit();
+
         }
     }
 
@@ -55,18 +54,9 @@ public class EnsureDepositAutoCommand extends CommandBase {
     }
 
     @Override
-    public boolean isFinished() { return (timer.milliseconds() >= stateDuration * 3) && !drive.isBusy(); }
+    public boolean isFinished() { return true; }
 
     private boolean withinState(double stateNumber) {
         return timer.milliseconds() >= (stateDuration * stateNumber) && timer.milliseconds() <= stateDuration * (stateNumber + 1);
-    }
-
-    public Trajectory CalcKinematics(double inches, double speed) {
-        double finalSpeed = speed == 0 ? DriveConstants.MAX_VEL : speed;
-        return drive.trajectoryBuilder(drive.getPoseEstimate())
-                .forward(inches,
-                        bCADMecanumDrive.getVelocityConstraint(finalSpeed, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        bCADMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .build();
     }
 }

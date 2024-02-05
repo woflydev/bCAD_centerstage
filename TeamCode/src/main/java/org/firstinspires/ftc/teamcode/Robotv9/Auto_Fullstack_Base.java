@@ -24,6 +24,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -150,6 +151,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                 ),
 
                 new InstantCommand(() -> deposit.clawDeposit()),
+                new HomeAutoCommand(deposit, lift, intake),
                 new SelectCommand(
                         new HashMap<Object, Command>() {{
                             put(RobotTaskFinishBehaviour.DO_NOT_CYCLE,
@@ -182,8 +184,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
             sequence.addCommands(
                 new MoveToStacks(drive, alliance, wCycleCheckpoints)
                         .alongWith(
-                                new EnsureDepositAutoCommand(drive, deposit, lift, intake, telemetry)
-                                        .andThen(new HomeAutoCommand(deposit, lift, intake))
+                                new HomeAutoCommand(deposit, lift, intake)
                         ),
 
                 new PickupFromStacks(drive, deposit, lift, intake, alliance),
@@ -196,6 +197,9 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                                         )
                         ),
                 new InstantCommand(() -> deposit.clawDeposit())
+                        .alongWith(
+                                new HomeAutoCommand(deposit, lift, intake)
+                        )
             );
         }
         return sequence;
@@ -204,10 +208,6 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     private SequentialCommandGroup BuildParkingSequence() {
         return new SequentialCommandGroup(
                 new MoveToParking(drive, alliance, PARKING_POSE)
-                        .alongWith(
-                                new EnsureDepositAutoCommand(drive, deposit, lift, intake, telemetry)
-                                        .andThen(new HomeAutoCommand(deposit, lift, intake))
-                        )
         );
     }
 

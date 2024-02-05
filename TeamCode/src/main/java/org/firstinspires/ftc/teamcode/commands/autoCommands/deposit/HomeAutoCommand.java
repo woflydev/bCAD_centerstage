@@ -18,7 +18,7 @@ public class HomeAutoCommand extends CommandBase {
     private final IntakeSubsystem intake;
     private final ElapsedTime timer = new ElapsedTime();
 
-    private final int stateDuration = 200;
+    private final int stateDuration = 300;
 
     public HomeAutoCommand(DepositSubsystem deposit, LiftSubsystem lift, IntakeSubsystem intake) {
         this.deposit = deposit;
@@ -35,14 +35,15 @@ public class HomeAutoCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (withinState(0)) {
+        if (withinState(1)) {
+            lift.targetLiftPosition = 0;
+            lift.UpdateLift(false, 0);
+        } else if (withinState(2)) {
             intake.closeFlap();
             deposit.clawGrab(); // note: just so it doesn't clip the flap
             deposit.elbow.turnToAngle(ELBOW_HOME);
             deposit.wrist.turnToAngle(WRIST_HOME);
-        } else if (withinState(1)) {
-            lift.targetLiftPosition = 0;
-            lift.UpdateLift(false, 0);
+            deposit.spin.turnToAngle(SPIN_HOME);
         }
     }
 
@@ -51,12 +52,11 @@ public class HomeAutoCommand extends CommandBase {
         deposit.outtakeBusy = false;
         intake.stop();
         intake.closeFlap();
-        deposit.spin.turnToAngle(SPIN_HOME);
         deposit.outtakeState = ASubsystemState.Outtake.IDLE;
     }
 
     @Override
-    public boolean isFinished() { return (timer.milliseconds() >= stateDuration * 2); }
+    public boolean isFinished() { return (lift.liftLM.getCurrentPosition() <= 6); }
 
     private void Delay(double time) { try { Thread.sleep((long)time); } catch (Exception e) { System.out.println("Exception!"); } }
 

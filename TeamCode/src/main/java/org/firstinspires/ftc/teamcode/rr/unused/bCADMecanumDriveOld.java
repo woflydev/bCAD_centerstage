@@ -138,8 +138,10 @@ public class bCADMecanumDriveOld extends MecanumDrive {
 
         //setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
 
-        trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
-
+        trajectorySequenceRunner = new TrajectorySequenceRunner(
+                follower, HEADING_PID, batteryVoltageSensor,
+                lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
+        );
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
