@@ -84,7 +84,6 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
     public boolean taskFinishBehaviourSelected = false;
     public int allianceIndex;
     public int dir;
-    public Vector2d diff = new Vector2d();
     public Pose2d[] wYellowBackdropAlign;
     public Pose2d[] wPurpleSpikemarkAlign;
     public Pose2d[] wPurpleAvoidanceCheckpoints;
@@ -128,7 +127,7 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
         wCycleCheckpoints = SortPoseBasedOnAlliance(RED_CYCLE_CHECKPOINTS, BLUE_CYCLE_CHECKPOINTS);
         wPurpleSpikemarkAlign = SortPurpleSpikemarkAlign();
 
-        //visualLoc = new VisualLoc(hardwareMap, drive, START_POSE, FRONT_CAMERA, telemetry);
+        visualLoc = new VisualLoc(hardwareMap, drive, START_POSE, FRONT_CAMERA, telemetry);
         drive = new bCADMecanumDrive(hardwareMap);
         drive.setPoseEstimate(START_POSE);
 
