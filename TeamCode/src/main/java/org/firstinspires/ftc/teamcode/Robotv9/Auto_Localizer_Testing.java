@@ -169,6 +169,7 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
     private void StatusTelemetry() {
         telemetry.addData("Autonomous Clock", autoTimer.seconds());
         telemetry.addData("Bonk Or Not", drive.bonked);
+        telemetry.addData("Pose Error", drive.getLastError());
         telemetry.addData("Robot Heading", Math.toDegrees(drive.getPoseEstimate().getHeading()));
         telemetry.addData("Target Location",
                 randomization == VisionPropPipeline.Randomization.LOCATION_1 ? "LEFT (LOC_1)" :
