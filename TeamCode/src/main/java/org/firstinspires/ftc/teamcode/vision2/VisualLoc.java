@@ -126,9 +126,6 @@ public class VisualLoc implements Localizer {
         this.t = t;
         this.FRONT_CAMERA = frontCamera;
         this.drive = d;
-
-        elapsedTime.reset();
-        initPortal();
     }
 
     @NonNull
@@ -142,6 +139,11 @@ public class VisualLoc implements Localizer {
 
     public Pose2d getPoseVelocity() {
         return poseVelocity;
+    }
+
+    public void Make() {
+        elapsedTime.reset();
+        initPortal();
     }
 
     public Pose2d WhereTheHellAmI() {

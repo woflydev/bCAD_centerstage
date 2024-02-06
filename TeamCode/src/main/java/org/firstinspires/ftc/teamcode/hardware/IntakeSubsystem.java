@@ -45,8 +45,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void spin() { intakeM.set(-RobotConstants.INTAKE_SPEED); }
     public void reverseSpin() { intakeM.set(RobotConstants.INTAKE_OUT_SPEED); }
-    public void stop() { intakeM.set(0); }
     public void cautiousReverseSpin() { intakeM.set(RobotConstants.INTAKE_OUT_CAUTIOUS_SPEED); }
+    public void stop() { intakeM.set(0); }
 
     public void openFlap() { servoFlap.turnToAngle(RobotConstants.FLAP_OPEN); }
     public void closeFlap() { servoFlap.turnToAngle(RobotConstants.FLAP_CLOSE); }

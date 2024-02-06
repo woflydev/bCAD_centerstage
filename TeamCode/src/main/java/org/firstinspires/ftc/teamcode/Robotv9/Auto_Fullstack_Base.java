@@ -39,7 +39,6 @@ import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.AAutoState.RobotStarting
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.AAutoState.RobotTaskFinishBehaviour;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.ASubsystemState.Outtake;
 import org.firstinspires.ftc.teamcode.commands.OpModeTemplate;
-import org.firstinspires.ftc.teamcode.commands.autoCommands.deposit.EnsureDepositAutoCommand;
 import org.firstinspires.ftc.teamcode.commands.autoCommands.deposit.DepositPurpleAtSpikemark;
 import org.firstinspires.ftc.teamcode.commands.autoCommands.deposit.HomeAutoCommand;
 import org.firstinspires.ftc.teamcode.commands.autoCommands.move.MoveToBackdropWhite;
@@ -144,7 +143,10 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
 
                 new ConditionalCommand(
                         new MoveToBackdropYellow(drive, randomization, wYellowBackdropAlign)
-                                .alongWith(new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_YELLOW, false, false)),
+                                .alongWith(
+                                        new WaitCommand(200),
+                                        new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_YELLOW, false, false)
+                                ),
                         new MoveToBackdropYellow(drive, randomization, wYellowBackdropAlign)
                                 .andThen(new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_YELLOW, false, false)),
                         () -> startingPosition == RobotStartingPosition.BACKDROP
@@ -184,7 +186,9 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
             sequence.addCommands(
                 new MoveToStacks(drive, alliance, wCycleCheckpoints)
                         .alongWith(
-                                new HomeAutoCommand(deposit, lift, intake)
+                                new HomeAutoCommand(deposit, lift, intake),
+                                new WaitUntilCommand(this::getRobotOnAudienceSide),
+                                new InstantCommand(() -> intake.cautiousReverseSpin())
                         ),
 
                 new PickupFromStacks(drive, deposit, lift, intake, alliance),
@@ -192,11 +196,11 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                         .alongWith(
                                 new TransferAndStandbyAutoCommand(deposit, lift, intake)
                                         .andThen(
-                                                new WaitUntilCommand(this::getRobotPastTruss),
+                                                new WaitUntilCommand(this::getRobotOnBackdropSide),
                                                 new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_WHITE, true, true)
                                         )
                         ),
-                new InstantCommand(() -> deposit.clawDeposit())
+                new RunCommand(() -> deposit.clawDeposit())
                         .alongWith(
                                 new HomeAutoCommand(deposit, lift, intake)
                         )
@@ -223,10 +227,14 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         );
 
         telemetry.addLine("---------");
+        telemetry.addData("Bonk Or Not", drive.bonked);
+        telemetry.addData("Pose Difference", drive.diffPosition);
+        telemetry.addData("Intake Current Draw", intake.intakeM.motorEx.getCurrent(CurrentUnit.AMPS));
+
+        telemetry.addLine("---------");
         telemetry.addData("Robot X", drive.getPoseEstimate().getX());
         telemetry.addData("Robot Y", drive.getPoseEstimate().getY());
         telemetry.addData("Robot Heading", Math.toDegrees(drive.getPoseEstimate().getHeading()));
-        telemetry.addData("Intake Current Draw", intake.intakeM.motorEx.getCurrentAlert(CurrentUnit.AMPS));
 
         telemetry.addLine("---------");
         telemetry.addData("Alliance", alliance);
@@ -237,16 +245,16 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     }
 
     private void SelectTaskFinishBehaviour() {
-        telemetry.addData("TEAM_PROP_LOCATION", randomization);
-        telemetry.addData("SELECTED_ALLIANCE", alliance);
-        telemetry.addLine("====================================");
-        telemetry.addLine("PLEASE SELECT TASK FINISH BEHAVIOUR!");
-        telemetry.addLine("X / SQUARE for DO_NOT_CYCLE.");
-        telemetry.addLine("Y / TRIANGLE for CYCLE_ONCE.");
-        telemetry.addLine("B / CIRCLE for CYCLE_TWICE.");
-        telemetry.update();
-
         while (!isStopRequested() && opModeInInit() && !taskFinishBehaviourSelected) {
+            telemetry.addData("TEAM_PROP_LOCATION", randomization);
+            telemetry.addData("SELECTED_ALLIANCE", alliance);
+            telemetry.addLine("====================================");
+            telemetry.addLine("PLEASE SELECT TASK FINISH BEHAVIOUR!");
+            telemetry.addLine("X / SQUARE for DO_NOT_CYCLE.");
+            telemetry.addLine("Y / TRIANGLE for CYCLE_ONCE.");
+            telemetry.addLine("B / CIRCLE for CYCLE_TWICE.");
+            telemetry.update();
+
             if (gamepad1.x) {
                 taskFinishBehaviour = RobotTaskFinishBehaviour.DO_NOT_CYCLE;
                 taskFinishBehaviourSelected = true;
@@ -354,7 +362,8 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
 
     private RobotTaskFinishBehaviour getTFB() { return taskFinishBehaviour; }
 
-    private boolean getRobotPastTruss() { return drive.getPoseEstimate().getX() >= 6; }
+    private boolean getRobotOnBackdropSide() { return drive.getPoseEstimate().getX() >= 6; }
+    private boolean getRobotOnAudienceSide() { return drive.getPoseEstimate().getX() <= -38; }
 
     private void timeout(double time) {
         ElapsedTime wait = new ElapsedTime();

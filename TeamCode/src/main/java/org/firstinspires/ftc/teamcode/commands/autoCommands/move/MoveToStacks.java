@@ -40,7 +40,7 @@ public class MoveToStacks extends CommandBase {
         TrajectorySequence cycleTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .splineTo(wCyclingCheckpoints[0].vec(), wCyclingCheckpoints[0].getHeading())
                 .splineTo(wCyclingCheckpoints[1].vec(), wCyclingCheckpoints[1].getHeading())
-                .lineToLinearHeading(wCyclingCheckpoints[2])
+                .splineTo(wCyclingCheckpoints[2].vec(), wCyclingCheckpoints[2].getHeading())
                 .build();
 
         drive.followTrajectorySequenceAsync(cycleTrajectory); // note: blocking

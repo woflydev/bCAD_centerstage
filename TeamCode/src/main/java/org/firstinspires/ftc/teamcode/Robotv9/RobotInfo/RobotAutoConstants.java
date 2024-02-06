@@ -100,13 +100,13 @@ public class RobotAutoConstants {
     };
     public static final Pose2d[] RED_CYCLE_CHECKPOINTS = {
             new Pose2d(-7, -36, Math.toRadians(181.94)),
-            new Pose2d(-60, -28, Math.toRadians(180)),
-            new Pose2d(-62, -25, Math.toRadians(120))
+            new Pose2d(-60, -28, Math.toRadians(120)),
+            new Pose2d(-61, -25, Math.toRadians(120))
 
     };
     public static final Pose2d[] BLUE_CYCLE_CHECKPOINTS = {
             new Pose2d(RED_CYCLE_CHECKPOINTS[0].getX(), -RED_CYCLE_CHECKPOINTS[0].getY(), Math.toRadians(178.06)),
-            new Pose2d(RED_CYCLE_CHECKPOINTS[1].getX(), -RED_CYCLE_CHECKPOINTS[1].getY(), Math.toRadians(180)),
+            new Pose2d(RED_CYCLE_CHECKPOINTS[1].getX(), -RED_CYCLE_CHECKPOINTS[1].getY(), Math.toRadians(240)),
             new Pose2d(RED_CYCLE_CHECKPOINTS[2].getX(), -RED_CYCLE_CHECKPOINTS[2].getY(), Math.toRadians(240))
     };
 

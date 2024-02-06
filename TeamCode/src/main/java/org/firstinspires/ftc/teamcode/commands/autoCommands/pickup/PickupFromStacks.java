@@ -4,7 +4,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.AAutoState;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.DriveConstants;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.RobotAutoConstants;
@@ -21,7 +20,8 @@ public class PickupFromStacks extends CommandBase {
     private final LiftSubsystem lift;
     private final IntakeSubsystem intake;
     private final AAutoState.RobotAlliance alliance;
-    private final ElapsedTime timer = new ElapsedTime();
+    private final ElapsedTime stateTimer = new ElapsedTime();
+    private final ElapsedTime utilTimer = new ElapsedTime();
 
     private final int stateDuration = 1000;
 
@@ -51,9 +51,10 @@ public class PickupFromStacks extends CommandBase {
         finish = false;
         ejecting = false;
         intake.spin();
-        timer.reset();
+        stateTimer.reset();
+        utilTimer.reset();
 
-        //drive.followTrajectorySequenceAsync(CalcKinematics(0, 0));
+        drive.followTrajectorySequenceAsync(CalcKinematics(4, 0));
     }
 
     @Override
@@ -64,10 +65,10 @@ public class PickupFromStacks extends CommandBase {
         // todo: add colour sensor input when calvin fixes it
         if (intake.intakeM.motorEx.getPower() >= RobotConstants.INTAKE_SPEED - 0.05
             && intake.intakeM.motorEx.isOverCurrent() && !ejecting) {
-            intake.cautiousReverseSpin();
-            timer.reset();
+            intake.reverseSpin();
+            utilTimer.reset();
             ejecting = true;
-        } else if (timer.seconds() >= 3 && ejecting) {
+        } else if (utilTimer.seconds() >= 3 && ejecting) {
             ejecting = false;
             intake.spin();
         }
@@ -93,10 +94,10 @@ public class PickupFromStacks extends CommandBase {
     }
 
     @Override
-    public boolean isFinished() { return (withinState(3, 999) && !drive.isBusy()) || finishTriggered(); }
+    public boolean isFinished() { return withinState(3, 999) && !drive.isBusy() || finishTriggered(); }
 
     private boolean withinState(double stateNumber, double endTimeFactor) {
-        return timer.milliseconds() >= (stateDuration * stateNumber) && timer.milliseconds() <= stateDuration * (stateNumber + endTimeFactor);
+        return stateTimer.milliseconds() >= (stateDuration * stateNumber) && stateTimer.milliseconds() <= stateDuration * (stateNumber + endTimeFactor);
     }
 
     private TrajectorySequence CalcKinematics(double inches, double speed) {
