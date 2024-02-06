@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 @Config
 public class DriveConstants {
     public static final double RR_HEADING_PID_kP = 8; // old: 9
-    public static final double RR_TRANSLATIONAL_PID_kP = 7;
+    public static final double RR_TRANSLATIONAL_PID_kP = 6;
 
     public static final double RR_LATERAL_MULTI = 1;
 
@@ -27,7 +27,7 @@ public class DriveConstants {
     public static double kStatic = 0.05;
 
     public static double MAX_VEL = 65.02365997; // old 70
-    public static double MAX_ACCEL = 55.02365997; // old 75
+    public static double MAX_ACCEL = 65; // old 75
 
     public static double MAX_ANG_VEL = Math.toRadians(270);
     public static double MAX_ANG_ACCEL = Math.toRadians(270);
