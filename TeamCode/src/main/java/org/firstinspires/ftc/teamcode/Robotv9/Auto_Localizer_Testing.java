@@ -128,18 +128,17 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
         wCycleCheckpoints = SortPoseBasedOnAlliance(RED_CYCLE_CHECKPOINTS, BLUE_CYCLE_CHECKPOINTS);
         wPurpleSpikemarkAlign = SortPurpleSpikemarkAlign();
 
-        visualLoc = new VisualLoc(hardwareMap, drive, START_POSE, FRONT_CAMERA, telemetry);
+        //visualLoc = new VisualLoc(hardwareMap, drive, START_POSE, FRONT_CAMERA, telemetry);
         drive = new bCADMecanumDrive(hardwareMap);
         drive.setPoseEstimate(START_POSE);
 
         randomization = VisionPropPipeline.Randomization.LOCATION_2;
-
-        BuildAutoSequence().schedule();
     }
 
     @Override
     public void run() {
         if (!autoAlreadyRun) {
+            BuildAutoSequence().schedule();
             autoTimer.reset();
             while (opModeIsActive() && !isStopRequested()) {
                 super.run();
@@ -151,7 +150,7 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
 
     private SequentialCommandGroup BuildAutoSequence() {
         return new SequentialCommandGroup(
-                new MoveToSpikemark(drive, randomization, wPurpleSpikemarkAlign),
+                //new MoveToSpikemark(drive, randomization, wPurpleSpikemarkAlign),
                 new ConditionalCommand(
                         new DepositPurpleAtSpikemark(drive),
                         new MoveToSpikemarkAvoidance(drive, wPurpleAvoidanceCheckpoints),
@@ -159,7 +158,7 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
                 ),
 
                 new MoveToBackdropYellow(drive, randomization, wYellowBackdropAlign),
-                new RelocalizeAtBackdrop(drive, visualLoc, telemetry),
+                //new RelocalizeAtBackdrop(drive, visualLoc, telemetry),
                 new WaitCommand(10000)
         );
     }
@@ -170,7 +169,7 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
         telemetry.addData("Bonk Or Not", drive.bonked);
         telemetry.addData("Pose Error", drive.getLastError());
         telemetry.addData("Pose Difference", drive.diffPosition);
-        telemetry.addData("Visual Localizer Pose", visualLoc.WhereTheHellAmI());
+        //telemetry.addData("Visual Localizer Pose", visualLoc.WhereTheHellAmI());
         telemetry.addData("Intake Current Draw", intake.intakeM.motorEx.getCurrent(CurrentUnit.AMPS));
 
         telemetry.addLine("---------");
