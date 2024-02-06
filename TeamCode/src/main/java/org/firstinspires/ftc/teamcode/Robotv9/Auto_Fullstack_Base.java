@@ -119,12 +119,13 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
         drive.setPoseEstimate(START_POSE);
 
         VisionPropDetection();
+
+        BuildAutoSequence().schedule();
     }
 
     @Override
     public void run() {
         if (!autoAlreadyRun) {
-            BuildAutoSequence().schedule();
             autoTimer.reset();
             while (opModeIsActive() && !isStopRequested()) {
                 super.run();
