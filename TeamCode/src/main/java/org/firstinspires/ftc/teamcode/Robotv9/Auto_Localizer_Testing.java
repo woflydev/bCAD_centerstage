@@ -147,7 +147,7 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
             while (opModeIsActive() && !isStopRequested()) {
                 super.run();
                 StatusTelemetry();
-                drive.CheckForBonk(); // todo: remove if still being special
+                drive.CheckForBonk();
             }
         }
     }
