@@ -96,7 +96,7 @@ public class bCADMecanumDrive extends MecanumDrive {
     public void CheckForBonk() {
         // note: once bonked is triggered, it will not be reset automatically.
         if (!bonked) {
-            diffPosition = getLastError().vec().minus(getPoseEstimate().vec());
+            diffPosition = absoluteVector(getLastError().vec());
             diffRotationVelocity = getExternalHeadingVelocity() != null ? getExternalHeadingVelocity() : 0;
 
             if (isBusy() && (diffPosition.getX() > BONK_X_TOLERANCE || diffPosition.getY() > BONK_Y_TOLERANCE)) {
@@ -170,6 +170,10 @@ public class bCADMecanumDrive extends MecanumDrive {
 
     public void breakFollowing() {
         trajectorySequenceRunner.breakFollowing();
+        leftFront.setPower(0);
+        leftRear.setPower(0);
+        rightRear.setPower(0);
+        rightFront.setPower(0);
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
@@ -343,5 +347,9 @@ public class bCADMecanumDrive extends MecanumDrive {
 
     public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
         return new ProfileAccelerationConstraint(maxAccel);
+    }
+
+    public Vector2d absoluteVector(Vector2d v) {
+        return new Vector2d(Math.abs(v.getX()), Math.abs(v.getY()));
     }
 }

@@ -119,6 +119,7 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
     public void initialize() {
         autoAlreadyRun = false;
         InitBlock();
+        SelectTaskFinishBehaviour();
         EnsureAttachmentNormalization();
         DetermineStartFinishPoses();
 
@@ -133,6 +134,8 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
         drive.setPoseEstimate(START_POSE);
 
         randomization = VisionPropPipeline.Randomization.LOCATION_2;
+
+        //VisionPropDetection();
     }
 
     @Override
@@ -143,14 +146,14 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
             while (opModeIsActive() && !isStopRequested()) {
                 super.run();
                 StatusTelemetry();
-                drive.CheckForBonk();
+                drive.CheckForBonk(); // todo: remove if still being special
             }
         }
     }
 
     private SequentialCommandGroup BuildAutoSequence() {
         return new SequentialCommandGroup(
-                //new MoveToSpikemark(drive, randomization, wPurpleSpikemarkAlign),
+                new MoveToSpikemark(drive, randomization, wPurpleSpikemarkAlign),
                 new ConditionalCommand(
                         new DepositPurpleAtSpikemark(drive),
                         new MoveToSpikemarkAvoidance(drive, wPurpleAvoidanceCheckpoints),
@@ -186,6 +189,72 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
         telemetry.addData("Robot Y", drive.getPoseEstimate().getY());
         telemetry.addData("Robot Heading", Math.toDegrees(drive.getPoseEstimate().getHeading()));
         telemetry.update();
+    }
+
+    private void SelectTaskFinishBehaviour() {
+        telemetry.addData("TEAM_PROP_LOCATION", randomization);
+        telemetry.addData("SELECTED_ALLIANCE", alliance);
+        telemetry.addLine("====================================");
+        telemetry.addLine("PLEASE SELECT TASK FINISH BEHAVIOUR!");
+        telemetry.addLine("X / SQUARE for DO_NOT_CYCLE.");
+        telemetry.addLine("Y / TRIANGLE for CYCLE_ONCE.");
+        telemetry.addLine("B / CIRCLE for CYCLE_TWICE.");
+        telemetry.update();
+
+        while (!isStopRequested() && opModeInInit() && !taskFinishBehaviourSelected) {
+            if (gamepad1.x) {
+                taskFinishBehaviour = RobotTaskFinishBehaviour.DO_NOT_CYCLE;
+                taskFinishBehaviourSelected = true;
+            } else if (gamepad1.y) {
+                taskFinishBehaviour = RobotTaskFinishBehaviour.CYCLE;
+                taskFinishBehaviourSelected = true;
+            } else if (gamepad1.b) {
+                taskFinishBehaviour = RobotTaskFinishBehaviour.CYCLE_TWICE;
+                taskFinishBehaviourSelected = true;
+            }
+        }
+
+        // note: in the event that program is started before selection, defaults to DO_NOT_CYCLE.
+        if (!taskFinishBehaviourSelected) taskFinishBehaviour = RobotTaskFinishBehaviour.DO_NOT_CYCLE;
+
+        telemetry.addLine("INITIALIZATION COMPLETE! TASK FINISH BEHAVIOUR SELECTED!");
+        telemetry.addData("Selected Behaviour", taskFinishBehaviour);
+        telemetry.update();
+    }
+
+    private void VisionPropDetection() {
+        OpenCvWebcam webcam;
+        VisionPropPipeline pipeline = new VisionPropPipeline( alliance, r1, r2, r3 );
+
+        @SuppressLint("DiscouragedApi")
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "cameraMonitorViewId",
+                "id",
+                hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, FRONT_CAMERA), cameraMonitorViewId);
+        webcam.setPipeline(pipeline);
+        webcam.setMillisecondsPermissionTimeout(2500);
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                FtcDashboard.getInstance().startCameraStream(webcam, 20);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                // intentional noop
+                telemetry.addLine("error, you stupid idiot");
+            }
+        });
+
+        autoTimer.reset();
+        while (opModeInInit()) {
+            randomization = pipeline.getRandomization();
+            telemetry.addData("TEAM_PROP_LOCATION", randomization);
+            telemetry.update();
+        }
+        webcam.closeCameraDevice();
     }
 
     private Pose2d[] SortPoseBasedOnAlliance(Pose2d[] posesForRed, Pose2d[] posesForBlue) {

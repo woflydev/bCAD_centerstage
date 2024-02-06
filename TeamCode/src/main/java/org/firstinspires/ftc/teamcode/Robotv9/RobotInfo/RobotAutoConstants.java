@@ -8,8 +8,7 @@ public class RobotAutoConstants {
     public static final double BONK_X_TOLERANCE = 5;
     public static final double BONK_Y_TOLERANCE = 5;
     public static final double BONK_ROT_TOLERANCE = 10;
-    public static final int MAX_INTAKE_CURRENT_DRAW = 7; // in amps
-
+    public static final double MAX_INTAKE_CURRENT_DRAW = 2.6; // in amps
 
     // note: -------------------------------------------------------------- POSE CONFIG
     public static final Pose2d[] RED_STARTING_POSES = {
@@ -31,9 +30,9 @@ public class RobotAutoConstants {
     };
     public static final Pose2d[] RED_YELLOW_PIXEL_BACKDROP_POSES = {
             // note: starts with LOC_1
-            new Pose2d(42, -26, Math.toRadians(180)),
-            new Pose2d(42, -34.5, Math.toRadians(180)),
-            new Pose2d(42, -44, Math.toRadians(180)),
+            new Pose2d(40, -26, Math.toRadians(180)),
+            new Pose2d(40, -34.5, Math.toRadians(180)),
+            new Pose2d(40, -44, Math.toRadians(180)),
     };
     public static final Pose2d[] BLUE_YELLOW_PIXEL_BACKDROP_POSES = {
             new Pose2d(RED_YELLOW_PIXEL_BACKDROP_POSES[0].getX(), -RED_YELLOW_PIXEL_BACKDROP_POSES[2].getY(), Math.toRadians(180)),
@@ -101,11 +100,14 @@ public class RobotAutoConstants {
     };
     public static final Pose2d[] RED_CYCLE_CHECKPOINTS = {
             new Pose2d(-7, -36, Math.toRadians(181.94)),
-            new Pose2d(-62, -28, Math.toRadians(110))
+            new Pose2d(-60, -28, Math.toRadians(180)),
+            new Pose2d(-62, -25, Math.toRadians(120))
+
     };
     public static final Pose2d[] BLUE_CYCLE_CHECKPOINTS = {
             new Pose2d(RED_CYCLE_CHECKPOINTS[0].getX(), -RED_CYCLE_CHECKPOINTS[0].getY(), Math.toRadians(178.06)),
-            new Pose2d(RED_CYCLE_CHECKPOINTS[1].getX(), -RED_CYCLE_CHECKPOINTS[1].getY(), Math.toRadians(250))
+            new Pose2d(RED_CYCLE_CHECKPOINTS[1].getX(), -RED_CYCLE_CHECKPOINTS[1].getY(), Math.toRadians(180)),
+            new Pose2d(RED_CYCLE_CHECKPOINTS[2].getX(), -RED_CYCLE_CHECKPOINTS[2].getY(), Math.toRadians(240))
     };
 
     public static final double CAUTION_SPEED = 14;

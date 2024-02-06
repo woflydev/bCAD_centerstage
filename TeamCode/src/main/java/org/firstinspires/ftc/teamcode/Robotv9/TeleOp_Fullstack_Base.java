@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.commands.teleopCommands.HomeCommand;
 import org.firstinspires.ftc.teamcode.commands.teleopCommands.subcommands.LeftTriggerReader;
@@ -119,6 +120,7 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
     public void StatusTelemetry() {
         telemetry.addData("Wrist Position", deposit.wrist.getAngle());
         telemetry.addData("Slide position", lift.liftLM.motor.getCurrentPosition());
+        telemetry.addData("Intake Current Draw", intake.intakeM.motorEx.getCurrent(CurrentUnit.AMPS));
         telemetry.update();
     }
 
