@@ -169,6 +169,7 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
     private void StatusTelemetry() {
         telemetry.addData("Bonk Or Not", drive.bonked);
         telemetry.addData("Pose Error", drive.getLastError());
+        telemetry.addData("Pose Difference", drive.diffPosition);
         telemetry.addData("Visual Localizer Pose", visualLoc.WhereTheHellAmI());
         telemetry.addData("Intake Current Draw", intake.intakeM.motorEx.getCurrent(CurrentUnit.AMPS));
 

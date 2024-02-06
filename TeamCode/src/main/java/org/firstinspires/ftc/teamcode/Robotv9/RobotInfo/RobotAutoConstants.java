@@ -5,10 +5,10 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 public class RobotAutoConstants {
     // note: -------------------------------------------------------------- NUMBER CONFIG
 
-    public static final double BONK_X_TOLERANCE = 10;
-    public static final double BONK_Y_TOLERANCE = 10;
+    public static final double BONK_X_TOLERANCE = 5;
+    public static final double BONK_Y_TOLERANCE = 5;
     public static final double BONK_ROT_TOLERANCE = 10;
-    public static final int MAX_ALLOWABLE_CURRENT_DRAW = 7;
+    public static final int MAX_INTAKE_CURRENT_DRAW = 7; // in amps
 
 
     // note: -------------------------------------------------------------- POSE CONFIG

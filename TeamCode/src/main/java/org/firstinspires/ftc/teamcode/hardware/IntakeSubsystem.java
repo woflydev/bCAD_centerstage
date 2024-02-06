@@ -34,7 +34,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeM = new MotorEx(hardwareMap, RobotConstants.INTAKE_MOTOR);
         intakeM.setRunMode(Motor.RunMode.RawPower);
         intakeM.setInverted(false);
-        intakeM.motorEx.setCurrentAlert(RobotAutoConstants.MAX_ALLOWABLE_CURRENT_DRAW, CurrentUnit.AMPS);
+        intakeM.motorEx.setCurrentAlert(RobotAutoConstants.MAX_INTAKE_CURRENT_DRAW, CurrentUnit.AMPS);
         servoFlap = new SimpleServo(hardwareMap, RobotConstants.SERVO_FLAP, 0, 260, AngleUnit.DEGREES);
 
         servoFlap.turnToAngle(RobotConstants.FLAP_CLOSE);
