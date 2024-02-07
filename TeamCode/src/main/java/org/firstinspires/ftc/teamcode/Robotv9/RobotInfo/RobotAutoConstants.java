@@ -30,9 +30,9 @@ public class RobotAutoConstants {
     };
     public static final Pose2d[] RED_YELLOW_PIXEL_BACKDROP_POSES = {
             // note: starts with LOC_1
-            new Pose2d(40, -26, Math.toRadians(180)),
-            new Pose2d(40, -34.5, Math.toRadians(180)),
-            new Pose2d(40, -44, Math.toRadians(180)),
+            new Pose2d(42, -31, Math.toRadians(180)),
+            new Pose2d(41.5, -34.5, Math.toRadians(180)),
+            new Pose2d(42, -43, Math.toRadians(180)),
     };
     public static final Pose2d[] BLUE_YELLOW_PIXEL_BACKDROP_POSES = {
             new Pose2d(RED_YELLOW_PIXEL_BACKDROP_POSES[0].getX(), -RED_YELLOW_PIXEL_BACKDROP_POSES[2].getY(), Math.toRadians(180)),
@@ -45,7 +45,7 @@ public class RobotAutoConstants {
     public static final double AUDIENCE_HEADING_VARIATION = 0;
     // note: backdrop, from Loc 1 to Loc 3.
     public static final Pose2d[] RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP = {
-            new Pose2d(12, -30, Math.toRadians(0)),
+            new Pose2d(10, -30, Math.toRadians(0)),
             new Pose2d(22, -28, Math.toRadians(0)),
             new Pose2d(34, -28, Math.toRadians(0))
     };
