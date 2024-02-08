@@ -54,7 +54,7 @@ public class TransferAndStandbyAutoCommand extends CommandBase {
             intake.stop();
             intake.openFlap();
             deposit.clawReset();
-        } else if (withinState(3, 1)) {
+        } else if (withinState(2, 2)) {
             deposit.wrist.turnToAngle(WRIST_PICKUP);
         } else if (withinState(4, 1)) {
             deposit.elbow.turnToAngle(ELBOW_PICKUP);
