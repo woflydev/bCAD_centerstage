@@ -68,5 +68,5 @@ public class RaiseAndPrimeAutoCommand extends CommandBase {
     }
 
     @Override
-    public boolean isFinished() { return (timer.milliseconds() >= stateDuration * 2) && interrupted(); }
+    public boolean isFinished() { return (timer.milliseconds() >= stateDuration * 5) || interrupted(); }
 }

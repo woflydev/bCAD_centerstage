@@ -54,12 +54,12 @@ public class PickupFromStacks extends CommandBase {
         stateTimer.reset();
         utilTimer.reset();
 
-        drive.followTrajectorySequenceAsync(CalcKinematics(4, 0));
+        //drive.followTrajectorySequenceAsync(CalcKinematics(4, 0));
     }
 
     @Override
     public void execute() {
-        drive.update();
+        //drive.update();
         drive.CheckForBonk();
 
         // todo: add colour sensor input when calvin fixes it
