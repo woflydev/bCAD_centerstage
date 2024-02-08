@@ -35,9 +35,7 @@ public class MoveToBackdropWhite extends CommandBase {
                 .build();*/
 
         TrajectorySequence toBackdropTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                //.splineTo(wCyclingCheckpoints[0].vec(), wCyclingCheckpoints[0].getHeading())
                 .lineToLinearHeading(wCyclingCheckpoints[3])
-                //.splineTo(wCyclingCheckpoints[0].vec(), wCyclingCheckpoints[0].getHeading())
                 .lineToLinearHeading(BACKDROP_CYCLE_DROPOFF_POSES[allianceIndex])
                 .build();
 
