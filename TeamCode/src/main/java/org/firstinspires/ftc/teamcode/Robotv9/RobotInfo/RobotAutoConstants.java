@@ -95,19 +95,24 @@ public class RobotAutoConstants {
             new Pose2d(16, 4, Math.toRadians(180.0)),
     };
     public static final Pose2d[] CYCLE_RETURN_POSES = {
-            new Pose2d(30, -5, Math.toRadians(180.0)),
-            new Pose2d(30, 5, Math.toRadians(180.0)),
+            new Pose2d(20, -5, Math.toRadians(180.0)),
+            new Pose2d(20, 5, Math.toRadians(180.0)),
     };
     public static final Pose2d[] RED_CYCLE_CHECKPOINTS = {
             new Pose2d(-7, -36, Math.toRadians(181.94)),
-            new Pose2d(-59, -28, Math.toRadians(120)),
-            new Pose2d(-59, -25, Math.toRadians(150))
+            new Pose2d(-58, -36, Math.toRadians(180)),
+            new Pose2d(-60, -36, Math.toRadians(180)),
+
+            // note: used for recentering the robot to not bonk into the truss
+            new Pose2d(-45, -36, Math.toRadians(180)),
 
     };
     public static final Pose2d[] BLUE_CYCLE_CHECKPOINTS = {
             new Pose2d(RED_CYCLE_CHECKPOINTS[0].getX(), -RED_CYCLE_CHECKPOINTS[0].getY(), Math.toRadians(178.06)),
-            new Pose2d(RED_CYCLE_CHECKPOINTS[1].getX(), -RED_CYCLE_CHECKPOINTS[1].getY(), Math.toRadians(240)),
-            new Pose2d(RED_CYCLE_CHECKPOINTS[2].getX(), -RED_CYCLE_CHECKPOINTS[2].getY(), Math.toRadians(210))
+            new Pose2d(RED_CYCLE_CHECKPOINTS[1].getX(), -RED_CYCLE_CHECKPOINTS[1].getY(), Math.toRadians(260)),
+            new Pose2d(RED_CYCLE_CHECKPOINTS[2].getX(), -RED_CYCLE_CHECKPOINTS[2].getY(), Math.toRadians(180)),
+
+            new Pose2d(RED_CYCLE_CHECKPOINTS[3].getX(), -RED_CYCLE_CHECKPOINTS[3].getY(), Math.toRadians(180))
     };
 
     public static final double CAUTION_SPEED = 14;

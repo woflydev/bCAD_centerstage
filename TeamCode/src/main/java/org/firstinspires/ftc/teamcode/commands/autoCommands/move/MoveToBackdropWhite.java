@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.autoCommands.move;
 
 import static org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.RobotAutoConstants.BACKDROP_CYCLE_DROPOFF_POSES;
+import static org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.RobotAutoConstants.CYCLE_RETURN_POSES;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandBase;
@@ -34,8 +35,10 @@ public class MoveToBackdropWhite extends CommandBase {
                 .build();*/
 
         TrajectorySequence toBackdropTrajectory = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                .splineTo(wCyclingCheckpoints[0].vec(), wCyclingCheckpoints[0].getHeading())
-                .splineTo(BACKDROP_CYCLE_DROPOFF_POSES[allianceIndex].vec(), BACKDROP_CYCLE_DROPOFF_POSES[allianceIndex].getHeading())
+                //.splineTo(wCyclingCheckpoints[0].vec(), wCyclingCheckpoints[0].getHeading())
+                .lineToLinearHeading(wCyclingCheckpoints[3])
+                //.splineTo(wCyclingCheckpoints[0].vec(), wCyclingCheckpoints[0].getHeading())
+                .lineToLinearHeading(BACKDROP_CYCLE_DROPOFF_POSES[allianceIndex])
                 .build();
 
         drive.followTrajectorySequenceAsync(toBackdropTrajectory);

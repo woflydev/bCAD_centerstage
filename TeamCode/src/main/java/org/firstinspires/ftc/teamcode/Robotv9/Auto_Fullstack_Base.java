@@ -144,7 +144,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                 new ConditionalCommand(
                         new MoveToBackdropYellow(drive, randomization, wYellowBackdropAlign)
                                 .alongWith(
-                                        new WaitCommand(200),
+                                        new WaitCommand(500),
                                         new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_YELLOW, false, false)
                                 ),
                         new MoveToBackdropYellow(drive, randomization, wYellowBackdropAlign)
@@ -153,7 +153,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                 ),
 
                 new InstantCommand(() -> deposit.clawDeposit()),
-                new HomeAutoCommand(deposit, lift, intake),
+                //new HomeAutoCommand(deposit, lift, intake)
                 new SelectCommand(
                         new HashMap<Object, Command>() {{
                             put(RobotTaskFinishBehaviour.DO_NOT_CYCLE,
@@ -186,9 +186,11 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
             sequence.addCommands(
                 new MoveToStacks(drive, alliance, wCycleCheckpoints)
                         .alongWith(
-                                new HomeAutoCommand(deposit, lift, intake),
-                                new WaitUntilCommand(this::getRobotOnAudienceSide),
-                                new RunCommand(() -> intake.cautiousReverseSpin())
+                                new HomeAutoCommand(deposit, lift, intake)
+                                        .andThen(
+                                                new WaitUntilCommand(this::getRobotOnAudienceSide)
+                                                //new InstantCommand(() -> intake.cautiousReverseSpin())
+                                        )
                         ),
 
                 new PickupFromStacks(drive, deposit, lift, intake, alliance),
@@ -196,11 +198,11 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                         .alongWith(
                                 new TransferAndStandbyAutoCommand(deposit, lift, intake)
                                         .andThen(
-                                                new WaitUntilCommand(this::getRobotOnBackdropSide),
+                                                new WaitUntilCommand(this::getRobotNearBackdrop),
                                                 new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_WHITE, true, true)
                                         )
                         ),
-                new RunCommand(() -> deposit.clawDeposit())
+                new InstantCommand(() -> deposit.clawDeposit())
                         .alongWith(
                                 new HomeAutoCommand(deposit, lift, intake)
                         )
@@ -362,7 +364,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
 
     private RobotTaskFinishBehaviour getTFB() { return taskFinishBehaviour; }
 
-    private boolean getRobotOnBackdropSide() { return drive.getPoseEstimate().getX() >= 6; }
+    private boolean getRobotNearBackdrop() { return drive.getPoseEstimate().getX() >= 20; }
     private boolean getRobotOnAudienceSide() { return drive.getPoseEstimate().getX() <= -36; }
 
     private void timeout(double time) {

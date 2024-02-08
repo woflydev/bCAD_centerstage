@@ -22,7 +22,7 @@ public class TransferAndStandbyAutoCommand extends CommandBase {
     private final IntakeSubsystem intake;
     private final ElapsedTime timer = new ElapsedTime();
 
-    private final int stateDuration = 200;
+    private final int stateDuration = 300;
 
     public TransferAndStandbyAutoCommand(DepositSubsystem deposit, LiftSubsystem lift, IntakeSubsystem intake) {
         this.deposit = deposit;
@@ -58,7 +58,7 @@ public class TransferAndStandbyAutoCommand extends CommandBase {
             deposit.wrist.turnToAngle(WRIST_PICKUP);
         } else if (withinState(4, 1)) {
             deposit.elbow.turnToAngle(ELBOW_PICKUP);
-        } else if (withinState(5.5, 1.5)) {
+        } else if (withinState(5, 1.5)) {
             deposit.clawGrab();
         }
     }
@@ -75,7 +75,7 @@ public class TransferAndStandbyAutoCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timer.milliseconds() >= stateDuration * 8;
+        return timer.milliseconds() >= stateDuration * 7;
     }
 
     private boolean withinState(double stateNumber, double endTimeFactor) {

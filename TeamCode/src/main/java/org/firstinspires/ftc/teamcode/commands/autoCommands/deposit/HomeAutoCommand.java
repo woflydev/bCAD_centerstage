@@ -18,7 +18,7 @@ public class HomeAutoCommand extends CommandBase {
     private final IntakeSubsystem intake;
     private final ElapsedTime timer = new ElapsedTime();
 
-    private final int stateDuration = 300;
+    private final int stateDuration = 200;
 
     public HomeAutoCommand(DepositSubsystem deposit, LiftSubsystem lift, IntakeSubsystem intake) {
         this.deposit = deposit;
