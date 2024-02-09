@@ -162,7 +162,7 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
                 ),
 
                 new MoveToBackdropYellow(drive, randomization, wYellowBackdropAlign),
-                //new RelocalizeAtBackdrop(drive, visualLoc, telemetry),
+                new RelocalizeAtBackdrop(drive, visualLoc, telemetry),
                 new WaitCommand(10000)
         );
     }
