@@ -25,7 +25,7 @@ public class RobotConstants {
     public static final String SERVO_HANG_R = "hangR";
     public static final String SERVO_HANG_L = "hangL";
 
-    public static final double MAX_LIFT_SPEED = 0.95;
+    public static final double MAX_LIFT_SPEED = 1;
     public static final int LIFT_RESET_TIMEOUT = 4; // note: how many seconds the lift should be active for before brought down automatically
     public static final int MAX_OUTTAKE_HEIGHT = 3200;
     public static final int MIN_OUTTAKE_HEIGHT = 0;
