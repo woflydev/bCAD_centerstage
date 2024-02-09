@@ -42,10 +42,11 @@ public class RaiseAndPrimeAutoCommand extends CommandBase {
         targetHeight += lift.liftOffset;
 
         if (withinState(0)) {
-            lift.targetLiftPosition = targetHeight;
-            lift.UpdateLift(false, 0);
             deposit.elbow.turnToAngle(cycleValues ? RobotConstants.ELBOW_CYCLE_ACTIVE : RobotConstants.ELBOW_AUTO_ACTIVE);
             deposit.wrist.turnToAngle(cycleValues ? RobotConstants.WRIST_CYCLE_ACTIVE : RobotConstants.WRIST_AUTO_ACTIVE);
+
+            lift.targetLiftPosition = targetHeight;
+            lift.UpdateLift(false, 0);
         } else if (withinState(1)) {
             if (spin) {
                 deposit.spin.turnToAngle(RobotConstants.SPIN_DEPOSIT);
