@@ -75,7 +75,7 @@ public class PickupFromStacks extends CommandBase {
                     .build();
 
             drive.followTrajectorySequence(traj);
-        } else if (withinState(8, 999)) {
+        } else if (withinState(4, 999)) {
             intake.stop();
             finish = true;
         }
