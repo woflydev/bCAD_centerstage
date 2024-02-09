@@ -52,6 +52,11 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
                 () -> shooter.reset()
         );
 
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.START).toggleWhenPressed(
+                () -> deposit.autoRaise = true,
+                () -> deposit.autoRaise = false
+        );
+
         // note: will not be scheduled unless button becomes INACTIVE -> ACTIVE again
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.X).whenPressed(new DepositAndResetCommand(deposit, lift, intake));
         new GamepadButton(gamepad2Ex, GamepadKeys.Button.Y).whenPressed(new HomeCommand(deposit, lift, intake));
@@ -120,7 +125,7 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
 
         Delay(80); // note: input debouncing
 
-        if (!deposit.outtakeBusy) lift.run(gamepad2Ex.getLeftY()); // note: allows for manual lift operation by driver2
+        if (!deposit.outtakeBusy) lift.runManualControls(gamepad2Ex.getLeftY()); // note: allows for manual lift operation by driver2
 
         if (deposit.autoRaise) AutoRaiseControl();
 
@@ -157,6 +162,9 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
         telemetry.addData("Wrist Position", deposit.wrist.getAngle());
         telemetry.addData("Slide position", lift.liftLM.motor.getCurrentPosition());
         telemetry.addData("Intake Current Draw", intake.intakeM.motorEx.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("Position AutoRaise", deposit.autoRaise);
+        telemetry.addData("Outtake Busy", deposit.outtakeBusy);
+        telemetry.addData("Outtake State", deposit.outtakeState);
         telemetry.update();
     }
 

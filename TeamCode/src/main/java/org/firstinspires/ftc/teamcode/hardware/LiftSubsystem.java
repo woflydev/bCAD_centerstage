@@ -49,9 +49,9 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
     // note: this is only run IF deposit.outtakeBusy is false.
-    public void run(double joystickY) {
-        PassiveResetCheck(); // note: passive check should come first
+    public void runManualControls(double joystickY) {
         ManualLift(joystickY);
+        //PassiveResetCheck(); // note: passive check should come first
     }
 
     public void ManualLift(double joystickY) {
@@ -59,7 +59,7 @@ public class LiftSubsystem extends SubsystemBase {
         double motorPowers = Range.clip(Math.abs(joystickY), 0.2, 1);
 
         targetLiftPosition = target;
-        //UpdateLift(true, motorPowers); // TODO: re-enable manual joystick controls when i figure out what this thing does
+        UpdateLift(true, motorPowers);
 
         telemetry.addData("Target", joystickY);
         telemetry.addData("Slide Power", motorPowers);
@@ -96,44 +96,6 @@ public class LiftSubsystem extends SubsystemBase {
     public int CalculateTargetFromJoystick(double joystick) {
         return (joystick > 0) ? (top + liftOffset) : ((joystick == 0) ? liftLM.motor.getCurrentPosition() : liftOffset);
     }
-
-    // note: for lift operation during autonomous
-    public void AutoRun() {
-        int target = 250;
-        while (getPosition() < target - 10) {
-            liftLM.motor.setTargetPosition(target);
-            liftRM.motor.setTargetPosition(target);
-
-            liftLM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            liftRM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            liftLM.motor.setPower(MAX_LIFT_SPEED);
-            liftRM.motor.setPower(MAX_LIFT_SPEED);
-        }
-    }
-
-    public void AutoHome() {
-        int target = 0;
-        deposit.elbow.turnToAngle(ELBOW_HOME);
-        deposit.wrist.turnToAngle(WRIST_HOME);
-        deposit.spin.turnToAngle(SPIN_HOME);
-        deposit.clawGrab();
-        deposit.outtakeBusy = false;
-
-        while(getPosition() > target + 10) {
-            liftLM.motor.setTargetPosition(target);
-            liftRM.motor.setTargetPosition(target);
-
-            liftLM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            liftRM.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            liftLM.motor.setPower(MAX_LIFT_SPEED);
-            liftRM.motor.setPower(MAX_LIFT_SPEED);
-        }
-    }
-
-    @Override
-    public void periodic() { }
 
     public double getPosition() { return liftLM.getCurrentPosition(); }
 }
