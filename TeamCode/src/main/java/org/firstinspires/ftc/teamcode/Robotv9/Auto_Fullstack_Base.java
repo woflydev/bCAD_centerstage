@@ -145,7 +145,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                 new ConditionalCommand(
                         new MoveToBackdropYellow(drive, randomization, wYellowBackdropAlign)
                                 .alongWith(
-                                        new WaitCommand(400)
+                                        new WaitCommand(200)
                                                 .andThen(
                                                         new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_YELLOW, false, false)
                                                 )
