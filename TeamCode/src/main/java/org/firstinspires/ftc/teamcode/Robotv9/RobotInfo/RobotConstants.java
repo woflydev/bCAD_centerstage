@@ -66,9 +66,9 @@ public class RobotConstants {
 
     public static final int JUNCTION_AUTO_YELLOW = 510;
     public static final int JUNCTION_AUTO_WHITE = 830;
-    public static final int JUNCTION_LOW = 300;
-    public static final int JUNCTION_MID = 600;
-    public static final int JUNCTION_HIGH = 900;
+    public static final int JUNCTION_LOW = 400;
+    public static final int JUNCTION_MID = 750;
+    public static final int JUNCTION_HIGH = 1100;
 
     // -------------------------------------------------------------- VISION
 
