@@ -62,12 +62,10 @@ public class PickupFromStacks extends CommandBase {
 
     @Override
     public void execute() {
-        drive.update();
+        //drive.update();
         //drive.CheckForBonk();
 
         if (withinState(0, 1)) {
-            intake.stop();
-        } else if (withinState(1, 1)) {
             intake.spin();
 
             TrajectorySequence traj = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
@@ -75,10 +73,12 @@ public class PickupFromStacks extends CommandBase {
                     .build();
 
             drive.followTrajectorySequence(traj);
-        } else if (withinState(3, 999)) {
+        } else if (withinState(1, 999)) {
             intake.stop();
             finish = true;
         }
+
+        drive.update();
 
         // todo: add colour sensor input when calvin fixes it
         /*if (intake.intakeM.motorEx.getPower() >= RobotConstants.INTAKE_SPEED - 0.05
