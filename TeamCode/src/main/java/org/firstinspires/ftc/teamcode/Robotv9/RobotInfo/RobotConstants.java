@@ -56,6 +56,12 @@ public class RobotConstants {
     public static final double INTAKE_OUT_CAUTIOUS_SPEED = 0.5;
     public static final double INTAKE_OUT_SPEED = 0.8;
 
+    // -------------------------------------------------------------- AUTO RAISE CRITERIA
+    public static final double RED_AUTORAISE_X = 35;
+    public static final double RED_AUTORAISE_Y = -30;
+    public static final double BLUE_AUTORAISE_X = 35;
+    public static final double BLUE_AUTORAISE_Y = 30;
+
     // -------------------------------------------------------------- JUNCTION PRESETS
 
     public static final int JUNCTION_AUTO_YELLOW = 510;

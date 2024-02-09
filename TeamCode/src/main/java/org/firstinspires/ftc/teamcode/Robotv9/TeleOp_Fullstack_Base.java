@@ -1,10 +1,14 @@
 package org.firstinspires.ftc.teamcode.Robotv9;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.AAutoState;
+import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.ASubsystemState;
+import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.GlobalStorage;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.RobotConstants;
 import org.firstinspires.ftc.teamcode.commands.teleopCommands.HomeCommand;
 import org.firstinspires.ftc.teamcode.commands.teleopCommands.subcommands.LeftTriggerReader;
@@ -13,11 +17,17 @@ import org.firstinspires.ftc.teamcode.commands.teleopCommands.RaiseAndPrimeComma
 import org.firstinspires.ftc.teamcode.commands.teleopCommands.subcommands.RightTriggerReader;
 import org.firstinspires.ftc.teamcode.commands.teleopCommands.DepositAndResetCommand;
 import org.firstinspires.ftc.teamcode.commands.teleopCommands.TransferAndStandbyCommand;
+import org.firstinspires.ftc.teamcode.rr.bCADMecanumDrive;
 
 public class TeleOp_Fullstack_Base extends OpModeTemplate {
+    private bCADMecanumDrive drive;
+
     @Override
     public void initialize() {
         InitBlock();
+
+        drive = new bCADMecanumDrive(hardwareMap);
+        drive.setPoseEstimate(GlobalStorage.switchoverPose);
 
         // note: ------------------------driver 1------------------------------------------------------------
         new GamepadButton(gamepad1Ex, GamepadKeys.Button.START)
@@ -112,9 +122,35 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
 
         if (!deposit.outtakeBusy) lift.run(gamepad2Ex.getLeftY()); // note: allows for manual lift operation by driver2
 
+        if (deposit.autoRaise) AutoRaiseControl();
+
         drivebase.Mecanum(gamepad1, imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
         deposit.manualElbowControl(gamepad2Ex.getRightY(), telemetry);
         hang.run(gamepad2);
+    }
+
+    public void AutoRaiseControl() {
+        Pose2d current = drive.getPoseEstimate();
+        boolean raise = CheckRaiseCriteria(current);
+
+        if (raise) {
+            gamepad1.rumble(0.5, 0.8, 800);
+            gamepad2.rumble(0.5, 0.8, 800);
+            //new RaiseAndPrimeCommand(deposit, lift, intake, RobotConstants.JUNCTION_MID, true).schedule();
+        } else {
+            gamepad1.stopRumble();
+        }
+    }
+
+    private boolean CheckRaiseCriteria(Pose2d p) {
+        if (deposit.outtakeState == ASubsystemState.Outtake.GRABBED_AND_READY) {
+            if (GlobalStorage.alliance == AAutoState.RobotAlliance.RED) {
+                return p.getX() >= RobotConstants.RED_AUTORAISE_X && p.getY() <= RobotConstants.RED_AUTORAISE_Y;
+            } else if (GlobalStorage.alliance == AAutoState.RobotAlliance.BLUE) {
+                return p.getX() >= RobotConstants.BLUE_AUTORAISE_X && p.getY() >= RobotConstants.BLUE_AUTORAISE_Y;
+            }
+        }
+        return false;
     }
 
     public void StatusTelemetry() {

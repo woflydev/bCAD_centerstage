@@ -19,6 +19,8 @@ public class DepositSubsystem extends SubsystemBase {
     public ServoEx spin;
     public boolean outtakeBusy;
 
+    public boolean autoRaise = false;
+
     public DepositSubsystem(HardwareMap hardwareMap) {
         elbow = new SimpleServo(hardwareMap, SERVO_ELBOW, 0, 355, AngleUnit.DEGREES);
         wrist = new SimpleServo(hardwareMap, SERVO_WRIST, 0, 260, AngleUnit.DEGREES);

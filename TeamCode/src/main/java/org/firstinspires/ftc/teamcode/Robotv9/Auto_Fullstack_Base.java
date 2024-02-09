@@ -24,7 +24,6 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -38,6 +37,7 @@ import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.AAutoState.RobotParkingL
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.AAutoState.RobotStartingPosition;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.AAutoState.RobotTaskFinishBehaviour;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.ASubsystemState.Outtake;
+import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.GlobalStorage;
 import org.firstinspires.ftc.teamcode.commands.OpModeTemplate;
 import org.firstinspires.ftc.teamcode.commands.autoCommands.deposit.DepositPurpleAtSpikemark;
 import org.firstinspires.ftc.teamcode.commands.autoCommands.deposit.HomeAutoCommand;
@@ -127,6 +127,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
             autoTimer.reset();
             while (opModeIsActive() && !isStopRequested()) {
                 super.run();
+                GlobalStorage.switchoverPose = drive.getPoseEstimate();
                 StatusTelemetry();
             }
         }
