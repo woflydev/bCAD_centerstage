@@ -53,34 +53,36 @@ public class PickupFromStacks extends CommandBase {
         deposit.outtakeBusy = false;
         finish = false;
         ejecting = false;
-        intake.cautiousReverseSpin();
         stateTimer.reset();
         utilTimer.reset();
+
+        intake.spin();
+        TrajectorySequence traj = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .lineToLinearHeading(wCyclingCheckpoints[2])
+                .lineToLinearHeading(wCyclingCheckpoints[4])
+                .lineToLinearHeading(wCyclingCheckpoints[5])
+                .build();
+
+        drive.followTrajectorySequenceAsync(traj);
 
         //drive.followTrajectorySequenceAsync(CalcKinematics(4, 0));
     }
 
     @Override
     public void execute() {
-        //drive.update();
-        //drive.CheckForBonk();
+        drive.update();
 
         if (withinState(0, 1)) {
 
         } else if (withinState(1, 999)) {
 
         }
-
-        intake.spin();
-
-        TrajectorySequence traj = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                .lineToLinearHeading(wCyclingCheckpoints[2])
-                .build();
-
-        drive.followTrajectorySequence(traj);
-
+/*
         intake.stop();
-        finish = true;
+        finish = true;*/
+
+/*        drive.update();
+        drive.CheckForBonk();*/
 
         // todo: add colour sensor input when calvin fixes it
         /*if (intake.intakeM.motorEx.getPower() >= RobotConstants.INTAKE_SPEED - 0.05
@@ -102,7 +104,7 @@ public class PickupFromStacks extends CommandBase {
     }
 
     @Override
-    public boolean isFinished() { return finishTriggered(); }
+    public boolean isFinished() { return finishTriggered() || !drive.isBusy(); }
 
     private boolean withinState(double stateNumber, double endTimeFactor) {
         return stateTimer.milliseconds() >= (stateDuration * stateNumber) && stateTimer.milliseconds() <= stateDuration * (stateNumber + endTimeFactor);

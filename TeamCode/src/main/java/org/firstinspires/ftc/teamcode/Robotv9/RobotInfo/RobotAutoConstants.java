@@ -106,13 +106,22 @@ public class RobotAutoConstants {
             // note: used for recentering the robot to not bonk into the truss
             new Pose2d(-45, -36, Math.toRadians(180)),
 
+            // note: used for sweeping pixels from stacks
+            new Pose2d(-58, -38, Math.toRadians(180)),
+            new Pose2d(-58, -34, Math.toRadians(180)),
+
     };
     public static final Pose2d[] BLUE_CYCLE_CHECKPOINTS = {
             new Pose2d(RED_CYCLE_CHECKPOINTS[0].getX(), -RED_CYCLE_CHECKPOINTS[0].getY(), Math.toRadians(178.06)),
             new Pose2d(RED_CYCLE_CHECKPOINTS[1].getX(), -RED_CYCLE_CHECKPOINTS[1].getY(), Math.toRadians(260)),
             new Pose2d(RED_CYCLE_CHECKPOINTS[2].getX(), -RED_CYCLE_CHECKPOINTS[2].getY(), Math.toRadians(180)),
 
-            new Pose2d(RED_CYCLE_CHECKPOINTS[3].getX(), -RED_CYCLE_CHECKPOINTS[3].getY(), Math.toRadians(180))
+            // note: used for recentering the robot to not bonk into the truss
+            new Pose2d(RED_CYCLE_CHECKPOINTS[3].getX(), -RED_CYCLE_CHECKPOINTS[3].getY(), Math.toRadians(180)),
+
+            // note: used for sweeping pixels from stacks
+            new Pose2d(RED_CYCLE_CHECKPOINTS[4].getX(), -RED_CYCLE_CHECKPOINTS[4].getY(), Math.toRadians(180)),
+            new Pose2d(RED_CYCLE_CHECKPOINTS[5].getX(), -RED_CYCLE_CHECKPOINTS[5].getY(), Math.toRadians(180))
     };
 
     public static final double CAUTION_SPEED = 14;
