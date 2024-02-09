@@ -36,10 +36,10 @@ public class RobotConstants {
     public static final double CLAW_AUTO_CLOSE = 100;
     public static final double CLAW_OPEN = 98;
     public static final double CLAW_DEPOSIT = 50;
-    public static final double ELBOW_HOME = 235;
+    public static final double ELBOW_HOME = 240;
     public static final double ELBOW_PICKUP = 273;
     public static final double ELBOW_GRABBED_STANDBY = 225;
-    public static final double ELBOW_ACTIVE = 130;
+    public static final double ELBOW_ACTIVE = 125;
     public static final double ELBOW_AUTO_ACTIVE = 0;
     public static final double ELBOW_CYCLE_ACTIVE = ELBOW_AUTO_ACTIVE - 10;
     public static final double WRIST_PICKUP = 260;

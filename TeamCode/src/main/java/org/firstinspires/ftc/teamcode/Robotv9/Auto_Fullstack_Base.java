@@ -151,12 +151,16 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                                                 )
                                 ),
                         new MoveToBackdropYellow(drive, randomization, wYellowBackdropAlign)
-                                .andThen(new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_YELLOW, false, false)),
+                                .alongWith(
+                                        new WaitUntilCommand(this::getRobotNearBackdrop)
+                                                .andThen(
+                                                        new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_YELLOW, false, false)
+                                                )
+                                        ),
                         () -> startingPosition == RobotStartingPosition.BACKDROP
                 ),
 
                 new InstantCommand(() -> deposit.clawDeposit()),
-                //new HomeAutoCommand(deposit, lift, intake)
                 new SelectCommand(
                         new HashMap<Object, Command>() {{
                             put(RobotTaskFinishBehaviour.DO_NOT_CYCLE,

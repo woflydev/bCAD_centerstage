@@ -31,7 +31,7 @@ public class RobotAutoConstants {
     public static final Pose2d[] RED_YELLOW_PIXEL_BACKDROP_POSES = {
             // note: starts with LOC_1
             new Pose2d(43, -31, Math.toRadians(180)),
-            new Pose2d(43, -34.5, Math.toRadians(180)),
+            new Pose2d(43, -34, Math.toRadians(180)),
             new Pose2d(43, -43, Math.toRadians(180)),
     };
     public static final Pose2d[] BLUE_YELLOW_PIXEL_BACKDROP_POSES = {
@@ -99,7 +99,7 @@ public class RobotAutoConstants {
             new Pose2d(20, 5, Math.toRadians(180.0)),
     };
     public static final Pose2d[] RED_CYCLE_CHECKPOINTS = {
-            new Pose2d(-7, -36, Math.toRadians(181.94)),
+            new Pose2d(-7, -37, Math.toRadians(181.94)),
             new Pose2d(-56, -36, Math.toRadians(180)),
             new Pose2d(-58, -36, Math.toRadians(180)),
 
@@ -107,8 +107,8 @@ public class RobotAutoConstants {
             new Pose2d(-45, -36, Math.toRadians(180)),
 
             // note: used for sweeping pixels from stacks
-            new Pose2d(-58, -38, Math.toRadians(180)),
-            new Pose2d(-58, -34, Math.toRadians(180)),
+            new Pose2d(-59, -40, Math.toRadians(180)),
+            new Pose2d(-59, -32, Math.toRadians(180)),
 
     };
     public static final Pose2d[] BLUE_CYCLE_CHECKPOINTS = {
