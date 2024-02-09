@@ -39,7 +39,7 @@ public class LiftSubsystem extends SubsystemBase {
         top = SlideModel.MAXENCODER;
         slideModel = new SlideModel();
 
-        liftLM = new MotorEx(hMap,LIFT_L, Motor.GoBILDA.RPM_1150);
+        liftLM = new MotorEx(hMap, LIFT_L, Motor.GoBILDA.RPM_1150);
         liftRM = new MotorEx(hMap, LIFT_R, Motor.GoBILDA.RPM_1150);
         liftLM.setInverted(true);
         liftLM.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
