@@ -57,7 +57,7 @@ public class PickupFromStacks extends CommandBase {
         stateTimer.reset();
         utilTimer.reset();
 
-        drive.followTrajectorySequenceAsync(CalcKinematics(4, 0));
+        //drive.followTrajectorySequenceAsync(CalcKinematics(4, 0));
     }
 
     @Override
@@ -65,9 +65,9 @@ public class PickupFromStacks extends CommandBase {
         drive.update();
         //drive.CheckForBonk();
 
-        if (withinState(1, 1)) {
+        if (withinState(0, 1)) {
             intake.stop();
-        } else if (withinState(2, 1)) {
+        } else if (withinState(1, 1)) {
             intake.spin();
 
             TrajectorySequence traj = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
@@ -75,7 +75,7 @@ public class PickupFromStacks extends CommandBase {
                     .build();
 
             drive.followTrajectorySequence(traj);
-        } else if (withinState(4, 999)) {
+        } else if (withinState(3, 999)) {
             intake.stop();
             finish = true;
         }

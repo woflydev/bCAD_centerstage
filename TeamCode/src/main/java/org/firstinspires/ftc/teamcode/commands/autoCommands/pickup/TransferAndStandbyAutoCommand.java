@@ -50,15 +50,15 @@ public class TransferAndStandbyAutoCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (withinState(0, 1)) {
+        if (withinState(0, 1.5)) {
             intake.stop();
             intake.openFlap();
             deposit.clawReset();
-        } else if (withinState(2, 2)) {
+        } else if (withinState(1.5, 1.5)) {
             deposit.wrist.turnToAngle(WRIST_PICKUP);
-        } else if (withinState(4, 1)) {
+        } else if (withinState(3, 1)) {
             deposit.elbow.turnToAngle(ELBOW_PICKUP);
-        } else if (withinState(5, 1.5)) {
+        } else if (withinState(4, 1)) {
             deposit.clawGrab();
         }
     }
@@ -75,7 +75,7 @@ public class TransferAndStandbyAutoCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timer.milliseconds() >= stateDuration * 7;
+        return timer.milliseconds() >= stateDuration * 5;
     }
 
     private boolean withinState(double stateNumber, double endTimeFactor) {
