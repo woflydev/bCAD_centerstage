@@ -56,21 +56,29 @@ public class PickupFromStacks extends CommandBase {
         stateTimer.reset();
         utilTimer.reset();
 
-        intake.spin();
+        // note: the below piece of code kinda works but not really
+        /*intake.spin();
         TrajectorySequence traj = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .lineToLinearHeading(wCyclingCheckpoints[2])
                 .lineToLinearHeading(wCyclingCheckpoints[4])
                 .lineToLinearHeading(wCyclingCheckpoints[5])
                 .build();
 
-        drive.followTrajectorySequenceAsync(traj);
+        drive.followTrajectorySequenceAsync(traj);*/
 
-        //drive.followTrajectorySequenceAsync(CalcKinematics(4, 0));
+        TrajectorySequence traj = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .lineToLinearHeading(wCyclingCheckpoints[2])
+                .lineToLinearHeading(wCyclingCheckpoints[4])
+                .lineToLinearHeading(wCyclingCheckpoints[5])
+                .build();
+        drive.followTrajectorySequence(CalcKinematics(4, 0));
+        drive.followTrajectorySequence(traj);
+        finish = true;
     }
 
     @Override
     public void execute() {
-        drive.update();
+        //drive.update();
 
         if (withinState(0, 1)) {
 
@@ -104,7 +112,7 @@ public class PickupFromStacks extends CommandBase {
     }
 
     @Override
-    public boolean isFinished() { return finishTriggered() || !drive.isBusy(); }
+    public boolean isFinished() { return finishTriggered() && !drive.isBusy(); }
 
     private boolean withinState(double stateNumber, double endTimeFactor) {
         return stateTimer.milliseconds() >= (stateDuration * stateNumber) && stateTimer.milliseconds() <= stateDuration * (stateNumber + endTimeFactor);
