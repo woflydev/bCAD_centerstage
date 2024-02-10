@@ -142,7 +142,7 @@ public class Auto_Localizer_Testing extends OpModeTemplate {
     public void run() {
         if (!autoAlreadyRun) {
             visualLoc.Make();
-            BuildAutoSequence().schedule();
+            //BuildAutoSequence().schedule();
             autoTimer.reset();
             while (opModeIsActive() && !isStopRequested()) {
                 super.run();
