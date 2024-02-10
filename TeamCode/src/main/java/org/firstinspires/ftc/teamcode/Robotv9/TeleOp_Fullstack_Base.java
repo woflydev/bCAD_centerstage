@@ -32,6 +32,9 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
         // note: ------------------------driver 1------------------------------------------------------------
         new GamepadButton(gamepad1Ex, GamepadKeys.Button.START)
                 .whenPressed(() -> imu.resetYaw());
+        new GamepadButton(gamepad1Ex, GamepadKeys.Button.BACK).whenPressed(
+                () -> deposit.autoRaise = !deposit.autoRaise
+        );
         new GamepadButton(gamepad1Ex, GamepadKeys.Button.X)
                 .whenPressed(intake::reverseSpin)
                 .whenReleased(intake::stop);
@@ -47,14 +50,13 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
                 () -> deposit.clawDeposit()
         );
 
-        new GamepadButton(gamepad2Ex, GamepadKeys.Button.BACK).toggleWhenPressed(
+        new GamepadButton(gamepad2Ex, GamepadKeys.Button.START).toggleWhenPressed(
                 () -> shooter.launch(),
                 () -> shooter.reset()
         );
 
-        new GamepadButton(gamepad2Ex, GamepadKeys.Button.START).toggleWhenPressed(
-                () -> deposit.autoRaise = true,
-                () -> deposit.autoRaise = false
+        new GamepadButton(gamepad1Ex, GamepadKeys.Button.BACK).whenPressed(
+                () -> deposit.autoRaise = !deposit.autoRaise
         );
 
         // note: will not be scheduled unless button becomes INACTIVE -> ACTIVE again
@@ -117,7 +119,7 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
                     deposit.mosaicSpin(1, telemetry);
                 else if (gamepad1.right_stick_button)
                     deposit.mosaicSpin(-1, telemetry);
-                else
+                else if (gamepad1.right_stick_button && gamepad1.left_stick_button)
                     deposit.mosaicSpin(0, telemetry);
 
                 break;
