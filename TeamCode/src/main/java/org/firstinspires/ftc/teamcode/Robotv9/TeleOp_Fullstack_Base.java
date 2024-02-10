@@ -166,7 +166,7 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
         telemetry.addData("Wrist Position", deposit.wrist.getAngle());
         telemetry.addData("Slide position", lift.liftLM.motor.getCurrentPosition());
         telemetry.addData("Intake Current Draw", intake.intakeM.motorEx.getCurrent(CurrentUnit.AMPS));
-        telemetry.addData("Position AutoRaise", deposit.autoRaise);
+        telemetry.addData("AutoRaise", deposit.autoRaise);
         telemetry.addData("Outtake Busy", deposit.outtakeBusy);
         telemetry.addData("Outtake State", deposit.outtakeState);
         telemetry.update();
