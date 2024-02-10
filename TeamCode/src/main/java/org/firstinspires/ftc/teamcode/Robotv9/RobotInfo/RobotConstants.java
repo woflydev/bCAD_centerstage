@@ -61,6 +61,7 @@ public class RobotConstants {
     public static final double RED_AUTORAISE_Y = -30;
     public static final double BLUE_AUTORAISE_X = 35;
     public static final double BLUE_AUTORAISE_Y = 30;
+    public static final double HEADING_AUTORAISE_VARIANCE = 10;
 
     // -------------------------------------------------------------- JUNCTION PRESETS
 

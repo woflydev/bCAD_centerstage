@@ -148,7 +148,11 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
     }
 
     private boolean CheckRaiseCriteria(Pose2d p) {
-        if (deposit.outtakeState == ASubsystemState.Outtake.GRABBED_AND_READY) {
+        boolean headingLegality =
+                p.getHeading() >= 180 - RobotConstants.HEADING_AUTORAISE_VARIANCE
+                        && p.getHeading() <= 180 + RobotConstants.HEADING_AUTORAISE_VARIANCE;
+
+        if (deposit.outtakeState == ASubsystemState.Outtake.GRABBED_AND_READY && headingLegality) {
             if (GlobalStorage.alliance == AAutoState.RobotAlliance.RED) {
                 return p.getX() >= RobotConstants.RED_AUTORAISE_X && p.getY() <= RobotConstants.RED_AUTORAISE_Y;
             } else if (GlobalStorage.alliance == AAutoState.RobotAlliance.BLUE) {
