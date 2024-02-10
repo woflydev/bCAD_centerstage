@@ -123,7 +123,7 @@ public class TeleOp_Fullstack_Base extends OpModeTemplate {
                 break;
         }
 
-        Delay(80); // note: input debouncing
+        //Delay(80); // note: input debouncing
 
         if (!deposit.outtakeBusy) lift.runManualControls(gamepad2Ex.getLeftY()); // note: allows for manual lift operation by driver2
 
