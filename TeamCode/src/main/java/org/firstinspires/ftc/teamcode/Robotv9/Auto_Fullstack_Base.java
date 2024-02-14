@@ -145,7 +145,7 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
                 new ConditionalCommand(
                         new MoveToBackdropYellow(drive, randomization, wYellowBackdropAlign)
                                 .alongWith(
-                                        new WaitCommand(1200)
+                                        new WaitCommand(500)
                                                 .andThen(
                                                         new RaiseAndPrimeAutoCommand(deposit, lift, JUNCTION_AUTO_YELLOW, false, false)
                                                 )
@@ -361,7 +361,6 @@ public class Auto_Fullstack_Base extends OpModeTemplate {
     }
 
     private void EnsureAttachmentNormalization() {
-        timeout(3);
         deposit.claw.turnToAngle(CLAW_AUTO_CLOSE);
         deposit.elbow.turnToAngle(ELBOW_GRABBED_STANDBY);
         deposit.wrist.turnToAngle(WRIST_HOME);

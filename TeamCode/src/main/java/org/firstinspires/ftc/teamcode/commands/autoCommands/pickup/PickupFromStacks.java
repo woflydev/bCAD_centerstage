@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.AAutoState;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.DriveConstants;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.RobotAutoConstants;
@@ -68,11 +69,14 @@ public class PickupFromStacks extends CommandBase {
 
         TrajectorySequence traj = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .lineToLinearHeading(wCyclingCheckpoints[2])
-                .lineToLinearHeading(wCyclingCheckpoints[4])
-                .lineToLinearHeading(wCyclingCheckpoints[5])
                 .build();
-        drive.followTrajectorySequence(CalcKinematics(4, 0));
-        drive.followTrajectorySequence(traj);
+
+        intake.cautiousReverseSpin();
+        timeout(0.5);
+        intake.spin();
+        drive.followTrajectorySequence(CalcKinematics(2, 0));
+        timeout(1.5);
+
         finish = true;
     }
 
@@ -92,16 +96,17 @@ public class PickupFromStacks extends CommandBase {
 /*        drive.update();
         drive.CheckForBonk();*/
 
-        // todo: add colour sensor input when calvin fixes it
-        /*if (intake.intakeM.motorEx.getPower() >= RobotConstants.INTAKE_SPEED - 0.05
-            && intake.intakeM.motorEx.isOverCurrent() && !ejecting) {
+        // todo: add colour sensor input
+        if (intake.intakeM.motorEx.getPower() >= RobotConstants.INTAKE_SPEED - 0.05
+            && intake.intakeM.motorEx.getCurrent(CurrentUnit.AMPS) >= RobotAutoConstants.MAX_INTAKE_CURRENT_DRAW && !ejecting) {
             intake.reverseSpin();
             utilTimer.reset();
             ejecting = true;
-        } else if (utilTimer.seconds() >= 3 && ejecting) {
+        } else if (utilTimer.seconds() >= 0.7 && ejecting) {
             ejecting = false;
+            drive.followTrajectorySequence(CalcKinematics(2, 0));
             intake.spin();
-        }*/
+        }
     }
 
     @Override
@@ -129,5 +134,11 @@ public class PickupFromStacks extends CommandBase {
 
     private boolean finishTriggered() {
         return finish;
+    }
+
+    private void timeout(double time) {
+        ElapsedTime wait = new ElapsedTime();
+        wait.reset();
+        while (wait.seconds() <= time) { short x; }
     }
 }

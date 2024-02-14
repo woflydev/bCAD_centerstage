@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.AAutoState.RobotAlliance
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.AAutoState.RobotStartingPosition;
 import org.firstinspires.ftc.teamcode.Robotv9.RobotInfo.GlobalStorage;
 
-@TeleOp(name="TeleOp ", group="!RC")
+@TeleOp(name="TeleOp Set Pose", group="!RC")
 public class TeleOp_TransferPose extends LinearOpMode {
     public RobotAlliance alliance;
     public RobotStartingPosition startingPosition;
@@ -22,6 +22,7 @@ public class TeleOp_TransferPose extends LinearOpMode {
     }
 
     public void runOpMode() {
+        waitForStart();
         DetermineStartFinishPoses();
         GlobalStorage.switchoverPose = START_POSE;
     }

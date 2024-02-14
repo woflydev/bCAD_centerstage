@@ -32,7 +32,7 @@ public class RobotConstants {
 
     public static final double FLAP_CLOSE = 200;
     public static final double FLAP_OPEN = 114;
-    public static final double CLAW_CLOSE = 149;
+    public static final double CLAW_CLOSE = 152;
     public static final double CLAW_AUTO_CLOSE = 100;
     public static final double CLAW_OPEN = 98;
     public static final double CLAW_DEPOSIT = 50;
@@ -53,7 +53,7 @@ public class RobotConstants {
     public static final double PLANE_ACTIVE = 0;
 
     public static final double INTAKE_SPEED = 0.8;
-    public static final double INTAKE_OUT_CAUTIOUS_SPEED = 0.5;
+    public static final double INTAKE_OUT_CAUTIOUS_SPEED = 0.3;
     public static final double INTAKE_OUT_SPEED = 0.8;
 
     // -------------------------------------------------------------- AUTO RAISE CRITERIA
@@ -65,11 +65,11 @@ public class RobotConstants {
 
     // -------------------------------------------------------------- JUNCTION PRESETS
 
-    public static final int JUNCTION_AUTO_YELLOW = 510;
+    public static final int JUNCTION_AUTO_YELLOW = 465;
     public static final int JUNCTION_AUTO_WHITE = 830;
-    public static final int JUNCTION_LOW = 400;
-    public static final int JUNCTION_MID = 750;
-    public static final int JUNCTION_HIGH = 1100;
+    public static final int JUNCTION_LOW = 200;
+    public static final int JUNCTION_MID = 700;
+    public static final int JUNCTION_HIGH = 1000;
 
     // -------------------------------------------------------------- VISION
 

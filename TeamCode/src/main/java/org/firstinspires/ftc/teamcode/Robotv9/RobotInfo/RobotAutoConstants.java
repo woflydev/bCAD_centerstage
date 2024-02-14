@@ -46,7 +46,7 @@ public class RobotAutoConstants {
     // note: backdrop, from Loc 1 to Loc 3.
     public static final Pose2d[] RED_PURPLE_PIXEL_SPIKEMARK_BACKDROP = {
             new Pose2d(10, -30, Math.toRadians(0)),
-            new Pose2d(22, -28, Math.toRadians(0)),
+            new Pose2d(20, -28, Math.toRadians(0)),
             new Pose2d(34, -28, Math.toRadians(0))
     };
     public static final Pose2d[] RED_PURPLE_SPIKEMARK_AUDIENCE = {
@@ -99,9 +99,9 @@ public class RobotAutoConstants {
             new Pose2d(20, 5, Math.toRadians(180.0)),
     };
     public static final Pose2d[] RED_CYCLE_CHECKPOINTS = {
-            new Pose2d(-7, -37, Math.toRadians(181.94)),
-            new Pose2d(-56, -36, Math.toRadians(180)),
-            new Pose2d(-58, -36, Math.toRadians(180)),
+            new Pose2d(-7, -35.5, Math.toRadians(181.94)),
+            new Pose2d(-56, -36.5, Math.toRadians(180)),
+            new Pose2d(-58, -36.5, Math.toRadians(180)),
 
             // note: used for recentering the robot to not bonk into the truss
             new Pose2d(-45, -36, Math.toRadians(180)),
