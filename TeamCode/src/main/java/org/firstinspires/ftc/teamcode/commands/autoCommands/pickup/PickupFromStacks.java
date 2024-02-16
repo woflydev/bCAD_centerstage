@@ -73,9 +73,9 @@ public class PickupFromStacks extends CommandBase {
 
         intake.cautiousReverseSpin();
         timeout(0.5);
-        intake.spin();
-        drive.followTrajectorySequence(CalcKinematics(2, 0));
-        timeout(1.5);
+        intake.autoSpin();
+        drive.followTrajectorySequence(CalcKinematics(0.001, 0));
+        timeout(3);
 
         finish = true;
     }

@@ -31,11 +31,11 @@ public class RobotConstants {
     public static final int MIN_OUTTAKE_HEIGHT = 0;
 
     public static final double FLAP_CLOSE = 200;
-    public static final double FLAP_OPEN = 114;
-    public static final double CLAW_CLOSE = 152;
-    public static final double CLAW_AUTO_CLOSE = 100;
-    public static final double CLAW_OPEN = 98;
-    public static final double CLAW_DEPOSIT = 50;
+    public static final double FLAP_OPEN = 117;
+    public static final double CLAW_CLOSE = 154;
+    public static final double CLAW_AUTO_CLOSE = 103;
+    public static final double CLAW_OPEN = 101;
+    public static final double CLAW_DEPOSIT = 53;
     public static final double ELBOW_HOME = 240;
     public static final double ELBOW_PICKUP = 273;
     public static final double ELBOW_GRABBED_STANDBY = 225;
@@ -53,7 +53,8 @@ public class RobotConstants {
     public static final double PLANE_ACTIVE = 0;
 
     public static final double INTAKE_SPEED = 0.8;
-    public static final double INTAKE_OUT_CAUTIOUS_SPEED = 0.3;
+    public static final double INTAKE_AUTO_SPEED = 0.7;
+    public static final double INTAKE_OUT_CAUTIOUS_SPEED = 0.4;
     public static final double INTAKE_OUT_SPEED = 0.8;
 
     // -------------------------------------------------------------- AUTO RAISE CRITERIA

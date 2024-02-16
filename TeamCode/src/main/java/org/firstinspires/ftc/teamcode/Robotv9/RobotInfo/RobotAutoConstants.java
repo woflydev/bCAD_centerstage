@@ -100,8 +100,8 @@ public class RobotAutoConstants {
     };
     public static final Pose2d[] RED_CYCLE_CHECKPOINTS = {
             new Pose2d(-7, -35.5, Math.toRadians(181.94)),
-            new Pose2d(-56, -36.5, Math.toRadians(180)),
-            new Pose2d(-58, -36.5, Math.toRadians(180)),
+            new Pose2d(-58, -37, Math.toRadians(180)),
+            new Pose2d(-59, -37, Math.toRadians(180)), // note: not used
 
             // note: used for recentering the robot to not bonk into the truss
             new Pose2d(-45, -36, Math.toRadians(180)),
