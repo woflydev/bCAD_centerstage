@@ -12,7 +12,7 @@ public class RaiseAndPrimeAutoCommand extends CommandBase {
     private final LiftSubsystem lift;
     private final boolean spin;
     private final boolean cycleValues;
-    private final int stateDuration = 300;
+    private final int stateDuration = 200;
     private final ElapsedTime timer = new ElapsedTime();
     private int targetHeight;
     private boolean finishTriggered;
@@ -69,5 +69,5 @@ public class RaiseAndPrimeAutoCommand extends CommandBase {
     }
 
     @Override
-    public boolean isFinished() { return (timer.milliseconds() >= stateDuration * 5) || interrupted(); }
+    public boolean isFinished() { return (timer.milliseconds() >= stateDuration * 2) || interrupted(); }
 }
