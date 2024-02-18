@@ -22,7 +22,8 @@ public class TransferAndStandbyAutoCommand extends CommandBase {
     private final IntakeSubsystem intake;
     private final ElapsedTime timer = new ElapsedTime();
 
-    private final int stateDuration = 300;
+    // note: untested change
+    private final int stateDuration = 250;
 
     public TransferAndStandbyAutoCommand(DepositSubsystem deposit, LiftSubsystem lift, IntakeSubsystem intake) {
         this.deposit = deposit;
